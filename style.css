@@ -1,0 +1,910 @@
+@font-face {
+    font-family: 'heebo-bold';
+    src: url('assets/fonts/Heebo-Bold.ttf')
+}
+
+@font-face {
+    font-family: 'heebo-medium';
+    src: url('assets/fonts/Heebo-Medium.ttf')
+}
+
+@font-face {
+    font-family: 'heebo-regular';
+    src: url('assets/fonts/Heebo-Regular.ttf')
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #F4F4F4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'heebo-regular';
+}
+
+/* lomda upper bar */
+.upper_bar {
+    width: 100%;
+    height: 8vh;
+    position: absolute;
+    background-color: #869B7E;
+    top: 0;
+    z-index: 1000;
+    /* Keeps it strictly above the scrolling content */
+}
+
+#lomda_title {
+    font-size: 1.5rem;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    margin: 0;
+    font-family: 'heebo-bold';
+
+}
+
+.upperBar_logo {
+    width: 12vw;
+    height: 6vh;
+}
+
+.symbol_row {
+    display: flex;
+    position: absolute;
+    top: 10%;
+    left: 2%;
+}
+
+/* progress bar */
+
+.progress_bar {
+    /* Changed position to relative without 'top: 8vh' so it stays 
+       in the normal layout flow right under the green header */
+    position: absolute;
+    top: 8vh;
+    /* Sits perfectly below the 8vh green header */
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    height: 7vh;
+    display: none;
+    /* Modified from none for illustration */
+    background-color: #C9CAAC;
+    flex-shrink: 0;
+    /* Prevents the progress bar from squeezing */
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allows the progress bar line to sit below the labels */
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 0 auto;
+    width: 100%;
+    max-width: 480px;
+    /* Looks great on both tiny screens and tablets */
+    direction: rtl;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    height: 100%;
+    /* Fits perfectly within the 7vh progress bar height */
+}
+
+.container .progress {
+    flex-basis: 100%;
+    /* Forces a line-break after the labels */
+    width: 100%;
+    margin: 4px auto 0 auto;
+    /* Pushes it slightly below the text row */
+    box-sizing: border-box;
+}
+
+.progress {
+    direction: rtl;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar {
+    height: 16px;
+    border-radius: 4px;
+    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    -webkit-transition: 0.4s linear;
+    -moz-transition: 0.4s linear;
+    -o-transition: 0.4s linear;
+    transition: 0.4s linear;
+    -webkit-transition-property: width, background-color;
+    -moz-transition-property: width, background-color;
+    -o-transition-property: width, background-color;
+    transition-property: width, background-color;
+    -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/*
+ * Note: using adjacent or general sibling selectors combined with
+ *       pseudo classes doesn't work in Safari 5.0 and Chrome 12.
+ *       See this article for more info and a potential fix:
+ *       https://css-tricks.com/webkit-sibling-bug/
+ */
+
+#five:checked~.progress>.progress-bar {
+    width: 5%;
+    background-color: #f63a0f;
+}
+
+#twentyfive:checked~.progress>.progress-bar {
+    width: 25%;
+    background-color: #f27011;
+}
+
+#fifty:checked~.progress>.progress-bar {
+    width: 50%;
+    background-color: #f2b01e;
+}
+
+#seventyfive:checked~.progress>.progress-bar {
+    width: 75%;
+    background-color: #f2d31b;
+}
+
+#onehundred:checked~.progress>.progress-bar {
+    width: 100%;
+    background-color: #86e01e;
+}
+
+.radio {
+    display: none;
+}
+
+.label {
+    font-family: 'heebo-bold';
+    display: inline-block;
+    margin: 0;
+
+    /* Responsive horizontal padding so labels don't overlap on tiny screens */
+    padding: 3px clamp(6px, 2.5vw, 15px);
+
+    color: #000000;
+    border-radius: 3px;
+    cursor: pointer;
+
+    /* Fluid font size based on screen width */
+    font-size: clamp(0.55rem, 2.2vw, 0.75rem);
+    white-space: nowrap;
+    /* Prevents ugly text-wrapping inside the small labels */
+}
+
+.radio:checked+.label {
+    color: white;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+#five {
+    padding: 3px 0px;
+}
+
+#onehundred {
+    padding: 3px 0px;
+}
+
+/* beginning animation */
+svg {
+    height: 70%;
+    width: 70%;
+    display: block;
+}
+
+
+.opening_sentence {
+    direction: rtl;
+    font-size: 1.5rem;
+}
+
+.opening_animation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* topics page */
+
+/* ========================================================= */
+/* 1. Page Wrapper (Locks height to exactly the remaining screen) */
+/* ========================================================= */
+.topics_page {
+    display: none;
+    /* Controlled by JS */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* Evenly spaces: Title -> Topics -> Button */
+
+    width: 100vw;
+    /* Lock the height to exactly 100% minus the 8vh header */
+    height: 92vh;
+    margin-top: 8vh;
+
+    box-sizing: border-box;
+    /* Tight padding to prevent vertical overflows */
+    padding: 2vh 5vw 3vh 5vw;
+
+    /* Strict no-scroll constraint */
+    overflow: hidden;
+}
+
+#topics_page {
+    display: none; /* Keep it completely hidden until JS turns it on */
+}
+
+.topics {
+    display: flex;
+    flex-direction: column;
+    /* Use dynamic gap that scales with the viewport height */
+    gap: 2.5vh;
+    width: 100%;
+    max-width: 450px;
+
+    /* Allows the topics block to grow into available space, but not overflow */
+    flex-grow: 1;
+    justify-content: center;
+    /* Centers the list vertically */
+    margin: 1vh 0;
+}
+
+/* Remove absolute positioning from the icon */
+.icon {
+    width: 24px;
+    /* Use fixed sizes for cleaner icons */
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+    /* Prevents the icon from squeezing if text gets long */
+}
+
+.topic {
+    background-color: #C9CAAC;
+    border: #869B7E solid 3px;
+    border-radius: 75px;
+    width: 100%;
+
+    /* Locks button height relative to vertical screen room */
+    height: 8vh;
+    min-height: 48px;
+    /* Safe minimum for tiny screens */
+    max-height: 68px;
+    /* Safe maximum for tall screens */
+
+    padding: 0 16px;
+    box-sizing: border-box;
+
+    direction: ltr;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 3px 3px 4px rgb(161, 161, 161);
+
+    /* Animation Properties */
+    opacity: 0;
+    animation-name: slideInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* Delays */
+#topic1 {
+    animation-delay: 0s;
+}
+
+#topic2 {
+    animation-delay: 0.3s;
+}
+
+#topic3 {
+    animation-delay: 0.6s;
+}
+
+#topic4 {
+    animation-delay: 0.9s;
+}
+
+#topic5 {
+    animation-delay: 1.2s;
+}
+
+#start_button {
+    animation-delay: 1.5s;
+}
+
+
+.topic_name {
+    text-align: right;
+    font-size: clamp(0.9rem, 3.5vw, 1.15rem);
+    /* Keeps text from clipping inside the 8vh box */
+    line-height: 1.2;
+    margin: 0;
+    flex-grow: 1;
+    padding-right: 12px;
+    font-family: 'heebo-regular';
+}
+
+.button {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    max-width: 250px;
+
+    /* Fixed height relative to screen height */
+    height: 6.5vh;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 30px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    z-index: 100;
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 4px 4px 5px rgb(161, 161, 161);
+    opacity: 0;
+    flex-shrink: 0;
+    /* Ensures the start button never gets crushed */
+
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    animation-name: slideInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* Pressed state animation */
+.button:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    box-shadow: 4px 4px 5px rgb(161, 161, 161);
+    background: radial-gradient(#FFFFFF, #EACDCD);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/* ========================================================= */
+/* 2. Titles Container (Compact spacing)                     */
+/* ========================================================= */
+.title-container {
+    text-align: center;
+    width: 100%;
+    /* Flex-shrink prevents this container from squishing */
+    flex-shrink: 0;
+}
+
+.title {
+    position: relative;
+    font-family: 'heebo-bold';
+    /* Using viewport-width (vw) makes text size fluid based on screen width */
+    font-size: clamp(1.8rem, 7vw, 2.3rem);
+    color: #AA3A3A;
+    margin: 0 0 4px 0;
+    padding: 0;
+    top: 2%;
+    text-align: center;
+    direction: rtl;
+}
+
+#title_text {
+    position: relative;
+    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+    color: #333;
+    margin: 0;
+    top: 0;
+    direction: rtl;
+    text-align: center;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        /* 30px is a bit subtler and smoother than 100% */
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* pharmacy israel page */
+/* ========================================================= */
+/* 1. Page and Layout Controls                               */
+/* ========================================================= */
+.pharmacy_page {
+    position: absolute;
+
+    /* 8vh (header) + 7vh (progress bar) */
+    top: 15vh;
+    left: 0;
+    width: 100vw;
+
+    /* Keeps everything perfectly locked inside the remaining screen height */
+    height: 85vh;
+
+    display: none;
+    flex-direction: column;
+    /* Stacks Title vertically, then Map below it */
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#to-practice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+
+}
+
+/* ========================================================= */
+/* 2. Map Viewport and Container                             */
+/* ========================================================= */
+
+.map-viewport {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Force the iframe to occupy the full container space */
+.map-container iframe {
+    position: absolute;
+    top: 5%;
+    /* Changed from 27vh/other values to 0 */
+    left: 0;
+    width: 100%;
+    height: 90%;
+    border: none;
+}
+
+.pharmacy_page h1,
+.pharmacy_page .page_title {
+    text-align: center;
+    color: #BA0000;
+    font-family: 'heebo-bold';
+    font-size: clamp(1.4rem, 6vw, 2rem);
+
+    /* Strict layout control so it leaves plenty of room for the map */
+    margin: 1vh 0;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================================= */
+/* 3. Map Layer Stacking & Cross-Fade                         */
+/* ========================================================= */
+
+.israel-layer {
+    position: absolute;
+    top: 25%;
+    /* Changed from 3vh to 0 to keep the map centered inside the viewport box */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 75%;
+    /* Explicit height constraint forces it to respect object-fit containment */
+    object-fit: contain;
+
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* The visible map layer */
+.israel-layer.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* #full_israel {
+    display: none;
+} 
+
+#north_israel {
+    display: none;
+}
+
+#center_israel {
+    display: none;
+}
+
+#south_israel {
+    display: none;
+} */
+
+
+/* ========================================================= */
+/* 4. Interactive Map Pins & Pulse Animation                 */
+/* ========================================================= */
+
+.map-point {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 10;
+    /* Raises the pin above standard image layers */
+    top: 35%;
+    left: 55%;
+}
+
+/* The actual clickable marker */
+.pin {
+    width: 14px;
+    height: 14px;
+    background-color: #1e3a8a;
+    /* Dark Blue from your image */
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+/* The expanding radar ring */
+.pulse-ring {
+    position: absolute;
+    width: 100px;
+    /* Max size of the ring */
+    height: 100px;
+    border: 2px solid rgba(30, 58, 138, 0.6);
+    /* Semi-transparent blue */
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0;
+    display: block;
+
+    /* Loop the pulse animation */
+    animation: radar-pulse 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+}
+
+@keyframes radar-pulse {
+    0% {
+        transform: scale(0.1);
+        opacity: 0.9;
+    }
+
+    80% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: scale(1.5);
+        /* Expands outward */
+        opacity: 0;
+        /* Fades out */
+    }
+}
+
+/* ========================================================= */
+/* 5. Dynamic Zoom Classes                                   */
+/* ========================================================= */
+
+/* Zoom into the North region */
+.map-container.zoom-north {
+    transform: scale(2.2) translateY(15%) translateX(-7%);
+}
+
+/* Zoom into the Center region */
+.map-container.zoom-center {
+    transform: scale(2.0) translateY(5%) translateX(0%);
+}
+
+/* Zoom into the South region */
+.map-container.zoom-south {
+    transform: scale(1.8) translateY(-20%) translateX(2%);
+}
+
+/* ========================================================= */
+/* Location Card Styles                                      */
+/* ========================================================= */
+.location-card {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 7vh;
+    display: none;
+
+    height: 38vh;
+    background: #d9edf2;
+
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, .2);
+
+    transform: translateY(100%);
+    transition: bottom 0.5s ease, opacity 0.5s ease;
+
+    z-index: 100;
+}
+
+/* When this active modifier class is appended by JS, the drawer slides upward */
+.location-card.open {
+    bottom: 250px;
+    opacity: 1;
+
+}
+
+/* Card layout spacing decorations */
+.card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(134, 155, 126, 0.3);
+}
+
+.chevron-icon {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 2px;
+    --rotation: 180deg;
+    animation: bounce 2s infinite;
+    /* Subtle continuous physical bounce hint */
+
+}
+
+.location-card.open .chevron-icon {
+    --rotation: 0deg;
+}
+
+
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-family: 'heebo-bold', sans-serif;
+    color: #333;
+}
+
+.card-content {
+    padding: 15px;
+    overflow-y: auto;
+    direction: rtl;
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    padding: 12px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.location-item p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #444;
+}
+
+/* Bouncing animation indicator cue for users */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: rotate(var(--rotation)) translateY(0);
+    }
+
+    50% {
+        transform: rotate(var(--rotation)) translateY(-3px);
+        /* Adjust bounce height here */
+    }
+}
+
+.popup {
+    /* Set to flex in your JS when opening: display: flex; */
+    display: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    /* Darkens and blurs everything behind it (including the map button!) */
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    justify-content: center;
+    align-items: center;
+
+    /* Pushes the entire popup mechanism above the map button (999) */
+    z-index: 10000;
+}
+
+.pop-up-card {
+    background-color: #FAF4EB;
+    border: #ac9a6b solid 3px;
+    border-radius: 24px;
+    padding: 30px 24px;
+    width: 85vw;
+    max-width: 320px;
+    box-sizing: border-box;
+    text-align: center;
+    direction: rtl;
+
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+
+    /* Clean entry animation */
+    animation: popupScaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pop-up-card p {
+    font-family: 'heebo-bold';
+    color: #000000;
+    font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+}
+
+.popup .button {
+    /* override the global .button absolute positioning */
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Perfect spacing between the two buttons */
+    align-items: center;
+    width: 100%;
+}
+
+/* Responsive popup buttons */
+@media (max-width: 600px) {
+    .pop-up-card {
+        width: 90vw;
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .popup .button {
+        min-width: 44vw;
+        font-size: 14px;
+        padding: 10px 12px;
+        border-width: 2px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .popup .button {
+        min-width: 200px;
+    }
+}
+
+
+/* exercise page */
+.exercise-page {
+    display: none;
+    text-align: center;
+
+}
+
+.exercise-page p {
+    font-size: 1.5rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    direction: rtl;
+}
+
+.exercise-page .button-row {
+    gap: 10px;
+}
+
+.exercise-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}

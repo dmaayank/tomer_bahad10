@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לומדת תומר</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="icon" type="image" href="assets/images/bahad10.png" />
+    <script type="text/javascript" src="main.js"></script>
+
+</head>
+
+<body>
+
+    <div class="opening_animation" id="opening_animation">
+        <p class="opening_sentence"> עוד רגע מתחילים...</p>
+
+        <svg width="512" height="512" id="svg_animation" viewBox="0 0 512 512" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <use href="#pill_shadow" transform="scale(.9, .3) translate(32 1150)" />
+            <use href="#everything">
+                <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite"
+                    calcMode="spline" keyTimes="0;0.5;1" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"
+                    values="40 256 256; -40 256 256; 40 256 256" />
+            </use>
+            <defs>
+                <g id="everything">
+                    <use href="#pill_top" filter="url(#shadowTop)" />
+                    <use href="#pill_bottom_back" />
+                    <use href="#pill_bottom" filter="url(#shadowBottom)" stroke="#0d2b45" stroke-width="2" />
+                    <use href="#bubble1" />
+                    <use href="#bubble2" />
+                    <use href="#bubble3" />
+                    <use href="#bubble4" />
+                    <use href="#pill_outline" stroke="#0d2b45" stroke-width="10" />
+                    <use href="#pill_outline" stroke="#ffd4a3" stroke-width="6" />
+                </g>
+                <path id="pill_outline" stroke-linejoin="round">
+                    <animate attributeName="d" dur="2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" values="M198 152  C198 82 314 82 314 152  L314 358  C314 424 198 424 198 358 L198 152Z;
+                    M198 162  C198 92 314 92 314 162  L314 348  C314 414 198 414 198 348 L198 162Z;
+                    M198 152  C198 82 314 82 314 152  L314 358  C314 424 198 424 198 358 L198 152Z" />
+                </path>
+                <g id="pill_shadow" filter="url(#labelClip)">
+                    <use href="#pill_outline" fill="#8d697a80" y="128">
+                        <animateTransform attributeName="transform" type="rotate" dur="4s" repeatCount="indefinite"
+                            values="90 256 384; -270 256 384" additive="sum" />
+                    </use>
+                </g>
+                <path id="pill_bottom" fill="#8d697a">
+                    <animate attributeName="d" dur="4s" repeatCount="indefinite" calcMode="linear"
+                        keyTimes="0;0.25;0.5;0.75;1" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1"
+                        values="M198 256  C198 256 314 256 314 256  L314 358  C314 420 198 420 198 358 L198 256Z;
+                    M198 256  C198 226 314 226 314 256  L314 348  C314 420 198 420 198 348 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 358  C314 420 198 420 198 358 L198 256Z;
+                    M198 256  C198 286 314 286 314 256  L314 348  C314 420 198 420 198 348 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 358  C314 420 198 420 198 358 L198 256Z" />
+                </path>
+                <path id="pill_bottom_back" fill="#d08159">
+                    <animate attributeName="d" dur="4s" repeatCount="indefinite" calcMode="linear"
+                        keyTimes="0;0.25;0.5;0.75;1" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1"
+                        values="M198 256  C198 256 314 256 314 256  L314 358  C314 414 198 414 198 358 L198 256Z;
+                    M198 256  C198 286 314 286 314 256  L314 348  C314 414 198 414 198 348 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 358  C314 414 198 414 198 358 L198 256Z;
+                    M198 256  C198 226 314 226 314 256  L314 348  C314 414 198 414 198 348 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 358  C314 414 198 414 198 358 L198 256Z;" />
+                </path>
+                <circle id="bubble1" cy="180" r="4" fill="#d08159">
+                    <animate attributeName="cx" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" values="216;266;216" />
+                </circle>
+                <circle id="bubble2" cy="160" r="6" fill="#d08159">
+                    <animate attributeName="cx" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" values="236;276;236" />
+                </circle>
+                <circle id="bubble3" cy="140" r="10" fill="#d08159">
+                    <animate attributeName="cx" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" values="226;276;226" />
+                </circle>
+                <circle id="bubble4" cy="135" r="4" fill="#d08159">
+                    <animate attributeName="cx" dur="4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1" values="276;236;276" />
+                </circle>
+                <path id="pill_top" fill="#ffaa5e" stroke-width="2">
+                    <animate attributeName="d" dur="4s" repeatCount="indefinite" calcMode="linear"
+                        keyTimes="0;0.25;0.5;0.75;1" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1"
+                        values="M198 256  C198 256 314 256 314 256  L314 152  C314 82 198 82 198 152 L198 256Z;
+                    M198 256  C198 226 314 226 314 256  L314 162  C314 92 198 92 198 162 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 152  C314 82 198 82 198 152 L198 256Z;
+                    M198 256  C198 286 314 286 314 256  L314 162  C314 92 198 92 198 162 L198 256Z;
+                    M198 256  C198 256 314 256 314 256  L314 152  C314 82 198 82 198 152 L198 256Z;" />
+                </path>
+                <filter id="shadowBottom">
+                    <feOffset dx="-32" dy="-8" />
+                    <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+                    <feFlood flood-color="#0d2b45" result="color" />
+                    <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+                    <feComposite operator="over" in="shadow" in2="SourceGraphic" />
+                </filter>
+                <filter id="shadowTop">
+                    <feOffset dx="-32" dy="4" />
+                    <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+                    <feFlood flood-color="#d08159" result="color" />
+                    <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+                    <feComposite operator="over" in="shadow" in2="SourceGraphic" />
+                </filter>
+            </defs>
+        </svg>
+    </div>
+
+
+    <div class="upper_bar" id="upper_bar">
+        <h3 id="lomda_title"> לומדת תומ"ר</h3>
+
+        <div class="symbol_row">
+            <img src="assets/images/bahad10.png" id="bahad10_symbol" alt="bahad10_symbol" class="upperBar_logo">
+            <img src="assets/images/medical_corps_symbol.png" id="bahad10_symbol" alt="bahad10_symbol"
+                class="upperBar_logo">
+            <img src="assets/images/מדור_טיל.png" id="bahad10_symbol" alt="bahad10_symbol" F class="upperBar_logo">
+        </div>
+
+        <div class="progress_bar" id="progress_bar">
+            <div class="container">
+                <input type="radio" class="radio" name="progress" value="five" id="five">
+                <label for="five" id="five" class="label">בתי מרקחת</label>
+
+                <input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive" checked>
+                <label for="twentyfive" class="label">תקני תרופות</label>
+
+                <input type="radio" class="radio" name="progress" value="fifty" id="fifty">
+                <label for="fifty" class="label">מערכת תומ”ר</label>
+
+                <input type="radio" class="radio" name="progress" value="seventyfive" id="seventyfive">
+                <label for="seventyfive" class="label">אסמכתא תקציבית</label>
+
+                <input type="radio" class="radio" name="progress" value="onehundred" id="onehundred">
+                <label for="onehundred" id="onehundred" class="label">זמינות מלאי</label>
+
+                <div class="progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="topics_page" id="topics_page">
+
+        <h1 class="title"> רוקחות בצה"ל ומערכת תומ"ר</h1>
+        <p id="title_text"> על מה נלמד בלומדה? </p>
+
+        <div class="topics">
+
+            <div class="topic" id="topic1">
+                <img class="icon" src="assets/images/location.png">
+                <p class="topic_name">סקירת מערך בתי המרקחת בצה”ל</p>
+            </div>
+            <div class="topic" id="topic2">
+                <img class="icon" src="assets/images/medicine.png">
+                <p class="topic_name">סמכויות רישום וניפוק תרופות</p>
+
+            </div>
+
+            <div class="topic" id="topic3">
+                <img class="icon" src="assets/images/settings.png">
+                <p class="topic_name">שימוש במערכת התומ”ר</p>
+
+            </div>
+
+            <div class="topic" id="topic4">
+                <img class="icon" src="assets/images/permission.png">
+                <p class="topic_name">תרופות הדורשות אישור מיוחד-
+                    אסמכתא תקציבית</p>
+
+            </div>
+
+            <div class="topic" id="topic5">
+                <img class="icon" src="assets/images/checked.png">
+                <p class="topic_name">זמינות מלאי</p>
+
+            </div>
+        </div>
+
+        <button class="button" id="start_button">
+            התחל
+        </button>
+
+    </div>
+
+
+    <div class="pharmacy_page" id="pharmacy_page">
+
+        <h1 class="title"> פיזור בתי מרקחת צבאיים</h1>
+
+
+        <div class="map-viewport">
+            <div class="map-container" id="mapContainer">
+
+
+                <iframe
+                    src="https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1"
+                    class="responsive-map-iframe" loading="lazy" allowfullscreen>
+                </iframe>
+                <!-- <img src="assets/images/center_israel.png" alt="Center Israel" class="israel-layer" id="center_israel">
+                <img src="assets/images/north_israel.png" alt="North Israel" class="israel-layer" id="north_israel">
+                <img src="assets/images/south_israel.png" alt="South Israel" class="israel-layer" id="south_israel">
+                <img src="assets/images/israel_map.png" alt="Israel Map" class="israel-layer active" id="full_israel"> -->
+
+                <!-- Pins layer (These will scale and move perfectly with the map) -->
+                <!-- <div class="map-point">
+                    <div class="pin" id="pin"></div>
+                    <div class="pulse-ring" id="pulse-ring"></div>
+                </div> -->
+
+            </div>
+        </div>
+
+        <div class="location-card" id="location-card">
+            <!-- The small drag handle/chevron arrow at the top -->
+            <div class="card-header">
+                <span class="chevron-icon">▼</span>
+                <h3 id="card-region-title">צפון</h3>
+            </div>
+
+            <!-- Inside contents list -->
+            <div class="card-content">
+                <div class="location-item">
+                    <span class="pin-icon">📍</span>
+                    <p id="card-location-text">מרפ"א 8280 - פילון</p>
+                </div>
+                <!-- You can add more list items here dynamically -->
+            </div>
+        </div>
+
+
+        <button class="button" id="to-practice-btn">
+            לתרגול
+        </button>
+
+        <div class="popup" id="popup">
+            <div class="pop-up-card">
+
+                <p>האם אתה בטוח שאתה רוצה לעבור לתרגול?</p>
+                <div class="button-row">
+
+                    <button class="button" id="yes-btn"> כן, המשך לתרגול</button>
+                    <button class="button" id="no-btn"> לא, חזור למפה</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="exercise-page" id="exercise-page">
+        <p>לפניכם תופיע מפה של ארץ ישראל ושמה של מרפאה. עליכם ללחוץ על המיקום שבו נמצאת המרפאה על גבי המפה.</p>
+        <div class="button-row">
+            <button class="button" id="back-btn"> חזור למפה</button>
+            <button class="button" id="start-exercise"> !בואו נתחיל</button>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
