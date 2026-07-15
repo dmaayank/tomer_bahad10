@@ -21,7 +21,7 @@ window.addEventListener('load', (event) => {
         document.getElementById('topics_page').style.display = "flex";
         document.getElementById('start_button').addEventListener('click', pharmacyPage);
 
-    }, 0);
+    }, 5000);
 
     document.getElementById('lomda_title').addEventListener('click', () => {
 
