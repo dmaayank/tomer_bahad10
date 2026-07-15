@@ -41,6 +41,7 @@ body {
     /* Keeps it strictly above the scrolling content */
 }
 
+
 #lomda_title {
     font-size: 1.5rem;
     position: absolute;
@@ -56,11 +57,16 @@ body {
     height: 6vh;
 }
 
+#bahad10_symbol {
+    width: 10vw;
+}
+
 .symbol_row {
     display: flex;
     position: absolute;
     top: 10%;
     left: 2%;
+    gap: 5px;
 }
 
 /* progress bar */
@@ -1108,7 +1114,8 @@ svg {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* מטשטש/מכהה את המפה ברקע */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* מטשטש/מכהה את המפה ברקע */
     display: none;
     justify-content: center;
     align-items: center;
@@ -1121,10 +1128,14 @@ svg {
 .pop-up-card {
     position: relative;
     background-color: #fff9f2;
-    border: 2px solid #b19379; /* מסגרת מעט יותר דקה */
-    border-radius: 16px;       /* פינות מעוגלות עדינות יותר */
-    padding: 15px 15px 20px 15px; /* מרווח פנימי קטן משמעותית */
-    width: 240px;              /* הוקטן מ-310px ל-240px */
+    border: 2px solid #b19379;
+    /* מסגרת מעט יותר דקה */
+    border-radius: 16px;
+    /* פינות מעוגלות עדינות יותר */
+    padding: 15px 15px 20px 15px;
+    /* מרווח פנימי קטן משמעותית */
+    width: 240px;
+    /* הוקטן מ-310px ל-240px */
     box-sizing: border-box;
     text-align: center;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
@@ -1150,7 +1161,8 @@ svg {
 }
 
 .popup-title {
-    font-size: 1rem; /* הוקטן מ-1.25rem */
+    font-size: 1rem;
+    /* הוקטן מ-1.25rem */
     color: #1a1a1a;
     margin: 5px 0 10px 0;
     font-weight: bold;
@@ -1166,8 +1178,10 @@ svg {
     margin-bottom: 5px;
 }
 
-#grade, #time {
-    font-size: 1.6rem; /* הוקטן מ-2.2rem */
+#grade,
+#time {
+    font-size: 1.6rem;
+    /* הוקטן מ-2.2rem */
     font-weight: 900;
     color: #000000;
 }
@@ -1192,29 +1206,33 @@ svg {
 
 .or-text {
     margin: 2px 0;
-    font-size: 0.85rem; /* הוקטן */
+    font-size: 0.85rem;
+    /* הוקטן */
     color: #1a1a1a;
     font-weight: bold;
 }
 
 /* כפתורי קפסולה קומפקטיים */
 .button-column .button {
-    width: 110px;          /* הוקטן מ-140px */
-    padding: 6px 0;        /* דק ועדין יותר */
-    font-size: 1rem;       /* גופן קטן יותר */
+    width: 110px;
+    /* הוקטן מ-140px */
+    padding: 6px 0;
+    /* דק ועדין יותר */
+    font-size: 1rem;
+    /* גופן קטן יותר */
     font-weight: bold;
     border-radius: 50px;
     cursor: pointer;
     text-align: center;
     box-sizing: border-box;
     transition: transform 0.1s ease, box-shadow 0.1s ease;
-    
+
     background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
     border: 1.5px solid #a53d3d;
     color: #a81c1c;
-    
+
     /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
-    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
 }
 
 .retry-btn {
@@ -1224,7 +1242,7 @@ svg {
 /* אפקט לחיצה מותאם */
 .button-column .button:active {
     transform: translateY(1.5px);
-    box-shadow: 0 1.5px 0px #822a2a, 0 2px 4px rgba(0,0,0,0.25);
+    box-shadow: 0 1.5px 0px #822a2a, 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .button-column .button:hover {
