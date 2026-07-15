@@ -13,22 +13,33 @@ const pharmacyQuizData = [
 
 
 window.addEventListener('load', (event) => {
+    
+    // חיבור כפתור ההתחלה של הלומדה
+    document.getElementById('start_button').addEventListener('click', pharmacyPage);
 
-    // set beginning animation and topics page
-    // Make the beginning intro start right away (no long delay)
-    setTimeout(() => {
+    // חיבור כפתור הכותרת לרענון הדף
+    document.getElementById('lomda_title').addEventListener('click', () => {
+        location.reload();
+    });
+
+    // בדיקה האם המשתמש כבר ראה את האנימציה בסשן הנוכחי
+    if (sessionStorage.getItem('animationSeen') === 'true') {
+        // דילוג מיידי על האנימציה (ללא שום דיליי/setTimeout)
         document.getElementById('opening_animation').style.display = "none";
         document.getElementById('topics_page').style.display = "flex";
-        document.getElementById('start_button').addEventListener('click', pharmacyPage);
+    } else {
+        // פעם ראשונה שהדף נפתח: מציגים את האנימציה
+        const ANIMATION_DURATION = 3000; // הזמן במיל שניות שהאנימציה שלך לוקחת (למשל 3 שניות)
 
-    }, 5000);
-
-    document.getElementById('lomda_title').addEventListener('click', () => {
-
-    })
-
-})
-
+        setTimeout(() => {
+            document.getElementById('opening_animation').style.display = "none";
+            document.getElementById('topics_page').style.display = "flex";
+            
+            // שמירת סימון שהאנימציה נצפתה כדי שבפעם הבאה נדלג עליה
+            sessionStorage.setItem('animationSeen', 'true');
+        }, ANIMATION_DURATION); 
+    }
+});
 
 const pharmacyPage = () => {
     document.getElementById('topics_page').style.display = "none";
