@@ -275,7 +275,7 @@ svg {
     /* Limits width so it doesn't stretch too wide on tablets */
 
     /* Shrinks the gap dynamically on small screens */
-    gap: clamp(8px, 1.5vh, 16px);
+    gap: clamp(8px, 3vh, 30px);
 
     /* Pushes the start button down to the bottom of the container naturally */
     margin-bottom: auto;
