@@ -249,7 +249,8 @@ svg {
 }
 
 #topics_page {
-    display: none; /* Keep it completely hidden until JS turns it on */
+    display: none;
+    /* Keep it completely hidden until JS turns it on */
 }
 
 .topics {
@@ -359,7 +360,7 @@ svg {
     align-items: center;
     justify-content: center;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 10px;
 
     border: #840000 solid 3px;
     border-radius: 100px;
@@ -413,7 +414,7 @@ svg {
     color: #AA3A3A;
     margin: 0 0 4px 0;
     padding: 0;
-    top: 2%;
+    top: 5%;
     text-align: center;
     direction: rtl;
 }
@@ -426,6 +427,11 @@ svg {
     top: 0;
     direction: rtl;
     text-align: center;
+}
+
+#lomda-title {
+    top: 0%;
+
 }
 
 @keyframes slideInUp {
@@ -844,7 +850,8 @@ svg {
 .button-row {
     display: flex;
     flex-direction: column;
-    gap: 1px; /* Perfect spacing between the two buttons */
+    gap: 1px;
+    /* Perfect spacing between the two buttons */
     align-items: center;
     width: 100%;
 }
@@ -880,7 +887,7 @@ svg {
 }
 
 .exercise-page p {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     width: 80%;
     text-align: center;
     margin: auto;
