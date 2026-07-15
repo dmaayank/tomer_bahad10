@@ -61,44 +61,6 @@ const pharmacyPage = () => {
 
     })
 
-
-    // const pulseRing = document.getElementById('pulse-ring');
-    // const pin = document.getElementById('pin');
-
-    // const triggerZoom = () => {
-
-    //     //erase the pulse animation
-    //     pulseRing.style.display = "none";
-    //     pin.style.display = "none";
-
-
-    //     switch (region) {
-    //         case 'north':
-    //             showNorthRegion();
-    //             break;
-    //         case 'center':
-    //             showNorthRegion();
-
-    //             break;
-    //         case 'south':
-    //             showNorthRegion();
-    //             break;
-    //     }
-
-    // };
-
-
-    // pulseRing.addEventListener('click', triggerZoom);
-    // pin.addEventListener('click', triggerZoom);
-
-    // const pinFilon = document.getElementById('pin-filon');
-    // const locationCard = document.getElementById('location-card');
-    // const cardLocationText = document.getElementById('card-location-text');
-
-
-    // // 3. Open the card immediately straight away!
-    // locationCard.classList.add('open');
-
 }
 
 let currPharmacy;
@@ -210,6 +172,10 @@ const endGame = () => {
     console.log("end game");
     document.getElementById('game-popup').style.display = "flex";
 
+    if (calculateGrade() < 75) {
+        document.getElementById('popup-title').innerText = "אולי נתרגל עוד קצת? ציונך הוא:"
+    }
+
     document.getElementById('time').innerText = timerDisplay.innerText;
 
     if (wrongAnswers === 0) {
@@ -283,11 +249,11 @@ const resetGame = () => {
     }
 
     const popup = document.getElementById('game-popup');
-popup.style.display = "none";
-popup.classList.remove("show");
+    popup.style.display = "none";
+    popup.classList.remove("show");
 
-setTimeout(() => {
-    startTimer();
-    nextPharmacy();
-}, 100);
+    setTimeout(() => {
+        startTimer();
+        nextPharmacy();
+    }, 100);
 };
