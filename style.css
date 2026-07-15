@@ -585,6 +585,10 @@ svg {
     flex-shrink: 0; /* מונע מהכותרת להתכווץ */
 }
 
+.pharmacy_page h1 {
+    top: 3%;
+}
+
 /* ========================================================= */
 /* 3. Map Layer Stacking & Cross-Fade                         */
 /* ========================================================= */
@@ -925,6 +929,7 @@ svg {
     width: 80%;
     text-align: center;
     margin: auto;
+    margin-bottom: 30px;
     direction: rtl;
 }
 
