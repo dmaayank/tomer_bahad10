@@ -1,5 +1,16 @@
 let region;
 
+const pharmacyQuizData = [
+    { id: "פילון", name: 'מר"ג פילון' },
+    { id: "ירושלים", name: 'מרפ"א ירושלים' },
+    { id: "בהדים", name: '8283 מרפ"א דרום' },
+    { id: "חיפה", name: 'מרפ"א צפון - בי"ח 10' },
+    { id: "צריפין", name: 'מרפ"א מרכז 8282' },
+    { id: "גלילות", name: 'בית מרקחת בה"ד 15 ' },
+    { id: "קרייה", name: 'מטכ"ל 911 ' },
+    { id: "עובדה", name: 'מרפ"א ערבה' }
+];
+
 
 window.addEventListener('load', (event) => {
 
@@ -10,7 +21,7 @@ window.addEventListener('load', (event) => {
         document.getElementById('topics_page').style.display = "flex";
         document.getElementById('start_button').addEventListener('click', pharmacyPage);
 
-    }, 5000);
+    }, 0);
 
     document.getElementById('lomda_title').addEventListener('click', () => {
 
@@ -43,7 +54,6 @@ const pharmacyPage = () => {
         });
 
         document.getElementById('start-exercise').addEventListener('click', pharmacyGame);
-
     })
 
     document.getElementById('no-btn').addEventListener('click', () => {
@@ -91,123 +101,193 @@ const pharmacyPage = () => {
 
 }
 
+let currPharmacy;
+let tempArr = [];
+let remainingLocations = 8;
+let random;
+let copyArr = [];
+let correctAnswers = 0;
+let wrongAnswers = 0;
+let loc;
+let timerDisplay = null;
+let timerInterval = null;
+let secondsElapsed = 0;
+const answersArr = document.getElementsByClassName('map-target-dot');
+
 const pharmacyGame = () => {
+    document.getElementById('exercise-page').style.display = "none";
+    document.getElementById('seterra-game-container').style.display = "flex";
+    copyArr = [...pharmacyQuizData];
+
+    clearInterval(timerInterval);
+    secondsElapsed = 0;
+
+    startTimer();
+
+
+    for (let i = 0; i < answersArr.length; i++) {
+        answersArr[i].addEventListener('click', checkAnswer);
+    }
+    nextPharmacy();
+}
+
+const nextPharmacy = () => {
+
+    if (copyArr.length === 0) {
+        endGame();
+        return;
+    }
+
+    random = Math.floor(Math.random() * copyArr.length);
+
+    currPharmacy = copyArr[random];
+    loc = random;
+
+    console.log(random, currPharmacy.name);
+
+    document.getElementById('target-name').innerText = currPharmacy.name;
+};
+
+const checkAnswer = (event) => {
+    console.log(event.target.id);
+    console.log(event.target);
+    let currPlace = 0;
+
+    console.log(document.getElementById('target-name').innerText);
+
+    if (event.target.id === currPharmacy.id) {
+        event.target.classList.add('correct');
+        tempArr[currPlace] = currPharmacy;
+        copyArr.splice(loc, 1);
+        correctAnswers++;
+        document.getElementById('score-counter').innerText = `${correctAnswers}/8`
+        remainingLocations--;
+        console.log(remainingLocations);
+        if (remainingLocations === 0) {
+            console.log(timerDisplay.innerText);
+            clearInterval(timerInterval);
+            endGame();
+        } else {
+            nextPharmacy();
+
+        }
+    }
+    else {
+        event.target.classList.add('wrong');
+        setTimeout(() => {
+            event.target.classList.remove('wrong');
+
+        }, 1000);
+        wrongAnswers++;
+
+    }
 
 }
 
-// // Function to zoom into the North region
-// const showNorthRegion = () => {
-//     // 1. Trigger the zoom transform
-//     mapContainer.classList.add('zoom-north');
+const startTimer = () => {
+    if (!timerDisplay) {
+        timerDisplay = document.getElementById("game-timer");
+    }
 
-//     const fullMap = document.getElementById('full_israel');
-//     const northMap = document.getElementById('north_israel');
-//     document.getElementById('location-card').style.display = "block";
+    if (!timerDisplay) {
+        console.warn("timerDisplay element #game-timer not found");
+        return;
+    }
 
-//     // 2. Cross-fade the images smoothly (using classes, not .style.display)
-//     fullMap.classList.remove('active');
-//     northMap.classList.add('active');
-
-
-//     showLocationCard("north");
-
-//     const chevron = document.querySelector(".chevron-icon");
-//     const card = document.getElementById("location-card");
-
-//     let isOpen = false;
-
-//     chevron.addEventListener("click", () => {
-//         isOpen = !isOpen;
-//         console.log(isOpen);
-
-//         if (isOpen) {
-//             card.classList.remove("open");
-//         }
-//         else {
-//             card.classList.add("open");
-
-//         }
-//     });
-
-// }
-
-// // Function to zoom into the North region
-// const showCenterRegion = () => {
-//     // 1. Trigger the zoom transform
-//     mapContainer.classList.add('zoom-center');
-
-//     const fullMap = document.getElementById('full_israel');
-//     const centerMap = document.getElementById('center_israel');
-//     document.getElementById('location-card').style.display = "block";
-
-//     // 2. Cross-fade the images smoothly (using classes, not .style.display)
-//     fullMap.classList.remove('active');
-//     centerMap.classList.add('active');
-
-//     showLocationCard("center");
-
-//     document.addEventListener("click", () => {
-//         const card = document.getElementById("location-card");
-//         card.classList.add("open");
-//     });
-
-// }
+    timerDisplay.innerText = "00:00";
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
+        const secs = String(secondsElapsed % 60).padStart(2, "0");
+        timerDisplay.innerText = `${mins}:${secs}`;
+    }, 1000);
+}
 
 
-// // Function to zoom into the North region
-// const showSouthRegion = () => {
-//     // 1. Trigger the zoom transform
-//     mapContainer.classList.add('zoom-south');
+const endGame = () => {
+    console.log("correct answers:", correctAnswers);
 
-//     const fullMap = document.getElementById('full_israel');
-//     const southMap = document.getElementById('north_israel');
-//     document.getElementById('location-card').style.display = "block";
+    console.log("end game");
+    document.getElementById('game-popup').style.display = "flex";
 
-//     // 2. Cross-fade the images smoothly (using classes, not .style.display)
-//     fullMap.classList.remove('active');
-//     southMap.classList.add('active');
+    document.getElementById('time').innerText = timerDisplay.innerText;
 
-//     showLocationCard("south");
+    if (wrongAnswers === 0) {
+        document.getElementById('mistake-line').innerText = `לא טעית בכלל!`
 
-// }
+    }
+    else if (wrongAnswers === 1) {
+        document.getElementById('mistake-line').innerText = `טעית פעם אחת`
 
-// const showLocationCard = (region) => {
+    } else {
+        document.getElementById('mistake-line').innerText = `טעית ${wrongAnswers} פעמים`
 
-//     const card = document.getElementById("location-card");
-//     const title = document.getElementById("card-region-title");
-//     const content = document.querySelector(".card-content");
+    }
 
-//     const data = pharmacyLocations[region];
+    // grade = % correct out of total planned questions (8)
+    const totalQuestions = 8;
+    const correct = correctAnswers;
+    let accuracyPercentage = totalQuestions > 0 ? Math.round((correct / totalQuestions) * 100) : 0;
 
-//     title.textContent = data.title;
+    // 3. עדכון הנתונים בתוך הפופ-אפ שלך
+    const gradeElement = document.getElementById("grade");
+    const timeElement = document.getElementById("time");
+    const popup = document.getElementById("game-popup");
 
-//     content.innerHTML = "";
+    if (gradeElement) gradeElement.innerText = `${calculateGrade()}%`;
 
-//     data.locations.forEach(location => {
+    document.getElementById('retry-btn').onclick = () => {
+        resetGame();
+    };
 
-//         const item = document.createElement("div");
-//         item.className = "location-item";
+    document.getElementById('next-btn').addEventListener('click', () => {
+    })
+    // כאן אפשר להציג פופ-אפ סיום מותאם אישית עם הציון הסופי והזמן שלקח
+}
 
-//         item.innerHTML = `
-//             <span class="pin-icon">📍</span>
-//             <p>${location.name}</p>        `;
+const calculateGrade = () => {
+    const penaltyPerMistake = 100 / 8; // 12.5 points per mistake
 
-//         content.appendChild(item);
-//     });
+    let grade = 100 - (wrongAnswers * penaltyPerMistake);
 
-//     card.classList.add("open");
-// };
+    return Math.max(0, Math.round(grade));
+};
 
+const resetGame = () => {
+    // Reset counters
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    remainingLocations = 8;
 
-// // Function to reset back to the full map
-// const resetMap = () => {
-//     const mapContainer = document.querySelector('.map-container');
-//     const fullMap = document.getElementById('full_israel');
-//     const northMap = document.getElementById('north_israel');
+    // Reset arrays
+    tempArr = [];
+    copyArr = [...pharmacyQuizData];
 
-//     mapContainer.classList.remove('zoom-north');
-//     northMap.classList.remove('active');
-//     fullMap.classList.add('active');
-// }
+    console.log("pharmacy data:", pharmacyQuizData);
+    console.log("copy:", copyArr);
 
+    // Reset timer
+    clearInterval(timerInterval);
+    secondsElapsed = 0;
 
+    if (timerDisplay) {
+        timerDisplay.innerText = "00:00";
+    }
+
+    // Reset score text
+    document.getElementById('score-counter').innerText = "0/8";
+
+    // Remove previous answers colors
+    for (let i = 0; i < answersArr.length; i++) {
+        answersArr[i].classList.remove("correct", "wrong");
+    }
+
+    const popup = document.getElementById('game-popup');
+popup.style.display = "none";
+popup.classList.remove("show");
+
+setTimeout(() => {
+    startTimer();
+    nextPharmacy();
+}, 100);
+};

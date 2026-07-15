@@ -199,7 +199,8 @@
             <div class="map-container" id="mapContainer">
 
 
-                <iframe src="https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1"
+                <iframe
+                    src="https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1"
                     class="responsive-map-iframe" loading="lazy" allowfullscreen>
                 </iframe>
                 <!-- <img src="assets/images/center_israel.png" alt="Center Israel" class="israel-layer" id="center_israel">
@@ -259,6 +260,59 @@
             <button class="button" id="start-exercise"> !בואו נתחיל</button>
         </div>
 
+    </div>
+
+    <div class="seterra-game-container" id="seterra-game-container">
+        <!-- Top Stats / Question Bar -->
+        <div class="game-header-bar">
+            <div class="stat-box"><span id="score-counter">0/8</span></div>
+            <div class="target-prompt"><strong id="target-name">מרפ"א דרום</strong></div>
+            <div class="timer-box">⏳ <span id="game-timer">00:00</span></div>
+        </div>
+
+        <!-- The Interactive Map Wrapper -->
+        <div class="game-map-viewport">
+            <img src="assets/images/clean-map-israel.png" alt="Israel Map" id="quiz-map-img" draggable="false">
+
+            <!-- White Click Dots (Seterra Style) -->
+            <!-- You can position these with absolute percentages (top/left) over the cities -->
+            <div class="map-target-dot" style="top: 21%; left: 66%;" id="פילון"></div>
+            <div class="map-target-dot" style="top: 23%; left: 47%;" id="חיפה"></div>
+            <div class="map-target-dot" style="top: 36%; left: 41%;" id="גלילות"></div>
+            <div class="map-target-dot" style="top: 40%; left: 39%;" id="קרייה"></div>
+            <div class="map-target-dot" style="top: 43%; left: 44%;" id="צריפין"></div>
+            <div class="map-target-dot" style="top: 47%; left: 54%;" id="ירושלים"></div>
+            <div class="map-target-dot" style="top: 61%; left: 45%;" id="בהדים"></div>
+            <div class="map-target-dot" style="top: 83%; left: 46%;" id="עובדה"></div>
+
+        </div>
+    </div>
+
+    <div class="game-popup" id="game-popup">
+        <div class="pop-up-card">
+            <!-- כפתור סגירה פינתי (X) -->
+
+            <p class="popup-title">כל הכבוד! ציונך הוא:</p>
+
+            <!-- שורת הנתונים (ציון וזמן זה לצד זה) -->
+            <div class="stats-row">
+                <span id="time">00:56</span>
+                <span id="grade">100%</span>
+            </div>
+
+            <p class="or-text" id = "mistake-line">או</p>
+
+
+            <!-- קו מפריד אפור באמצע -->
+            <hr class="separator-line">
+
+            <!-- אזור הבחירה והכפתורים בעיצוב אנכי -->
+            <div class="button-column">
+                <button class="button retry-btn" id="retry-btn">נסה שוב</button>
+                <p class="or-text">או</p>
+                <button class="button next-btn" id="next-btn">הבא</button>
+            </div>
+        </div>
     </div>
 
 </body>
