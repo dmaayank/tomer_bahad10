@@ -227,25 +227,39 @@ svg {
 /* ========================================================= */
 /* 1. Page Wrapper (Locks height to exactly the remaining screen) */
 /* ========================================================= */
-.topics_page {
+#topics_page {
+    position: absolute;
+    top: 8vh;
+    /* Starts right below your 8vh header */
+    left: 0;
+    width: 100vw;
+    height: 92vh;
+    /* Remaining height of the screen (100 - 8) */
+    height: 92dvh;
+
     display: none;
-    /* Controlled by JS */
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    /* Evenly spaces: Title -> Topics -> Button */
-
-    width: 100vw;
-    /* Lock the height to exactly 100% minus the 8vh header */
-    height: 92vh;
-    margin-top: 8vh;
-
     box-sizing: border-box;
-    /* Tight padding to prevent vertical overflows */
-    padding: 2vh 5vw 3vh 5vw;
 
-    /* Strict no-scroll constraint */
+    /* Responsive vertical padding to save space on small screens */
+    padding: clamp(10px, 3vh, 25px) 20px;
     overflow: hidden;
+    /* Stops layout elements from expanding the page */
+}
+
+.topics,
+#topics_page>div:nth-child(2) {
+    /* Adjust selector to match your HTML wrapper if needed */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+
+    /* This makes the gap shrink on small screens and grow on larger screens */
+    gap: clamp(8px, 1.8vh, 16px);
+    margin-bottom: auto;
+    /* Pushes the start button down cleanly */
 }
 
 #topics_page {
@@ -256,26 +270,24 @@ svg {
 .topics {
     display: flex;
     flex-direction: column;
-    /* Use dynamic gap that scales with the viewport height */
-    gap: 2.5vh;
     width: 100%;
-    max-width: 450px;
+    max-width: 340px;
+    /* Limits width so it doesn't stretch too wide on tablets */
 
-    /* Allows the topics block to grow into available space, but not overflow */
-    flex-grow: 1;
-    justify-content: center;
-    /* Centers the list vertically */
-    margin: 1vh 0;
+    /* Shrinks the gap dynamically on small screens */
+    gap: clamp(8px, 1.5vh, 16px);
+
+    /* Pushes the start button down to the bottom of the container naturally */
+    margin-bottom: auto;
 }
 
 /* Remove absolute positioning from the icon */
-.icon {
-    width: 24px;
-    /* Use fixed sizes for cleaner icons */
-    height: 24px;
+.topic .icon {
+    width: clamp(22px, 3vh, 28px);
+    height: clamp(22px, 3vh, 28px);
     object-fit: contain;
     flex-shrink: 0;
-    /* Prevents the icon from squeezing if text gets long */
+    /* Prevents icon distortion */
 }
 
 .topic {
@@ -285,7 +297,7 @@ svg {
     width: 100%;
 
     /* Locks button height relative to vertical screen room */
-    height: 8vh;
+    height: clamp(52px, 7.2vh, 66px);
     min-height: 48px;
     /* Safe minimum for tiny screens */
     max-height: 68px;
@@ -308,6 +320,15 @@ svg {
     animation-duration: 1s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
+}
+
+.topics_page .title {
+    font-family: 'heebo-bold';
+    color: #BA0000;
+    text-align: center;
+    margin: 0 0 4px 0;
+    font-size: clamp(1.5rem, 5.5vw, 2rem);
+    line-height: 1.2;
 }
 
 /* Delays */
@@ -333,18 +354,33 @@ svg {
 
 #start_button {
     animation-delay: 1.5s;
+    flex-shrink: 0;
+    /* Prevents the button from shrinking under pressure */
+    margin-bottom: clamp(10px, 2.5vh, 20px);
+    /* Keeps a safe gap from the device bottom */
+    /* Never allow the button to flatten or compress */
 }
 
 
 .topic_name {
-    text-align: right;
-    font-size: clamp(0.9rem, 3.5vw, 1.15rem);
     /* Keeps text from clipping inside the 8vh box */
-    line-height: 1.2;
-    margin: 0;
     flex-grow: 1;
     padding-right: 12px;
     font-family: 'heebo-regular';
+
+    color: #000000;
+    margin: 0;
+    text-align: right;
+    direction: rtl;
+    font-size: clamp(0.85rem, 3.2vw, 1rem);
+    line-height: 1.25;
+
+    /* Safely handles the double-line text in topic 4 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
 }
 
 .button {
@@ -421,7 +457,7 @@ svg {
 
 #title_text {
     position: relative;
-    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+    font-size: clamp(1rem, 4vw, 1.2rem);
     color: #333;
     margin: 0;
     top: 0;
