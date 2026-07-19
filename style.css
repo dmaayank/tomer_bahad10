@@ -416,6 +416,14 @@ svg {
     flex-shrink: 0;
     /* Ensures the start button never gets crushed */
 
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
     transition: scale 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.1s ease-out;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
@@ -547,6 +555,14 @@ svg {
     font-family: 'heebo-bold';
     background: radial-gradient(#FFFFFF, #EACDCD);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
 
     /* Clean transition (removed transform rules to prevent off-center bugs) */
     transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
@@ -1247,4 +1263,598 @@ svg {
 
 .button-column .button:hover {
     filter: brightness(0.98);
+}
+
+.medicine-table-page {
+    display: none;
+    font-size: 0.8rem;
+}
+
+.medicine-table-page table {
+    border-collapse: collapse;
+    position: relative;
+    top: 3vh;
+    width: 100%;
+    direction: rtl;
+    text-align: center;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+
+    text-align: center;
+
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#warning-btn {
+    position: relative;
+    width: 10%;
+}
+
+.important {
+    display: flex;
+    color: #b31010 !important;
+    flex-direction: row-reverse;
+    align-items: center;
+    font-family: 'heebo-bold';
+    position: relative;
+    top: 5vh;
+}
+
+/* medicine page */
+.medicine-page {
+    display: none;
+    text-align: center;
+
+}
+
+.medicine-page p {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    direction: rtl;
+}
+
+.medicine-page .button-row {
+    gap: 10px;
+}
+
+.medicine-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+/*medicine game page*/
+
+.pill-img {
+    width: 35%;
+}
+
+#practice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border-radius: 100px;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+/* אזור המשחק הכללי */
+.medicine-game {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    box-sizing: border-box;
+    padding-top: 10px;
+    display: none;
+    overflow: hidden;
+}
+
+/* כותרת המשחק */
+.medicine-game .title {
+    position: absolute;
+    top: 20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+}
+
+/* קוביות בחירת התרופה */
+.medicine-choice {
+    position: absolute;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* עטיפה לבקבוק כדי לאפשר מיקום מוחלט של התג מעליו */
+.pill-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+
+/* תמונת הבקבוק עם צל ברירת מחדל לבן/רך */
+.pill-img {
+    width: 50px;
+    height: auto;
+    filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.12)) drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.8));
+    transition: filter 0.2s ease;
+}
+
+/* --- מצבי פידבק לבקבוקים --- */
+
+/* במידה והבחירה שגויה - הילה אדומה */
+.selected-wrong {
+    filter: drop-shadow(0px 0px 8px rgba(255, 0, 0, 0.7)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* התג הסגול (האות M) */
+.badge-icon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #a855b7;
+    /* סגול תואם */
+    color: white;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 0.85rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+/* טקסט מתחת לבקבוק */
+.medicine-choice p {
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 0.95rem;
+    margin: 0;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* מיקומים אחידים */
+#asmachta {
+    top: 29vh;
+    left: 4vw;
+}
+
+#teken15 {
+    top: 29vh;
+    right: 4vw;
+}
+
+#teken15d {
+    bottom: 11vh;
+    left: 4vw;
+}
+
+/* הועלה מעט ל-12vh כדי לפנות מקום לבאנר השגיאה */
+#mumhim {
+    bottom: 11vh;
+    right: 4vw;
+}
+
+/* תיבת השאלה המרכזית */
+.question-prompt {
+    text-align: center;
+    position: absolute;
+    direction: rtl;
+    background-color: #D4E8EA;
+    width: 86%;
+    border: #526365 solid 1px;
+    border-radius: 12px;
+    padding: 15px 15px;
+    left: 50%;
+    top: 59%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+
+#question-progress {
+    font-size: 0.85rem;
+    margin: 0 0 10px 0;
+    color: #555;
+}
+
+#question {
+    font-family: 'heebo', sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    margin: 5px 0;
+    color: #111;
+}
+
+/* באנר שגיאה תחתון קבוע */
+.answer-banner {
+    position: absolute;
+    bottom: 2vh;
+    left: 5%;
+    width: 90%;
+    display: flex;
+    flex-direction: row-reverse;
+    /* דואג שהאיקס יהיה בצד ימין/שמאל בהתאם */
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.answer-text {
+    font-family: 'heebo', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0;
+    direction: rtl;
+    text-align: right;
+    width: 85%;
+    line-height: 1.3;
+}
+
+.answer-icon {
+    color: #d9381e;
+    /* אדום של ה-X */
+    font-size: 1.3rem;
+    cursor: pointer;
+    font-weight: bold;
+    width: 10%;
+}
+
+/* --- מצב פידבק לבחירה נכונה --- */
+
+/* במידה והבחירה נכונה - הילה ירוקה זוהרת */
+.selected-right {
+    filter: drop-shadow(0px 0px 8px rgba(40, 167, 69, 0.8)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* medicine box page */
+.medicine-box-page {
+    display: none;
+
+}
+
+#practice-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border-radius: 100px;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+/* כותרת ההסבר הכחולה */
+.info-title {
+    font-family: 'heebo-bold', sans-serif;
+    color: #4a6572;
+    /* כחול-אפרפר תואם */
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    max-width: 90%;
+    line-height: 1.3;
+}
+
+/* ריכוז השלבים */
+.info-steps {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* שורת שלב בודד */
+.info-step {
+    display: flex;
+    flex-direction: row-reverse;
+    /* גורם לאייקון להיות מימין לטקסט */
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 15px 0;
+    gap: 15px;
+}
+
+.step-icon {
+    width: 45px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.step-text {
+    font-family: 'heebo-regular', sans-serif;
+    font-size: 1rem;
+    color: #333;
+    text-align: right;
+    margin: 0;
+    line-height: 1.4;
+    direction: rtl;
+}
+
+/* קווי הפרדה אפורים בין השלבים */
+.step-divider {
+    width: 40%;
+    border: none;
+    border-top: 1px solid #54636b;
+    margin: 10px 0;
+}
+
+.step-icon {
+    width: 6vw;
+    position: relative;
+    right: 2%;
+}
+
+
+
+/*medicine bag page*/
+.bag-page {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    /* פתרון: הוספת מרווח עליון כדי שהכותרת תרד אל מתחת לסרגל הניווט */
+    margin-top: 100px;
+}
+
+/* קונטיינר האפשרויות */
+.options-container {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    top: 67%;
+}
+
+.bag-page .title {
+    top: -17vh;
+}
+
+.options-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+/* עיצוב כפתור בחירה שגרתי */
+.option-btn {
+    background-color: #ced2b7;
+    /* צבע זית/חאקי בהיר כמו בצילום */
+    border: 1px solid #b5b99e;
+    color: #000;
+    border-radius: 20px;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 0.7rem;
+    width: 50vw;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.39);
+    transition: all 0.2s ease;
+}
+
+/* מצב שבו הכפתור נבחר על ידי המשתמש (Toggle) */
+.option-btn.selected {
+    background-color: #8c926b;
+    /* כהה יותר המראה בחירה */
+    color: white;
+    transform: scale(0.96);
+}
+
+/* כפתור נפק תרופה התחתון */
+.dispense-btn {
+    background-color: #f2dede;
+    border: 3px solid #b7473a;
+    color: #b7473a;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 1.4rem;
+    padding: 8px 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bag-img {
+    width: 70vw;
+    top: -16vh;
+    position: relative;
+}
+
+#dispense-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+.answer-choice {
+    font-size: 0.8rem;
+    font-family: 'heebo-bold';
+    margin: 4px;
+}
+
+#medicine-choice {
+    position: absolute;
+    display: none;
+
+    top: 39vh;
+}
+
+#expiry-date-choice {
+    position: absolute;
+    display: none;
+
+    top: 42vh;
+}
+
+#name-choice {
+    position: absolute;
+    display: none;
+
+    top: 45vh;
+}
+
+#batch-number-choice {
+    position: absolute;
+    display: none;
+
+    top: 48vh;
 }

@@ -267,12 +267,12 @@
 
             <!-- White Click Dots (Seterra Style) -->
             <!-- You can position these with absolute percentages (top/left) over the cities -->
-            <div class="map-target-dot" style="top: 21%; left: 66%;" id="פילון"></div>
-            <div class="map-target-dot" style="top: 23%; left: 47%;" id="חיפה"></div>
-            <div class="map-target-dot" style="top: 36%; left: 41%;" id="גלילות"></div>
-            <div class="map-target-dot" style="top: 40%; left: 39%;" id="קרייה"></div>
-            <div class="map-target-dot" style="top: 43%; left: 44%;" id="צריפין"></div>
-            <div class="map-target-dot" style="top: 47%; left: 54%;" id="ירושלים"></div>
+            <div class="map-target-dot" style="top: 20%; left: 66%;" id="פילון"></div>
+            <div class="map-target-dot" style="top: 22%; left: 47%;" id="חיפה"></div>
+            <div class="map-target-dot" style="top: 35%; left: 41%;" id="גלילות"></div>
+            <div class="map-target-dot" style="top: 39%; left: 39%;" id="קרייה"></div>
+            <div class="map-target-dot" style="top: 42%; left: 44%;" id="צריפין"></div>
+            <div class="map-target-dot" style="top: 46%; left: 54%;" id="ירושלים"></div>
             <div class="map-target-dot" style="top: 61%; left: 45%;" id="בהדים"></div>
             <div class="map-target-dot" style="top: 83%; left: 46%;" id="עובדה"></div>
 
@@ -283,7 +283,7 @@
         <div class="pop-up-card">
             <!-- כפתור סגירה פינתי (X) -->
 
-            <p class="popup-title" id = "popup-title">כל הכבוד! ציונך הוא:</p>
+            <p class="popup-title" id="popup-title">כל הכבוד! ציונך הוא:</p>
 
             <!-- שורת הנתונים (ציון וזמן זה לצד זה) -->
             <div class="stats-row">
@@ -291,7 +291,7 @@
                 <span id="grade">100%</span>
             </div>
 
-            <p class="or-text" id = "mistake-line">או</p>
+            <p class="or-text" id="mistake-line">או</p>
 
 
             <!-- קו מפריד אפור באמצע -->
@@ -305,6 +305,187 @@
             </div>
         </div>
     </div>
+
+
+    <div class="medicine-table-page" id="medicine-table-page">
+
+        <h1 class="title"> תקני תרופות בצה”ל</h1>
+
+        <table class="medicine-table" style="width:100%">
+            <tr>
+                <th>תקן</th>
+                <th>סמכות רישום</th>
+                <th>סמכות ניפוק</th>
+                <th>מקום ניפוק</th>
+
+            </tr>
+            <tr>
+                <td>15ד</td>
+                <td>חובש</td>
+                <td>חובש</td>
+                <td>מרפאת יחידה</td>
+
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>רופא יחידה</td>
+                <td>חובש,רוקח</td>
+                <td>מרפאת יחידה</td>
+            </tr>
+            <tr>
+                <td>מומחים</td>
+                <td>רופא מומחה</td>
+                <td>רוקח</td>
+                <td>בית מרקחת</td>
+            </tr>
+            <tr>
+                <td>אדמכתא תקציבית</td>
+                <td>דורש אישור ענף שר”פ</td>
+                <td>רוקח</td>
+                <td>בית מרקחת</td>
+            </tr>
+        </table>
+
+        <div class="important">
+            <img src="assets/images/warning.png" class="icon" id="warning-btn">
+            שימו לב - לא כל רופא מוסמך לרשום כל תרופה
+        </div>
+
+        <button class="button" id="practice-btn">
+            לתרגול
+        </button>
+    </div>
+
+    <div class="medicine-page" id="medicine-page">
+        <p>לפניכם יופיע משפט ומספר תרופות לבחירה. בחרו את התרופה המתאימה ביותר למשפט.</p>
+        <div class="button-row">
+            <button class="button" id="return-btn"> חזור לטבלה</button>
+            <button class="button" id="start-game"> !בואו נתחיל</button>
+        </div>
+
+    </div>
+
+    <div class="medicine-game" id="medicine-game">
+        <h1 class="title">תקני תרופות בצה”ל</h1>
+
+        <!-- דוגמה לבקבוק עם הילה אדומה ותג סגול מעליו -->
+        <div class="medicine-choice selected-wrong" id="asmachta">
+            <div class="pill-wrapper">
+                <span class="badge-icon">M</span>
+                <img src="assets/images/pill_bottle.png" class="pill-img">
+            </div>
+            <p>אסמכתא תקציבית</p>
+        </div>
+
+        <div class="medicine-choice" id="teken15">
+            <div class="pill-wrapper">
+                <img src="assets/images/pill_bottle.png" class="pill-img">
+            </div>
+            <p>תקן 15</p>
+        </div>
+
+        <div class="medicine-choice" id="mumhim">
+            <div class="pill-wrapper">
+                <img src="assets/images/pill_bottle.png" class="pill-img">
+            </div>
+            <p>מומחים</p>
+        </div>
+
+        <div class="medicine-choice" id="teken15d">
+            <div class="pill-wrapper">
+                <img src="assets/images/pill_bottle.png" class="pill-img">
+            </div>
+            <p>תקן 15ד</p>
+        </div>
+
+        <div class="question-prompt">
+            <p id="question-progress">1/4</p>
+            <p id="question-text"> </p>
+        </div>
+
+        <!-- באנר שגיאה תחתון -->
+        <div class="answer-banner" id="answer-banner">
+            <img class="answer-icon" id="answer-icon" src="">
+            <p class="answer-text" id="answer-text"></p>
+        </div>
+    </div>
+
+    <div class="medicine-box-page" id="medicine-box-page">
+        <h1 class="title">איך מנפקים תרופה משולחן הטיפולים/ארגז חופ”ל?</h1>
+
+        <div class="info-steps">
+            <div class="info-step">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="step-text">חובה לתעד ב-CPR את התרופות שניתנו</p>
+            </div>
+
+            <hr class="step-divider">
+
+            <div class="info-step">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="step-text">חובה לנפק את התרופות בשקית ולרשום על גבי השקית את שם התרופה, אצווה, תוקף, ואת אופן
+                    הנטילה.</p>
+            </div>
+
+            <hr class="step-divider">
+
+            <div class="info-step">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="step-text">יש להסביר לחייל איך ליטול את התרופה עם עלון לצרכן</p>
+            </div>
+        </div>
+
+
+
+        <button class="button" id="practice-button">
+            לתרגול
+        </button>
+
+
+    </div>
+
+    <div class="bag-page" id="bag-page">
+        <h1 class="title">הכנת התרופה לניפוק</h1>
+        <!-- תמונת השקית והתרופה -->
+        <div class="bag-container">
+            <div class="label-lines"></div>
+            <img src="assets/images/medicine-bag.png" class="bag-img" alt="שקית אקמול">
+        </div>
+
+        <!-- כפתורי האפשרויות לבחירה (מפוזרים בשורות) -->
+        <div class="options-container">
+            <div class="options-row">
+                <button class="option-btn" id="item-code">קוד פריט: PC123</button>
+                <button class="option-btn" id="expiry-date">05/2028</button>
+                <button class="option-btn" id="batch-number">L998877</button>
+            </div>
+            <div class="options-row">
+                <button class="option-btn" id="dosage-instruction">לפי הצורך כל 6 שעות</button>
+                <button class="option-btn" id="quality-control">בקרת יצרן</button>
+            </div>
+            <div class="options-row">
+                <button class="option-btn" id="kosher">כשר לפסח</button>
+                <button class="option-btn" id="name">ישראל ישראלי</button>
+                <button class="option-btn" id="weight">משקל: 100 גרם</button>
+            </div>
+            <div class="options-row">
+                <button class="option-btn" id="origin">תוצרת גרמניה</button>
+                <button class="option-btn" id="medicine">אקמול 500 מ"ג</button>
+            </div>
+        </div>
+
+        <div class = "answer-choice" id = "name-choice">ישראל ישראלי</div>
+        <div class = "answer-choice" id = "expiry-date-choice">05/2028</div>
+        <div class = "answer-choice" id = "medicine-choice">אקמול 500 מ"ג</div>
+        <div class = "answer-choice" id = "batch-number-choice">L998877</div>
+
+        <!-- כפתור הניפוק הסופי -->
+        <div class="submit-container">
+            <button class="dispense-btn" id="dispense-btn">נפק תרופה</button>
+        </div>
+    </div>
+
+
 
 </body>
 
