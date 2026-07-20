@@ -699,6 +699,10 @@ const resetBagGame = () => {
 
 const setTomerPage = () => {
     // 1. Reset page counter back to 1
+    document.getElementById('game-popup').style.display = "none";
+    document.getElementById('bag-page').style.display = "none";
+    document.getElementById('medicine-table-page').style.display = "none";
+
     currPage = 1;
 
     // 2. Hide all internal Tomer image slides (tomer1, tomer2, etc.)
@@ -716,9 +720,6 @@ const setTomerPage = () => {
 
     // 5. Ensure parent container is shown
     document.getElementById('tomer-system').style.display = "block";
-    document.getElementById('game-popup').style.display = "none";
-    document.getElementById('bag-page').style.display = "none";
-    document.getElementById('medicine-table-page').style.display = "none";
 
     // 6. Remove previous listener duplicates & attach clean event handler
     const nextBtn = document.getElementById('next-page-btn');
