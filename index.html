@@ -440,19 +440,40 @@
         <button class="button" id="practice-button">
             לתרגול
         </button>
+    </div>
 
+<div class="medicine-page" id="medicine-page">
+        <p>לפניכם תופיע שקית עם מדבקה ומספר אופציות. עליכם ללחוץ על האופציות הנכונות לפני מה שלמדתם על הנפקת תרופה השקית
+        </p>
+        <div class="button-row">
+            <button class="button" id="return-btn"> חזור לטבלה</button>
+            <button class="button" id="start-game"> !בואו נתחיל</button>
+        </div>
 
     </div>
 
     <div class="bag-page" id="bag-page">
         <h1 class="title">הכנת התרופה לניפוק</h1>
+
         <!-- תמונת השקית והתרופה -->
         <div class="bag-container">
-            <div class="label-lines"></div>
+            <!-- התגיות שיופיעו על השקית מרוכזות כאן -->
+            <div class="label-lines">
+                <div class="answer-choice" id="batch-number-choice">L998877</div>
+                <div class="answer-choice" id="name-choice">ישראל ישראלי</div>
+                <div class="answer-choice" id="medicine-choice">אקמול 500 מ"ג</div>
+                <div class="answer-choice" id="expiry-date-choice">05/2028</div>
+                <div class="answer-choice" id="item-code-choice">קוד פריט: PC123</div>
+                <div class="answer-choice" id="quality-control-choice">בקרת יצרן</div>
+                <div class="answer-choice" id="dosage-instruction-choice">לפי הצורך כל 6 שעות</div>
+                <div class="answer-choice" id="kosher-choice">כשר לפסח</div>
+                <div class="answer-choice" id="weight-choice">משקל: 100 גרם</div>
+                <div class="answer-choice" id="origin-choice">תוצרת גרמניה</div>
+            </div>
             <img src="assets/images/medicine-bag.png" class="bag-img" alt="שקית אקמול">
         </div>
 
-        <!-- כפתורי האפשרויות לבחירה (מפוזרים בשורות) -->
+        <!-- כפתורי האפשרויות לבחירה -->
         <div class="options-container">
             <div class="options-row">
                 <button class="option-btn" id="item-code">קוד פריט: PC123</button>
@@ -474,17 +495,192 @@
             </div>
         </div>
 
-        <div class = "answer-choice" id = "name-choice">ישראל ישראלי</div>
-        <div class = "answer-choice" id = "expiry-date-choice">05/2028</div>
-        <div class = "answer-choice" id = "medicine-choice">אקמול 500 מ"ג</div>
-        <div class = "answer-choice" id = "batch-number-choice">L998877</div>
-
         <!-- כפתור הניפוק הסופי -->
         <div class="submit-container">
-            <button class="dispense-btn" id="dispense-btn">נפק תרופה</button>
+            <button class="next-button" id="dispense-btn">נפק תרופה</button>
         </div>
     </div>
 
+    <div class="tomer-system" id="tomer-system">
+        <h1 class="title" id="tomer-title">איך מנפקים תרופות במערכת התומ"ר</h1>
+
+        <img src=" " id="tomer1" class="tomer-photo">
+        <img src=" " id="tomer2" class="tomer-photo">
+        <img src=" " id="tomer3" class="tomer-photo">
+        <img src=" " id="tomer4" class="tomer-photo">
+        <img src=" " id="tomer5" class="tomer-photo">
+
+        <button class="button" id="next-page-btn">הבא</button>
+    </div>
+
+    <div class="asmachta-page" id="asmachta-page">
+        <!-- כותרת העמוד -->
+        <h1 class="title">אסמכתא תקציבית -<br>דגשים</h1>
+
+        <!-- רשימת הסעיפים -->
+        <div class="bullets-container">
+
+            <div class="bullet-item">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="bullet-text">ניתנת ע"י ענף שר"פ או באישור הרת"ח<br>(רופא במומחיות רלוונטית)</p>
+            </div>
+            <div class="bullet-divider"></div>
+
+            <div class="bullet-item">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="bullet-text">תוקף אוטומטי - חצי שנה</p>
+            </div>
+            <div class="bullet-divider"></div>
+
+            <div class="bullet-item">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="bullet-text">ניתן לקצר בקשה לתוקף אסמכתא במלל החופשי.</p>
+            </div>
+            <div class="bullet-divider"></div>
+
+            <div class="bullet-item">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="bullet-text">תרופות מקור או גנריקה ספציפית - מצריכה אסמכתא</p>
+            </div>
+            <div class="bullet-divider"></div>
+
+            <div class="bullet-item">
+                <img src="assets/images/asterisk.png" class="step-icon" alt="גלולות">
+                <p class="bullet-text">שינוי מינון דורש הגשת בקשה חדשה</p>
+            </div>
+            <div class="bullet-divider"></div>
+
+        </div>
+
+        <!-- כפתור הבא -->
+        <button class="next-button" id="next-button">הבא</button>
+    </div>
+
+    <div id="digital-page">
+        <!-- כותרת -->
+        <h1 class="digital-title">המרשם הדיגיטלי</h1>
+
+        <!-- רשימה -->
+        <div class="digital-bullets">
+
+            <div class="digital-item">
+                <img src="assets/images/no-print.png" class="digital-icon" alt="אייקון">
+                <p class="digital-text highlight">מהיום אין צורך להדפיס את המרשם!</p>
+            </div>
+            <div class="digital-divider"></div>
+
+            <div class="digital-item">
+                <img src="assets/images/smartphone.png" class="digital-icon" alt="אייקון">
+                <p class="digital-text">כחלק משפור השירות לפרט ולמטפלים, נפתחה האופציה במערכת ה-CPR למתן מרשם אלקטרוני
+                    (דיגיטל) למטופל.</p>
+            </div>
+            <div class="digital-divider"></div>
+
+            <div class="digital-item">
+                <img src="assets/images/approved.png" class="digital-icon" alt="אייקון">
+                <p class="digital-text">השימוש במרשם אלקטרוני יאפשר תיעוד של הוראות המטופל למתן טיפול תרופתי ללא צורך
+                    להדפיס עותק נייר על מנת לייצר מרשם תקף.</p>
+            </div>
+            <div class="digital-divider"></div>
+
+            <div class="digital-item">
+                <img src="assets/images/danger.png" class="digital-icon" alt="אייקון">
+                <p class="digital-text alert">סם מסוכן - עדיין דורש מרשם עם חותמת וחתמת רופא - רק במרפאות צבאיות.</p>
+            </div>
+            <div class="digital-divider"></div>
+
+        </div>
+
+        <!-- כפתור הבא -->
+        <button id="digital-next-btn" class="next-button">הבא</button>
+    </div>
+
+    <div id="available-page" class="available-page">
+
+        <h1 class="available-title">זמינות מלאי</h1>
+
+        <video width="320" height="240" controls id="video">
+            <source src="assets/videos/סרטון 4 - זמינות תרופות.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <button id="available-next-btn" class="next-button">הבא</button>
+
+    </div>
+
+    <div class="tomer-system-page" id="tomer-system-page">
+
+        <!-- כותרת העמוד -->
+        <h1 class="system-title">מערכת לבדיקת זמינות מלאי תרופות בבית מרקחת</h1>
+
+        <!-- מכולת האקורדיון -->
+        <div class="accordion-container">
+
+            <!-- אקורדיון 1 -->
+            <details class="accordion-item green-item">
+                <summary class="accordion-header">
+                    <div class="header-content">
+                        <img src="assets/images/goal.png" class="digital-icon" alt="אייקון">
+                        <span class="header-text">מטרות המערכת</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </summary>
+                <div class="accordion-body">
+                    המטרה היא ייעול זמנו של המטופל ומניעת נסיעות שווא.
+                </div>
+            </details>
+
+            <!-- אקורדיון 2 -->
+            <details class="accordion-item beige-item">
+                <summary class="accordion-header">
+                    <div class="header-content">
+                        <img src="assets/images/settings-yellow.png" class="digital-icon" alt="אייקון">
+                        <span class="header-text">מה המערכת מאפשרת</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </summary>
+                <div class="accordion-body">
+                    המערכת מאפשרת לחופל ולצוות המרפאה לבדוק האם התרופה המבוקשת קיימת במלאי, טרם הגעת המטופל לבית מרקחת.
+                </div>
+            </details>
+
+            <!-- אקורדיון 3 -->
+            <details class="accordion-item blue-item">
+                <summary class="accordion-header">
+                    <div class="header-content">
+                        <img src="assets/images/question.png" class="digital-icon" alt="אייקון">
+                        <span class="header-text">במה המערכת עוזרת</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </summary>
+                <div class="accordion-body">
+                    באמצעות המערכת ניתן לבדוק בזמן אמת באיזה בית מרקחת קיימת התרופה במלאי.
+                </div>
+            </details>
+
+            <!-- אקורדיון 4 -->
+            <details class="accordion-item orange-item">
+                <summary class="accordion-header">
+                    <div class="header-content">
+                        <img src="assets/images/system-entrance.png" class="digital-icon" alt="אייקון">
+                        <span class="header-text">כניסה למערכת</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </summary>
+                <div class="accordion-body">
+                    <p>הכניסה למערכת מתאפשרת דרך התומכ"ל.</p>
+                    <div class="image-placeholder">
+                        <!-- כאן נכנסת התמונה של המסך -->
+                    </div>
+                </div>
+            </details>
+
+        </div>
+
+        <!-- כפתור סיום (מופיע בסוף) -->
+        <button id="finish-btn" class="finish-btn">סיים לומדה</button>
+
+    </div>
 
 
 </body>

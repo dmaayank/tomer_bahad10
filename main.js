@@ -534,40 +534,371 @@ const resetMedicineGame = () => {
     loadNextQuestion();
 };
 
-const bagChoices = document.getElementsByClassName('option-btn');
 
+
+// const bagChoices = document.querySelectorAll('.option-btn'); 
 const possibleAnswers = ['name', 'expiry-date', 'medicine', 'batch-number'];
+let userChoice = [];
 
-const checkBagAnswer = (event) => {
-    const clickedId = event.target.id; // name | expiry-date | medicine | batch-number
+const bagGame = () => {
+    document.getElementById("bag-page").style.display = "flex";
+    document.getElementById("medicine-box-page").style.display = "none";
 
-    if (!possibleAnswers.includes(clickedId)) return;
+    userChoice = [];
 
-    const choiceElement = document.getElementById(`${clickedId}-choice`);
-    if (!choiceElement) return;
+    // Reset choices UI
+    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
+        choice.style.display = "none";
+        choice.classList.remove("selected-right", "selected-wrong");
+        choice.onclick = null;
+    });
 
-    choiceElement.style.display = "block";
-    event.target.style.visibility = "hidden";
+    // Fetch buttons fresh when bagGame() runs to avoid empty NodeList issues
+    const bagChoices = document.querySelectorAll('.option-btn');
 
-    // if user clicks the revealed row again, hide it and show the original option button
-    choiceElement.onclick = () => {
-        choiceElement.style.display = "none";
-        event.target.style.visibility = "visible";
+    bagChoices.forEach(btn => {
+        btn.style.visibility = "visible";
+        btn.onclick = addChoice;
+    });
+
+    document.getElementById("dispense-btn").onclick = endBagGame;
+};
+
+const addChoice = (event) => {
+    // .closest('.option-btn') ensures we get the button's ID even if child elements inside were clicked
+    const btn = event.currentTarget || event.target.closest('.option-btn');
+    if (!btn) return;
+
+    const clickedId = btn.id;
+
+    if (userChoice.includes(clickedId) || userChoice.length >= 4) return;
+
+    userChoice.push(clickedId);
+
+    // Hide the clicked option button
+    btn.style.visibility = "hidden";
+
+    // Show the selected row UI item
+    const row = document.getElementById(`${clickedId}-choice`);
+    if (!row) {
+        console.error(`Missing element with ID: ${clickedId}-choice`);
+        return;
+    }
+
+    row.style.display = "block";
+
+    // Allow clicking the row to remove the selection
+    row.onclick = () => {
+        row.style.display = "none";
+        btn.style.visibility = "visible";
+        userChoice = userChoice.filter(item => item !== clickedId);
+    };
+}
+
+
+const endBagGame = () => {
+
+    let totalRight = 0;
+    let totalWrong = 0;
+    // Check everything the user selected
+    userChoice.forEach(id => {
+
+        const row = document.getElementById(`${id}-choice`);
+
+        if (possibleAnswers.includes(id)) {
+
+            row.classList.add("selected-right");
+            totalRight++;
+
+        } else {
+
+            row.classList.add("selected-wrong");
+            totalWrong++;
+        }
+
+    });
+    // Show missed correct answers
+    possibleAnswers.forEach(id => {
+
+        if (!userChoice.includes(id)) {
+
+            const row = document.getElementById(`${id}-choice`);
+
+            row.style.display = "block";
+            row.classList.add("selected-wrong");
+        }
+
+    });
+    const finalGrade = calculateBagGrade(totalWrong);
+
+    document.getElementById("game-popup").style.display = "flex";
+
+    document.getElementById("popup-title").innerText =
+        finalGrade >= 75
+            ? "כל הכבוד! ציונך הוא:"
+            : "אולי נתרגל עוד קצת? ציונך הוא:";
+
+    document.getElementById("grade").innerText = `${finalGrade}%`;
+
+    document.getElementById("time").innerText = `${totalRight}/4`;
+
+    const mistakeLine = document.getElementById("mistake-line");
+
+    if (totalWrong === 0) {
+        mistakeLine.innerText = "לא טעית בכלל!";
+    }
+    else if (totalWrong === 1) {
+        mistakeLine.innerText = "טעית פעם אחת";
+    }
+    else {
+        mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
+    }
+
+    document.getElementById("retry-btn").onclick = () => {
+        document.getElementById("game-popup").style.display = "none";
+        resetBagGame();
+    };
+
+    document.getElementById("next-btn").onclick = () => {
+
+        setTomerPage();
+        document.getElementById("practice-button").onclick = bagGame;
     };
 };
 
+// 5. Fixed: Accepts mistake count directly, eliminating reliance on leaky global arrays
+const calculateBagGrade = (mistakeCount) => {
+    const total = 4;
+    const correct = total - mistakeCount;
+    const grade = (correct / total) * 100;
+    return Math.max(0, Math.min(100, Math.round(grade)));
+};
 
 
-const bagGame = () => {
+// 6. Reset logic cleaned up
+const resetBagGame = () => {
+    userChoice = [];
 
-    document.getElementById('bag-page').style.display = "flex";
-    document.getElementById('medicine-box-page').style.display = "none";
+    // 1. Reset all option buttons visibility
+    const bagChoices = document.querySelectorAll('.option-btn');
+    bagChoices.forEach(btn => {
+        btn.style.visibility = "visible";
+    });
 
-    for (let i = 0 ; i < bagChoices.length; i++) {
-        bagChoices[i].addEventListener('click',checkBagAnswer);
+    // 2. Reset every choice row UI and classes
+    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
+        choice.style.display = "none";
+        choice.classList.remove("selected-right", "selected-wrong");
+        choice.onclick = null;
+    });
+
+    // 3. Re-initialize the game listeners and state
+    bagGame();
+};
+
+
+const setTomerPage = () => {
+    // 1. Reset page counter back to 1
+    currPage = 1;
+
+    // 2. Hide all internal Tomer image slides (tomer1, tomer2, etc.)
+    for (let i = 1; i <= 5; i++) {
+        const img = document.getElementById(`tomer${i}`);
+        if (img) img.style.display = "none";
     }
 
+    // 3. Show only the first slide
+    const firstImg = document.getElementById('tomer1');
+    if (firstImg) firstImg.style.display = "block";
+
+    // 4. Update progress radio button state
+    document.getElementById("fifty").checked = true;
+
+    // 5. Ensure parent container is shown
+    document.getElementById('tomer-system').style.display = "block";
+    document.getElementById('game-popup').style.display = "none";
+    document.getElementById('bag-page').style.display = "none";
+
+    // 6. Remove previous listener duplicates & attach clean event handler
+    const nextBtn = document.getElementById('next-page-btn');
+    if (nextBtn) {
+        nextBtn.onclick = nextTomerPage;
+    }
+};
+
+let currPage = 1;
+
+const nextTomerPage = () => {
+    // 1. אם הגענו כבר לעמוד האחרון (5), הלחיצה תעביר אותנו לעמוד אסמכתא
+    if (currPage === 5) {
+        asmachtaPage();
+        return;
+    }
+
+    // 2. הסתרת התמונה הנוכחית
+    const currentImg = document.getElementById(`tomer${currPage}`);
+    if (currentImg) {
+        currentImg.style.display = "none";
+    }
+
+    // 3. קידום העמוד והצגת התמונה הבאה
+    currPage++;
+    console.log("Current Page:", currPage);
+
+    const nextImg = document.getElementById(`tomer${currPage}`);
+    if (nextImg) {
+        nextImg.style.display = "block";
+    }
+};
+
+const asmachtaPage = () => {
+    document.getElementById("seventyfive").checked = true;
+    document.getElementById('tomer-system').style.display = "none";
+    document.getElementById('asmachta-page').style.display = "flex"; // או "block"
+    document.getElementById('next-button').addEventListener('click', toDigitalPage);
+};
+
+// חיבור האירוע לכפתור פעם אחת בלבד בעת טעינת הדף:
+
+const toDigitalPage = () => {
+    document.getElementById('asmachta-page').style.display = "none";
+    document.getElementById('digital-page').style.display = "flex"; // או "block"
+    document.getElementById('digital-next-btn').addEventListener('click', availablePage);
 }
 
-// (old implementation removed) 
+const availablePage = () => {
+    hideAllScreens(); // מנקה את כל המסכים האחרים
 
+    // עדכון סרגל ההתקדמות ל-100%
+    document.getElementById('progress_bar').style.display = "block";
+    document.getElementById("onehundred").checked = true;
+
+    // הצגת העמוד הראשון של זמינות מלאי (העמוד הצבעוני)
+    const page1 = document.getElementById('available-page'); // או ID העמוד הצבעוני שלך
+    if (page1) page1.style.display = "flex";
+
+    // חיבור כפתור "הבא" של העמוד הצבעוני לעמוד הווידאו/המשחק
+    const nextBtn = document.getElementById('available-next-btn');
+    if (nextBtn) {
+        nextBtn.onclick = availableStep2;
+    }
+};
+
+const availableStep2 = () => {
+    hideAllScreens(); // מנקה את העמוד הצבעוני
+
+    // שומר על סרגל ההתקדמות ב-100%
+    document.getElementById('progress_bar').style.display = "block";
+    document.getElementById("onehundred").checked = true;
+
+    // מציג את עמוד הווידאו/המדיה
+    const page2 = document.getElementById('tomer-system-page'); // התאם ל-ID המדויק של עמוד הווידאו
+    if (page2) page2.style.display = "flex";
+
+    // בלחיצה על "הבא" בסוף זמינות מלאי - חוזרים לעמוד הנושאים הראשי
+    const finalBtn = document.getElementById('finish-btn');
+    if (finalBtn) {
+        finalBtn.onclick = () => {
+            hideAllScreens();
+            document.getElementById('topics_page').style.display = "flex";
+            document.getElementById('progress_bar').style.display = "none";
+        };
+    }
+};
+
+// Add this event listener to handle direct navigation from the progress bar
+const hideAllScreens = () => {
+    const screens = [
+        'topics_page',
+        'pharmacy_page',
+        'exercise-page',
+        'seterra-game-container',
+        'medicine-table-page',
+        'medicine-page',
+        'medicine-game',
+        'medicine-box-page',
+        'bag-page',
+        'tomer-system',
+        'asmachta-page',
+        'digital-page',
+        'available-page',
+        'tomer-system-page',
+        'popup',
+        'game-popup'
+    ];
+
+    screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+    });
+
+    // איפוס שקופיות תומ"ר
+    for (let i = 1; i <= 5; i++) {
+        const img = document.getElementById(`tomer${i}`);
+        if (img) img.style.display = "none";
+    }
+
+    if (typeof timerInterval !== 'undefined' && timerInterval) {
+        clearInterval(timerInterval);
+    }
+};
+
+// 2. מאזין לסרגל ההתקדמות בלבד
+document.addEventListener('DOMContentLoaded', () => {
+    const progressRadios = document.querySelectorAll('.progress_bar input[type="radio"]');
+
+    progressRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            hideAllScreens(); // עכשיו זה יעבוד מכל מקום בלי שגיאות!
+
+            switch (e.target.id) {
+                case 'five': // בתי מרקחת
+                    pharmacyPage();
+                    break;
+
+                case 'twentyfive': // תקני תרופות
+                    document.getElementById('progress_bar').style.display = "block";
+                    document.getElementById("twentyfive").checked = true;
+                    document.getElementById('medicine-table-page').style.display = "block";
+
+                    // שימוש ב-onclick מונע שכפול מאזינים בעת לחיצות חוזרות בסרגל
+                    const practiceBtn = document.getElementById('practice-btn');
+                    if (practiceBtn) {
+                        practiceBtn.onclick = () => {
+                            document.getElementById('medicine-table-page').style.display = "none";
+                            document.getElementById('medicine-page').style.display = "block";
+                        };
+                    }
+
+                    const returnBtn = document.getElementById('return-btn');
+                    if (returnBtn) {
+                        returnBtn.onclick = () => {
+                            document.getElementById('medicine-table-page').style.display = "block";
+                            document.getElementById('medicine-page').style.display = "none";
+                        };
+                    }
+
+                    const startGameBtn = document.getElementById('start-game');
+                    if (startGameBtn) {
+                        startGameBtn.onclick = () => medicineGame();
+                    }
+                    break;
+
+                case 'fifty': // מערכת תומ"ר
+                    document.getElementById('progress_bar').style.display = "block";
+                    setTomerPage();
+                    break;
+
+                case 'seventyfive': // אסמכתא תקציבית
+                    document.getElementById('progress_bar').style.display = "block";
+                    asmachtaPage();
+                    break;
+
+                case 'onehundred': // זמינות מלאי
+                    document.getElementById('progress_bar').style.display = "block";
+                    availablePage();
+                    break;
+            }
+        });
+    });
+});
