@@ -718,6 +718,7 @@ const setTomerPage = () => {
     document.getElementById('tomer-system').style.display = "block";
     document.getElementById('game-popup').style.display = "none";
     document.getElementById('bag-page').style.display = "none";
+    document.getElementById('medicine-table-page').style.display = "none";
 
     // 6. Remove previous listener duplicates & attach clean event handler
     const nextBtn = document.getElementById('next-page-btn');
