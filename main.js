@@ -670,6 +670,7 @@ const endBagGame = () => {
     }
 
     document.getElementById('retry-btn').onclick = () => {
+        document.getElementById('medicine-game').style.display = "none";
         resetBagGame();
     };
 
