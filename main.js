@@ -222,8 +222,8 @@ const endGame = () => {
             const returnBtn = document.getElementById('return-btn');
             if (returnBtn) {
                 returnBtn.addEventListener('click', () => {
-                    document.getElementById('medicine-box-page').style.display = "block";
-                    document.getElementById('medicine-bag-page').style.display = "none";
+                    document.getElementById('medicine-table-page').style.display = "block";
+                    document.getElementById('medicine-page').style.display = "none";
                 });
             }
 
@@ -857,8 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const returnBtn = document.getElementById('return-btn');
                     if (returnBtn) {
                         returnBtn.onclick = () => {
-                            document.getElementById('medicine-box-page').style.display = "block";
-                            document.getElementById('medicine-bag-page').style.display = "none";
+                            document.getElementById('medicine-table-page').style.display = "block";
+                            document.getElementById('medicine-page').style.display = "none";
                         };
                     }
 
