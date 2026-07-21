@@ -856,10 +856,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const returnBtn = document.getElementById('return-btn');
                     if (returnBtn) {
-                        returnBtn.onclick = () => {
+                        returnBtn.addEventListener('click', () => {
                             document.getElementById('medicine-table-page').style.display = "block";
                             document.getElementById('medicine-page').style.display = "none";
-                        };
+                        });
                     }
 
                     const startGameBtn = document.getElementById('start-game');
