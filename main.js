@@ -357,6 +357,7 @@ const medicineGame = () => {
     copy = [...medicineGameData].sort(() => Math.random() - 0.5);
 
     rightAnswers = 0;
+    cntr = 1;
     incorrectAnswers = 0;
     userTries = 0;
     loadNextQuestion();
@@ -433,6 +434,8 @@ const checkMedicineAnswer = (event) => {
 const resetMedicineGame = () => {
     // הפעלה מחדש של הפונקציה הראשת המאפסת את המערך מחדש
     document.getElementById('game-popup').style.display = "none";
+    document.getElementById('bag-page').style.display = "none";
+
     cntr = 1;
     userTries = 0;
     medicineGame();
