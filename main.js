@@ -713,6 +713,8 @@ const resetBagGame = () => {
     });
 
     document.getElementById("game-popup").style.display = "none";
+    document.getElementById("bag-page").style.display = "flex";
+
     if (typeof bagGame === 'function') bagGame();
 };
 
