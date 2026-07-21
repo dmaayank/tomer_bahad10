@@ -1546,12 +1546,12 @@ tr:nth-child(even) {
 #asmachta {
     top: 50vh;
     left: 4vw;
-    padding-top: 10px;
+    padding-top: 15px;
 }
 
 #teken15 {
     top: 50vh;
-    padding-top: 10px;
+    padding-top: 15px;
     right: 4vw;
 }
 
@@ -1650,6 +1650,10 @@ tr:nth-child(even) {
 /* medicine box page */
 .medicine-box-page {
     display: none;
+}
+
+.medicine-box-page .title {
+
 }
 
 #practice-button {
@@ -1779,7 +1783,6 @@ tr:nth-child(even) {
 }
 
 
-
 /*medicine bag page*/
 .bag-page {
     width: 100%;
@@ -1794,6 +1797,9 @@ tr:nth-child(even) {
 }
 
 /* קונטיינר האפשרויות */
+/* NOTE: position:absolute here only behaves predictably if the actual
+   HTML parent of .options-container has position:relative/absolute set.
+   Verify against markup — see chat notes. */
 .options-container {
     width: 90%;
     max-width: 400px;
@@ -1804,6 +1810,8 @@ tr:nth-child(even) {
     top: 67%;
 }
 
+/* NOTE: `top` has no effect unless .title also has a position other than
+   static defined elsewhere. Verify this rule is actually doing anything. */
 .bag-page .title {
     top: -4vh;
 }
@@ -1852,12 +1860,6 @@ tr:nth-child(even) {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.bag-img {
-    width: 70vw;
-    top: -16vh;
-    position: relative;
-}
-
 #dispense-btn {
     display: flex;
     align-items: center;
@@ -1882,13 +1884,8 @@ tr:nth-child(even) {
     height: 6.5vh !important;
     min-height: 48px;
 
-    border: #840000 solid 3px;
-    border-radius: 100px;
-    color: #BA0000;
     font-size: clamp(1.3rem, 4.5vw, 1.6rem);
     font-family: 'heebo-bold';
-    background: radial-gradient(#FFFFFF, #EACDCD);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 
     background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
     border: 1.5px solid #a53d3d;
@@ -1897,27 +1894,19 @@ tr:nth-child(even) {
     /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
     box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
 
-
     /* Clean transition (removed transform rules to prevent off-center bugs) */
     transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-
 }
 
 #dispense-btn:active {
     /* Use the individual CSS scale property instead of transform: scale() */
     scale: 0.95;
 
-    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
-    border: 1.5px solid #a53d3d;
-    color: #a81c1c;
-    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
-
     /* Faster transition into the press */
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
 }
-
 
 /* קונטיינר השקית - מקבל מיקום יחסי */
 .bag-container {
@@ -1930,11 +1919,15 @@ tr:nth-child(even) {
     margin: 0 auto;
 }
 
-/* התמונה של השקית */
+/* התמונה של השקית — merged duplicate rules; if you need both the
+   -16vh offset from the old first block AND width:100%, this reflects
+   that combination. Drop `position/top` back out if it wasn't intentional. */
 .bag-img {
     width: 100%;
     height: auto;
     display: block;
+    position: relative;
+    top: -16vh;
 }
 
 /* האזור הלבן שעל השקית - ממוקם בדיוק במרכז התווית */
