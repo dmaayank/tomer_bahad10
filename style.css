@@ -1544,12 +1544,14 @@ tr:nth-child(even) {
 
 /* מיקומים אחידים ברשת המשחק */
 #asmachta {
-    top: 48vh;
+    top: 50vh;
     left: 4vw;
+    padding-top: 10px;
 }
 
 #teken15 {
-    top: 48vh;
+    top: 50vh;
+    padding-top: 10px;
     right: 4vw;
 }
 
