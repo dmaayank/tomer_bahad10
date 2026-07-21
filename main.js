@@ -91,7 +91,12 @@ let hasAnsweredCurrent = false;
 let userChoice = [];
 let currPage = 1;
 
-let scores = 0;
+// אובייקט שמנהל את כל ציוני המשחקים
+const gameScores = {
+    pharmacy: null,
+    medicine: null,
+    bag: null
+};
 
 // ==========================================
 // 3. UTILS & NAVIGATION
@@ -101,7 +106,7 @@ const hideAllScreens = () => {
         'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
         'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
         'bag-page', 'tomer-system', 'asmachta-page', 'digital-page', 'available-page',
-        'tomer-system-page', 'popup', 'game-popup', 'summary-page' // <-- התווסף כאן
+        'tomer-system-page', 'popup', 'game-popup', 'summary-page'
     ];
 
     screens.forEach(id => {
@@ -249,12 +254,13 @@ const checkAnswer = (event) => {
 const calculateGrade = () => {
     if (userTries === 0) return 0;
     const grade = (correctAnswers * 100) / userTries;
-    scores+=grade;
     return Math.max(0, Math.round(grade));
 };
 
 const endGame = () => {
     const finalGrade = calculateGrade();
+    gameScores.pharmacy = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
     popup.dataset.gameType = "pharmacy";
@@ -412,13 +418,13 @@ const checkMedicineAnswer = (event) => {
 const calculateMedicineGrade = () => {
     if (userTries === 0) return 0;
     const grade = (rightAnswers * 100) / userTries;
-        scores+=grade;
-
     return Math.max(0, Math.round(grade));
 };
 
 const endMedicineGame = () => {
     const finalGrade = calculateMedicineGrade();
+    gameScores.medicine = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
     popup.dataset.gameType = "medicine";
@@ -487,7 +493,6 @@ const bagGame = () => {
     hideAllScreens();
     document.getElementById("bag-page").style.display = "flex";
     document.getElementById('medicine-bag-page').style.display = "none";
-
 
     document.querySelectorAll('[id$="-choice"]').forEach(choice => {
         choice.style.display = "none";
@@ -564,6 +569,8 @@ const endBagGame = () => {
     });
 
     const finalGrade = calculateBagGrade(totalWrong);
+    gameScores.bag = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+
     const popup = document.getElementById("game-popup");
     popup.style.display = "flex";
     popup.dataset.gameType = "bag";
@@ -596,8 +603,6 @@ const endBagGame = () => {
 const calculateBagGrade = (mistakeCount) => {
     const correct = 4 - mistakeCount;
     const grade = Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
-    scores += grade;
-
     return grade;
 };
 
@@ -674,12 +679,59 @@ const availableStep2 = () => {
 
     const finalBtn = document.getElementById('finish-btn');
     if (finalBtn) {
-        finalBtn.onclick = showSummaryPage; // <-- כעת מפנה לעמוד הסיכום!
+        finalBtn.onclick = showSummaryPage;
     }
 };
 
 // ==========================================
-// 8. INITIALIZATION & LISTENERS
+// 8. SUMMARY & FINAL PAGE
+// ==========================================
+const showSummaryPage = () => {
+    hideAllScreens();
+    document.getElementById('summary-page').style.display = "flex";
+
+    document.getElementById('progress_bar').style.display = "block";
+    setRadioProgress("onehundred");
+
+    // סינון ציונים שבוצעו וחישוב ממוצע מדויק
+    const validScores = Object.values(gameScores).filter(score => score !== null);
+    const sum = validScores.reduce((acc, score) => acc + score, 0);
+    
+    const avgScore = validScores.length > 0 
+        ? Math.round(sum / validScores.length) 
+        : 100;
+
+    document.getElementById('final-score-display').innerText = avgScore;
+
+    const titleEl = document.getElementById('final-title');
+    if (avgScore >= 75) {
+        titleEl.innerText = "כל הכבוד! סיימתם את הלומדה בהצלחה.";
+    } else {
+        titleEl.innerText = "לומדה הושלמה! כדאי לתרגל שוב.";
+    }
+
+    const starsContainer = document.getElementById('stars-container');
+    let starsHTML = '';
+
+    if (avgScore >= 90) {
+        starsHTML = '⭐ ⭐ ⭐';
+    } else if (avgScore >= 70) {
+        starsHTML = '⭐ ⭐ <span class="star gray">⭐</span>';
+    } else {
+        starsHTML = '⭐ <span class="star gray">⭐</span> <span class="star gray">⭐</span>';
+    }
+    starsContainer.innerHTML = starsHTML;
+
+    const redoBtn = document.getElementById('redo-lomda-btn');
+    if (redoBtn) {
+        redoBtn.onclick = () => {
+            location.reload();
+        };
+    }
+};
+
+// ==========================================
+// 9. INITIALIZATION & LISTENERS
 // ==========================================
 window.addEventListener('load', () => {
     const startBtn = document.getElementById('start_button');
@@ -724,69 +776,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-const showSummaryPage = () => {
-    hideAllScreens();
-    document.getElementById('summary-page').style.display = "flex";
-
-    // סמן 100% בסרגל ההתקדמות העליון
-    document.getElementById('progress_bar').style.display = "block";
-    setRadioProgress("onehundred");
-
-    // חישוב ממוצע הציונים שהתקבלו (מתעלם מציון שלא שוחק במידה ויש)
-    const validScores = Object.values(gameScores).filter(score => score !== null);
-    const avgScore = validScores.length > 0
-        ? Math.round(scores/3)
-        : 100; // ברירת מחדל אם נכנסו ישירות
-
-    // עדכון טקסט הציון
-    document.getElementById('final-score-display').innerText = avgScore;
-
-    // עדכון כותרת לפי הציון
-    const titleEl = document.getElementById('final-title');
-    if (avgScore >= 75) {
-        titleEl.innerText = "כל הכבוד! סיימתם את הלומדה בהצלחה.";
-    } else {
-        titleEl.innerText = "לומדה הושלמה! כדאי לתרגל שוב.";
-    }
-
-    // עדכון כוכבים (לפי הציון המשוקלל)
-    const starsContainer = document.getElementById('stars-container');
-    let starsHTML = '';
-
-    if (avgScore >= 90) {
-        starsHTML = '⭐ ⭐ ⭐'; // 3 כוכבים
-    } else if (avgScore >= 70) {
-        starsHTML = '⭐ ⭐ <span class="star gray">⭐</span>'; // 2 כוכבים
-    } else {
-        starsHTML = '⭐ <span class="star gray">⭐</span> <span class="star gray">⭐</span>'; // כוכב 1
-    }
-    starsContainer.innerHTML = starsHTML;
-
-    // חיבור כפתור "נסה שוב"
-    const redoBtn = document.getElementById('redo-lomda-btn');
-    if (redoBtn) {
-        redoBtn.onclick = () => {
-            location.reload(); // רענון הלומדה מחדש
-        };
-    }
-};
-
-// משתנה גלובלי לשמירת ציוני המשחקים
-const gameScores = {
-    pharmacy: null,
-    medicine: null,
-    bag: null
-};
-
-// עדכן את הפונקציה calculateGrade בסוף משחק המפה:
-// inside endGame() of pharmacy game:
-gameScores.pharmacy = calculateGrade();
-
-// עדכן את הפונקציה בסוף משחק התרופות:
-// inside endMedicineGame():
-gameScores.medicine = calculateMedicineGrade();
-
-// עדכן את הפונקציה בסוף משחק השקיות:
-// inside endBagGame():
-gameScores.bag = calculateBagGrade(totalWrong);
