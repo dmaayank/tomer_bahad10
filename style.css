@@ -1948,7 +1948,7 @@ tr:nth-child(even) {
 /* האזור הלבן שעל השקית - ממוקם בדיוק במרכז התווית */
 .label-lines {
     position: absolute;
-    top: 33%;
+    top: 32%;
     /* גובה הריבוע הלבן בשקית */
     left: 50%;
     transform: translate(-50%, -50%);
