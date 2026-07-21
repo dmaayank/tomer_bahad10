@@ -1652,7 +1652,10 @@ tr:nth-child(even) {
     display: none;
 }
 
-.medicine-box-page .title {}
+.medicine-box-page .title {
+    
+}
+
 
 #practice-button {
     display: flex;
@@ -1780,166 +1783,202 @@ tr:nth-child(even) {
     right: 2%;
 }
 
-/* =========================================
-   עמוד ניפוק תרופה בשקית (Medicine Bag Page)
-   ========================================= */
 
-/* קונטיינר העמוד הראשי */
+
+/*medicine bag page*/
 .bag-page {
     width: 100%;
-    min-height: 100dvh;
-    display: none; /* שונה ל-flex דרך JS כשהעמוד פעיל */
+    display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px 20px;
+    padding: 20px;
     box-sizing: border-box;
-    
-    /* מרווח עליון להתרחקות מסרגל הניווט העליון */
-    margin-top: 80px; 
+
+    /* פתרון: הוספת מרווח עליון כדי שהכותרת תרד אל מתחת לסרגל הניווט */
+    margin-top: 100px;
 }
 
-/* כותרת העמוד */
-.bag-page .title {
-    font-family: 'heebo-bold', sans-serif;
-    font-size: clamp(1.2rem, 4vw, 1.6rem);
-    color: #000;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-/* =========================================
-   קונטיינר השקית והמדבקה
-   ========================================= */
-
-.bag-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80vw;
-    max-width: 290px;
-    margin: 0 auto;
-}
-
-/* תמונת השקית */
-.bag-img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* האזור הלבן שעל גבי השקית (אזור התוויות) */
-.label-lines {
-    position: absolute;
-    top: 38%; /* יורד למרכז המלבן הלבן שבתמונה */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 52%; /* רוחב מותאם לגבולות התווית הלבנה */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1px;
-    z-index: 10;
-}
-
-/* השורות/תשובות שמופיעות בתוך התווית הלבנה בלחיצה */
-.answer-choice {
-    display: none; /* מוסתר כברירת מחדל עד לבחירה */
-    width: 100%;
-    text-align: center;
-    font-family: 'playpen', sans-serif;
-    font-size: clamp(0.55rem, 2.5vw, 0.75rem);
-    font-weight: bold;
-    color: #1a1a1a;
-    line-height: 1.1;
-    cursor: pointer;
-}
-
-/* =========================================
-   קונטיינר התגיות / כפתורי האפשרויות
-   ========================================= */
-
+/* קונטיינר האפשרויות */
 .options-container {
-    width: 100%;
-    max-width: 360px;
+    width: 90%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 15px;
+    gap: 8px;
+    position: absolute;
+    top: 67%;
+}
+
+.bag-page .title {
+    margin-bottom: 10px;
+    position: absolute;
+    top: 15%;
 }
 
 .options-row {
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     width: 100%;
 }
 
-/* עיצוב כפתור תגית בודד */
+/* עיצוב כפתור בחירה שגרתי */
 .option-btn {
-    flex: 1;
-    background-color: #ced2b7; /* גוון זית/חאקי בהיר */
+    background-color: #ced2b7;
+    /* צבע זית/חאקי בהיר כמו בצילום */
     border: 1px solid #b5b99e;
     color: #000;
     border-radius: 20px;
     font-family: 'heebo-bold', sans-serif;
-    font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-    padding: 6px 4px;
+    font-size: 0.7rem;
+    width: 50vw;
     cursor: pointer;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.39);
     transition: all 0.2s ease;
-    text-align: center;
-    white-space: nowrap; /* מונע שבירת שורה בתגית */
 }
 
-/* מצב תגית נבחרת (Toggle) */
+/* מצב שבו הכפתור נבחר על ידי המשתמש (Toggle) */
 .option-btn.selected {
-    background-color: #8c926b; /* ירוק זית כהה */
-    color: #ffffff;
+    background-color: #8c926b;
+    /* כהה יותר המראה בחירה */
+    color: white;
     transform: scale(0.96);
 }
 
-/* =========================================
-   אזור וכפתור ניפוק סופי
-   ========================================= */
+/* כפתור נפק תרופה התחתון */
+.dispense-btn {
+    background-color: #f2dede;
+    border: 3px solid #b7473a;
+    color: #b7473a;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 1.4rem;
+    padding: 8px 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-.submit-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    padding-top: 15px;
+.bag-img {
+    width: 70vw;
+    top: -5vh;
+    position: relative;
+    padding-bottom: 100px;
 }
 
 #dispense-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70vw !important;
-    max-width: 240px !important;
-    height: 48px !important;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
     margin: 0 auto;
-    
-    font-size: clamp(1.2rem, 4vw, 1.5rem);
-    font-family: 'heebo-bold', sans-serif;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
 
     background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
     border: 1.5px solid #a53d3d;
     color: #a81c1c;
-    border-radius: 100px;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
     box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
 
-    cursor: pointer;
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
     transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+
 }
 
 #dispense-btn:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
     scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+
+/* קונטיינר השקית - מקבל מיקום יחסי */
+.bag-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 67vw;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* התמונה של השקית */
+.bag-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* האזור הלבן שעל השקית - ממוקם בדיוק במרכז התווית */
+.label-lines {
+    position: absolute;
+    top: 8%;
+    /* גובה הריבוע הלבן בשקית */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 58%;
+    /* רוחב התווית הלבנה */
+    display: flex;
+    flex-direction: column;
+    /* מסדר את השורות אחת מתחת לשנייה */
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    /* רווח קטן בין שורה לשורה */
+    z-index: 10;
+}
+
+/* עיצוב כל שורת טקסט בתוך התווית */
+.answer-choice {
+    display: none;
+    /* מוסתר כברירת מחדל עד לחיצה */
+    width: 100%;
+    text-align: center;
+    font-family: 'playpen';
+    font-size: clamp(0.65rem, 3.2vw, 0.85rem);
+    /* גודל גופן גמיש שלא יברח */
+    font-weight: bold;
+    color: #000;
+    border-radius: 3px;
+    padding: 2px 0;
+    cursor: pointer;
+    height: 2vh;
 }
 
 /*tomer system page */
@@ -1975,8 +2014,7 @@ tr:nth-child(even) {
     text-align: center;
     margin: 0;
     top: 13%;
-    margin-top: 5px;
-    line-height: 1.3;
+    margin-top: 5px line-height: 1.3;
 }
 
 .tomer-photo {
