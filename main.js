@@ -1,6 +1,7 @@
-let region;
-
-const pharmacyQuizData = [
+// ==========================================
+// 1. DATA & CONSTANTS
+// ==========================================
+const PHARMACY_QUIZ_DATA = [
     { id: "פילון", name: 'מר"ג פילון' },
     { id: "ירושלים", name: 'מרפ"א ירושלים' },
     { id: "בהדים", name: '8283 מרפ"א דרום' },
@@ -11,273 +12,7 @@ const pharmacyQuizData = [
     { id: "עובדה", name: 'מרפ"א ערבה' }
 ];
 
-window.addEventListener('load', (event) => {
-    // חיבור כפתור ההתחלה של הלומדה
-    const startBtn = document.getElementById('start_button');
-    if (startBtn) startBtn.addEventListener('click', pharmacyPage);
-
-    // חיבור כפתור הכותרת לרענון הדף
-    const lomdaTitle = document.getElementById('lomda_title');
-    if (lomdaTitle) {
-        lomdaTitle.addEventListener('click', () => {
-            location.reload();
-        });
-    }
-
-    // // בדיקה האם המשתמש כבר ראה את האנימציה בסשן הנוכחי
-    // if (sessionStorage.getItem('animationSeen') === 'true') {
-    //     document.getElementById('opening_animation').style.display = "none";
-    //     document.getElementById('topics_page').style.display = "flex";
-    // } else {
-    //     const ANIMATION_DURATION = 1500;
-    //     setTimeout(() => {
-    //         document.getElementById('opening_animation').style.display = "none";
-    //         document.getElementById('topics_page').style.display = "flex";
-    //         sessionStorage.setItem('animationSeen', 'true');
-    //     }, ANIMATION_DURATION);
-    // }
-    document.getElementById('topics_page').style.display = "flex";
-
-});
-
-const pharmacyPage = () => {
-    document.getElementById('topics_page').style.display = "none";
-    document.getElementById('pharmacy_page').style.display = "block";
-
-    document.getElementById('progress_bar').style.display = "block";
-    document.getElementById("five").checked = true;
-
-    // שימוש ב-onclick למניעת שכפול מאזינים בביקורים חוזרים בעמוד
-    document.getElementById('to-practice-btn').style.display = "block";
-    document.getElementById('to-practice-btn').onclick = () => {
-        document.getElementById('popup').style.display = "flex";
-    };
-
-    document.getElementById('yes-btn').onclick = () => {
-        document.getElementById('exercise-page').style.display = "block";
-        document.getElementById('pharmacy_page').style.display = "none";
-
-        document.getElementById('back-btn').onclick = () => {
-            document.getElementById('pharmacy_page').style.display = "block";
-            document.getElementById('exercise-page').style.display = "none";
-            document.getElementById('popup').style.display = "none";
-        };
-
-        document.getElementById('start-exercise').onclick = pharmacyGame;
-    };
-
-    document.getElementById('no-btn').onclick = () => {
-        document.getElementById('popup').style.display = "none";
-    };
-};
-
-let currPharmacy;
-let tempArr = [];
-let remainingLocations = 8;
-let random;
-let userTries = 1;
-let copyArr = [];
-let correctAnswers = 0;
-let wrongAnswers = 0;
-let loc;
-let timerDisplay = null;
-let timerInterval = null;
-let secondsElapsed = 0;
-const answersArr = document.getElementsByClassName('map-target-dot');
-
-const pharmacyGame = () => {
-    userTries = 1;
-    document.getElementById('exercise-page').style.display = "none";
-    document.getElementById('seterra-game-container').style.display = "flex";
-    copyArr = [...pharmacyQuizData];
-
-    clearInterval(timerInterval);
-    secondsElapsed = 0;
-    startTimer();
-
-    for (let i = 0; i < answersArr.length; i++) {
-        // הסרת מאזין ישן אם קיים כדי למנוע כפילויות, ואז הוספה מחדש
-        answersArr[i].removeEventListener('click', checkAnswer);
-        answersArr[i].addEventListener('click', checkAnswer);
-    }
-    nextPharmacy();
-};
-
-const nextPharmacy = () => {
-    if (copyArr.length === 0) {
-        endGame();
-        return;
-    }
-
-    random = Math.floor(Math.random() * copyArr.length);
-    currPharmacy = copyArr[random];
-    loc = random;
-
-    document.getElementById('target-name').innerText = currPharmacy.name;
-};
-
-const checkAnswer = (event) => {
-    let currPlace = 0;
-
-    if (event.target.id === currPharmacy.id) {
-        event.target.classList.add('correct');
-        // הסרת המאזין מהנקודה הספציפית הזו כדי שלא יוכלו ללחוץ עליה שוב בטעות
-        event.target.removeEventListener('click', checkAnswer);
-
-        tempArr[currPlace] = currPharmacy;
-        copyArr.splice(loc, 1);
-        correctAnswers++;
-        document.getElementById('score-counter').innerText = `${correctAnswers}/8`;
-        remainingLocations--;
-
-        if (remainingLocations === 0) {
-            clearInterval(timerInterval);
-            endGame();
-        } else {
-            nextPharmacy();
-        }
-    } else {
-        event.target.classList.add('wrong');
-        setTimeout(() => {
-            event.target.classList.remove('wrong');
-        }, 1000);
-        wrongAnswers++;
-
-    }
-    userTries++;
-    console.log(userTries);
-};
-
-const startTimer = () => {
-    if (!timerDisplay) {
-        timerDisplay = document.getElementById("game-timer");
-    }
-    if (!timerDisplay) return;
-
-    timerDisplay.innerText = "00:00";
-    timerInterval = setInterval(() => {
-        secondsElapsed++;
-        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
-        const secs = String(secondsElapsed % 60).padStart(2, "0");
-        timerDisplay.innerText = `${mins}:${secs}`;
-    }, 1000);
-};
-
-const endGame = () => {
-    const finalGrade = calculateGrade();
-    document.getElementById('game-popup').style.display = "flex";
-
-    if (finalGrade < 75) {
-        document.getElementById('popup-title').innerText = "אולי נתרגל עוד קצת? ציונך הוא:";
-    } else {
-        document.getElementById('popup-title').innerText = "כל הכבוד! ציונך הוא:";
-    }
-
-    if (timerDisplay) {
-        document.getElementById('time').innerText = timerDisplay.innerText;
-    }
-
-    if (wrongAnswers === 0) {
-        document.getElementById('mistake-line').innerText = `לא טעית בכלל!`;
-    } else if (wrongAnswers === 1) {
-        document.getElementById('mistake-line').innerText = `טעית פעם אחת`;
-    } else {
-        document.getElementById('mistake-line').innerText = `טעית ${wrongAnswers} פעמים`;
-    }
-
-    const gradeElement = document.getElementById("grade");
-    if (gradeElement) gradeElement.innerText = `${finalGrade}%`;
-
-    // סימון הפופאפ כמשוייך למשחק המפה
-    document.getElementById('game-popup').dataset.gameType = "pharmacy";
-
-    document.getElementById('retry-btn').onclick = () => {
-        resetGame();
-    };
-
-    const nextBtn = document.getElementById('next-btn');
-    const orText = document.getElementById('or-text');
-
-    // if (finalGrade < 100) {
-    //     if (nextBtn) nextBtn.style.display = "none";
-    //     if (orText) orText.style.display = "none";
-    // } else {
-    if (nextBtn) {
-        nextBtn.style.display = "block";
-        nextBtn.onclick = () => {
-            document.getElementById('seterra-game-container').style.display = "none";
-            document.getElementById('game-popup').style.display = "none";
-            document.getElementById('medicine-table-page').style.display = "block";
-            document.getElementById("five").checked = false;
-            document.getElementById("twentyfive").checked = true;
-
-            const practiceBtn = document.getElementById('practice-btn');
-            if (practiceBtn) {
-                practiceBtn.onclick = () => {
-                    document.getElementById('medicine-table-page').style.display = "none";
-                    document.getElementById('medicine-page').style.display = "block";
-                };
-            }
-
-            const returnBtn = document.getElementById('return-btn');
-            if (returnBtn) {
-                returnBtn.addEventListener('click', () => {
-                    document.getElementById('medicine-table-page').style.display = "block";
-                    document.getElementById('medicine-page').style.display = "none";
-                });
-            }
-
-            const startGameBtn = document.getElementById('start-game');
-            if (startGameBtn) {
-                // תיקון קריטי: העברת שם הפונקציה ללא סוגריים בסוף!
-                startGameBtn.onclick = medicineGame;
-            }
-        };
-    }
-    if (orText) orText.style.display = "block";
-    // }
-};
-
-const calculateGrade = () => {
-    const penaltyPerMistake = 5;
-    // let grade = 100 - ((wrongAnswers) * penaltyPerMistake) + correctAnswers * 4;
-    console.log("usertries" + userTries);
-
-    let grade = (correctAnswers * 100) / userTries;
-
-    return Math.max(0, Math.round(grade));
-};
-
-const resetGame = () => {
-    correctAnswers = 0;
-    wrongAnswers = 0;
-    userTries = 1;
-    remainingLocations = 8;
-    tempArr = [];
-    copyArr = [...pharmacyQuizData];
-
-    clearInterval(timerInterval);
-    secondsElapsed = 0;
-
-    if (timerDisplay) {
-        timerDisplay.innerText = "00:00";
-    }
-
-    document.getElementById('score-counter').innerText = "0/8";
-
-    for (let i = 0; i < answersArr.length; i++) {
-        answersArr[i].classList.remove("correct", "wrong");
-    }
-
-    const popup = document.getElementById('game-popup');
-    popup.style.display = "none";
-
-    setTimeout(() => {
-        pharmacyGame(); // אתחול מחדש נקי עם חיבור מחדש של המאזינים
-    }, 100);
-};
-
-const medicineGameData = [
+const MEDICINE_GAME_DATA = [
     {
         id: 1,
         progress: "1/4",
@@ -328,34 +63,280 @@ const medicineGameData = [
     }
 ];
 
-let currentQuestionIndex = 0;
-let rightAnswers = 0;
-let copy = medicineGameData;
-let temp = [];
+const POSSIBLE_BAG_ANSWERS = ['name', 'expiry-date', 'medicine', 'batch-number'];
+
+// ==========================================
+// 2. GLOBAL STATE
+// ==========================================
+let copyArr = [];
+let tempArr = [];
+let remainingLocations = 8;
+let currPharmacy = null;
+let locIndex = 0;
+let userTries = 0;
+let correctAnswers = 0;
+let wrongAnswers = 0;
+
+let timerDisplay = null;
+let timerInterval = null;
+let secondsElapsed = 0;
+
+let medicineQuestionsQueue = [];
+let currentQuestion = null;
 let cntr = 1;
+let rightAnswers = 0;
 let incorrectAnswers = 0;
 let hasAnsweredCurrent = false;
-const medicineChoices = document.getElementsByClassName('medicine-choice');
 
-let currentQuestion = null;
+let userChoice = [];
+let currPage = 1;
+
+// ==========================================
+// 3. UTILS & NAVIGATION
+// ==========================================
+const hideAllScreens = () => {
+    const screens = [
+        'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
+        'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
+        'bag-page', 'tomer-system', 'asmachta-page', 'digital-page', 'available-page',
+        'tomer-system-page', 'popup', 'game-popup'
+    ];
+
+    screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+    });
+
+    for (let i = 1; i <= 5; i++) {
+        const img = document.getElementById(`tomer${i}`);
+        if (img) img.style.display = "none";
+    }
+
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+};
+
+const setRadioProgress = (radioId) => {
+    const radio = document.getElementById(radioId);
+    if (radio) radio.checked = true;
+};
+
+// ==========================================
+// 4. MAP / PHARMACY GAME LOGIC
+// ==========================================
+const pharmacyPage = () => {
+    hideAllScreens();
+    document.getElementById('pharmacy_page').style.display = "block";
+    document.getElementById('progress_bar').style.display = "block";
+    setRadioProgress("five");
+
+    const toPracticeBtn = document.getElementById('to-practice-btn');
+    if (toPracticeBtn) {
+        toPracticeBtn.style.display = "block";
+        toPracticeBtn.onclick = () => {
+            document.getElementById('popup').style.display = "flex";
+        };
+    }
+
+    const yesBtn = document.getElementById('yes-btn');
+    if (yesBtn) {
+        yesBtn.onclick = () => {
+            document.getElementById('exercise-page').style.display = "block";
+            document.getElementById('pharmacy_page').style.display = "none";
+
+            document.getElementById('back-btn').onclick = () => {
+                document.getElementById('pharmacy_page').style.display = "block";
+                document.getElementById('exercise-page').style.display = "none";
+                document.getElementById('popup').style.display = "none";
+            };
+
+            document.getElementById('start-exercise').onclick = pharmacyGame;
+        };
+    }
+
+    const noBtn = document.getElementById('no-btn');
+    if (noBtn) {
+        noBtn.onclick = () => {
+            document.getElementById('popup').style.display = "none";
+        };
+    }
+};
+
+const startTimer = () => {
+    if (!timerDisplay) {
+        timerDisplay = document.getElementById("game-timer");
+    }
+    if (!timerDisplay) return;
+
+    timerDisplay.innerText = "00:00";
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
+        const secs = String(secondsElapsed % 60).padStart(2, "0");
+        timerDisplay.innerText = `${mins}:${secs}`;
+    }, 1000);
+};
+
+const pharmacyGame = () => {
+    userTries = 0;
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    remainingLocations = PHARMACY_QUIZ_DATA.length;
+    tempArr = [];
+    copyArr = [...PHARMACY_QUIZ_DATA];
+
+    document.getElementById('exercise-page').style.display = "none";
+    document.getElementById('seterra-game-container').style.display = "flex";
+
+    clearInterval(timerInterval);
+    secondsElapsed = 0;
+    startTimer();
+
+    const answersArr = document.getElementsByClassName('map-target-dot');
+    for (let i = 0; i < answersArr.length; i++) {
+        answersArr[i].classList.remove("correct", "wrong");
+        answersArr[i].removeEventListener('click', checkAnswer);
+        answersArr[i].addEventListener('click', checkAnswer);
+    }
+    nextPharmacy();
+};
+
+const nextPharmacy = () => {
+    if (copyArr.length === 0) {
+        endGame();
+        return;
+    }
+
+    locIndex = Math.floor(Math.random() * copyArr.length);
+    currPharmacy = copyArr[locIndex];
+
+    const targetName = document.getElementById('target-name');
+    if (targetName) targetName.innerText = currPharmacy.name;
+};
+
+const checkAnswer = (event) => {
+    userTries++;
+
+    if (event.target.id === currPharmacy.id) {
+        event.target.classList.add('correct');
+        event.target.removeEventListener('click', checkAnswer);
+
+        tempArr.push(currPharmacy);
+        copyArr.splice(locIndex, 1);
+        correctAnswers++;
+
+        document.getElementById('score-counter').innerText = `${correctAnswers}/${PHARMACY_QUIZ_DATA.length}`;
+        remainingLocations--;
+
+        if (remainingLocations === 0) {
+            clearInterval(timerInterval);
+            endGame();
+        } else {
+            nextPharmacy();
+        }
+    } else {
+        event.target.classList.add('wrong');
+        setTimeout(() => {
+            event.target.classList.remove('wrong');
+        }, 1000);
+        wrongAnswers++;
+    }
+};
+
+const calculateGrade = () => {
+    if (userTries === 0) return 0;
+    const grade = (correctAnswers * 100) / userTries;
+    return Math.max(0, Math.round(grade));
+};
+
+const endGame = () => {
+    const finalGrade = calculateGrade();
+    const popup = document.getElementById('game-popup');
+    popup.style.display = "flex";
+    popup.dataset.gameType = "pharmacy";
+
+    document.getElementById('popup-title').innerText = finalGrade < 75
+        ? "אולי נתרגל עוד קצת? ציונך הוא:"
+        : "כל הכבוד! ציונך הוא:";
+
+    if (timerDisplay) {
+        document.getElementById('time').innerText = timerDisplay.innerText;
+    }
+
+    const mistakeLine = document.getElementById('mistake-line');
+    if (wrongAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
+    else if (wrongAnswers === 1) mistakeLine.innerText = `טעית פעם אחת`;
+    else mistakeLine.innerText = `טעית ${wrongAnswers} פעמים`;
+
+    const gradeElement = document.getElementById("grade");
+    if (gradeElement) gradeElement.innerText = `${finalGrade}%`;
+
+    document.getElementById('retry-btn').onclick = resetGame;
+
+    const nextBtn = document.getElementById('next-btn');
+    const orText = document.getElementById('or-text');
+
+    if (nextBtn) {
+        nextBtn.style.display = "block";
+        nextBtn.onclick = () => {
+            hideAllScreens();
+            document.getElementById('progress_bar').style.display = "block";
+            document.getElementById('medicine-table-page').style.display = "block";
+            setRadioProgress("twentyfive");
+            setupMedicinePageEvents();
+        };
+    }
+    if (orText) orText.style.display = "block";
+};
+
+const resetGame = () => {
+    document.getElementById('score-counter').innerText = `0/${PHARMACY_QUIZ_DATA.length}`;
+    document.getElementById('game-popup').style.display = "none";
+
+    setTimeout(() => {
+        pharmacyGame();
+    }, 100);
+};
+
+// ==========================================
+// 5. MEDICINE QUIZ GAME LOGIC
+// ==========================================
+const setupMedicinePageEvents = () => {
+    const practiceBtn = document.getElementById('practice-btn');
+    if (practiceBtn) {
+        practiceBtn.onclick = () => {
+            document.getElementById('medicine-table-page').style.display = "none";
+            document.getElementById('medicine-page').style.display = "block";
+        };
+    }
+
+    const returnBtn = document.getElementById('return-btn');
+    if (returnBtn) {
+        returnBtn.onclick = () => {
+            document.getElementById('medicine-table-page').style.display = "block";
+            document.getElementById('medicine-page').style.display = "none";
+        };
+    }
+
+    const startGameBtn = document.getElementById('start-game');
+    if (startGameBtn) startGameBtn.onclick = medicineGame;
+};
 
 const medicineGame = () => {
     document.getElementById('medicine-page').style.display = "none";
     document.getElementById('medicine-game').style.display = "block";
 
     const answerBanner = document.getElementById('answer-banner');
-    if (answerBanner) {
-        answerBanner.style.display = 'none';
+    if (answerBanner) answerBanner.style.display = 'none';
+
+    const choices = document.getElementsByClassName('medicine-choice');
+    for (let i = 0; i < choices.length; i++) {
+        choices[i].classList.remove('selected-wrong', 'selected-right');
+        choices[i].onclick = checkMedicineAnswer;
     }
 
-    for (let i = 0; i < medicineChoices.length; i++) {
-        medicineChoices[i].classList.remove('selected-wrong', 'selected-right');
-        medicineChoices[i].onclick = checkMedicineAnswer;
-    }
-
-    // יצירת העתק של השאלות וערבוב שלהן (Shuffle)
-    copy = [...medicineGameData].sort(() => Math.random() - 0.5);
-
+    medicineQuestionsQueue = [...MEDICINE_GAME_DATA].sort(() => Math.random() - 0.5);
     rightAnswers = 0;
     cntr = 1;
     incorrectAnswers = 0;
@@ -364,8 +345,7 @@ const medicineGame = () => {
 };
 
 const loadNextQuestion = () => {
-    // אם לא נותרו שאלות במערך, סיימנו
-    if (copy.length === 0) {
+    if (medicineQuestionsQueue.length === 0) {
         endMedicineGame();
         return;
     }
@@ -373,14 +353,13 @@ const loadNextQuestion = () => {
     hasAnsweredCurrent = false;
     document.getElementById('answer-banner').style.display = 'none';
 
-    for (let i = 0; i < medicineChoices.length; i++) {
-        medicineChoices[i].classList.remove('selected-wrong', 'selected-right');
+    const choices = document.getElementsByClassName('medicine-choice');
+    for (let i = 0; i < choices.length; i++) {
+        choices[i].classList.remove('selected-wrong', 'selected-right');
     }
 
-    // שולפים את השאלה הראשונה מתוך המערך המעורב
-    currentQuestion = copy.pop();
-
-    document.getElementById('question-progress').innerText = `${cntr}/4`;
+    currentQuestion = medicineQuestionsQueue.pop();
+    document.getElementById('question-progress').innerText = `${cntr}/${MEDICINE_GAME_DATA.length}`;
     document.getElementById('question-text').innerText = currentQuestion.question;
     cntr++;
 };
@@ -392,132 +371,77 @@ const checkMedicineAnswer = (event) => {
     if (!clickedElement) return;
 
     const selectedId = clickedElement.id;
-
     const errorBanner = document.getElementById('answer-banner');
     const answerIcon = document.getElementById('answer-icon');
     const answerText = document.getElementById('answer-text');
 
-    for (let i = 0; i < medicineChoices.length; i++) {
-        medicineChoices[i].classList.remove('selected-wrong', 'selected-right');
+    const choices = document.getElementsByClassName('medicine-choice');
+    for (let i = 0; i < choices.length; i++) {
+        choices[i].classList.remove('selected-wrong', 'selected-right');
     }
 
-    // ניגשים ישירות לאובייקט השאלה הטעון
+    userTries++;
+
     if (selectedId === currentQuestion.correctAnswer) {
         hasAnsweredCurrent = true;
         rightAnswers++;
         clickedElement.classList.add('selected-right');
 
-        answerIcon.src = "assets/images/right.png";
-        answerText.innerText = currentQuestion.successText || "נכון מאוד!";
-        errorBanner.style.display = 'flex';
+        if (answerIcon) answerIcon.src = "assets/images/right.png";
+        if (answerText) answerText.innerText = currentQuestion.successText || "נכון מאוד!";
+        if (errorBanner) errorBanner.style.display = 'flex';
 
-        setTimeout(() => {
-            loadNextQuestion(); // פשוט טוענים את השאלה הבאה
-        }, 2000);
-
+        setTimeout(loadNextQuestion, 2000);
     } else {
         incorrectAnswers++;
         clickedElement.classList.add('selected-wrong');
-        answerIcon.src = "assets/images/wrong.png";
+        if (answerIcon) answerIcon.src = "assets/images/wrong.png";
 
         if (currentQuestion.wrongAnswers && currentQuestion.wrongAnswers[selectedId]) {
             answerText.innerText = currentQuestion.wrongAnswers[selectedId];
         } else {
-            answerText.innerText = "טעות, נסה בקבוק אחר!";
+            answerText.innerText = "טעות, נסה שוב!";
         }
-
-        errorBanner.style.display = 'flex';
+        if (errorBanner) errorBanner.style.display = 'flex';
     }
-    userTries++;
 };
 
-const resetMedicineGame = () => {
-    // הפעלה מחדש של הפונקציה הראשת המאפסת את המערך מחדש
-    document.getElementById('game-popup').style.display = "none";
-    document.getElementById('bag-page').style.display = "none";
-
-    cntr = 1;
-    userTries = 0;
-    medicineGame();
+const calculateMedicineGrade = () => {
+    if (userTries === 0) return 0;
+    const grade = (rightAnswers * 100) / userTries;
+    return Math.max(0, Math.round(grade));
 };
 
 const endMedicineGame = () => {
     const finalGrade = calculateMedicineGrade();
+    const popup = document.getElementById('game-popup');
+    popup.style.display = "flex";
+    popup.dataset.gameType = "medicine";
 
-    document.getElementById('game-popup').style.display = "flex";
-    document.getElementById('game-popup').dataset.gameType = "medicine";
-
-    if (finalGrade < 75) {
-        document.getElementById('popup-title').innerText = "אולי נתרגל עוד קצת? ציונך הוא:";
-    } else {
-        document.getElementById('popup-title').innerText = "כל הכבוד! ציונך הוא:";
-    }
+    document.getElementById('popup-title').innerText = finalGrade < 75
+        ? "אולי נתרגל עוד קצת? ציונך הוא:"
+        : "כל הכבוד! ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
-    document.getElementById("time").innerText = `${4 - incorrectAnswers}/4`;
+    document.getElementById("time").innerText = `${MEDICINE_GAME_DATA.length - incorrectAnswers}/${MEDICINE_GAME_DATA.length}`;
 
-    if (incorrectAnswers === 0) {
-        document.getElementById('mistake-line').innerText = `לא טעית בכלל!`;
-    } else if (incorrectAnswers === 1) {
-        document.getElementById('mistake-line').innerText = `טעית פעם אחת`;
-    } else {
-        document.getElementById('mistake-line').innerText = `טעית ${incorrectAnswers} פעמים`;
-    }
+    const mistakeLine = document.getElementById('mistake-line');
+    if (incorrectAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
+    else if (incorrectAnswers === 1) mistakeLine.innerText = `טעית פעם אחת`;
+    else mistakeLine.innerText = `טעית ${incorrectAnswers} פעמים`;
 
-    document.getElementById('retry-btn').addEventListener('click', () => {
-        resetMedicineGame();
-    });
+    document.getElementById('retry-btn').onclick = resetMedicineGame;
 
     const nextBtn = document.getElementById('next-btn');
     const orText = document.getElementById('or-text');
 
-    // if (finalGrade < 100) {
-    //     if (nextBtn) nextBtn.style.display = "none";
-    //     if (orText) orText.style.display = "none";
-    // } else {
-    //     if (nextBtn) {
-    //         nextBtn.style.display = "block";
-    //         nextBtn.onclick = () => {
-    //             document.getElementById('medicine-game').style.display = "none";
-    //             document.getElementById('game-popup').style.display = "none";
-    //             document.getElementById('medicine-box-page').style.display = "block";
-    //             document.getElementById("five").checked = false;
-    //             document.getElementById("twentyfive").checked = true;
-
-    //             const practiceBtn = document.getElementById('practice-button');
-    //             if (practiceBtn) {
-    //                 practiceBtn.onclick = () => {
-    //                     document.getElementById('medicine-box-page').style.display = "none";
-    //                     document.getElementById('medicine-bag-page').style.display = "block";
-
-    //                     const returnBtn = document.getElementById('return-bag-btn');
-    //                     if (returnBtn) {
-    //                         returnBtn.onclick = () => {
-    //                             document.getElementById('medicine-box-page').style.display = "block";
-    //                             document.getElementById('medicine-bag-page').style.display = "none";
-    //                         };
-    //                     }
-
-    //                     const startGameBtn = document.getElementById('start-bag-game');
-    //                     if (startGameBtn) startGameBtn.onclick = bagGame;
-    //                 };
-    //             }
-    //         };
-    //     }
-    //     if (orText) orText.style.display = "block";
-    // }
-    //     if (finalGrade < 100) {
-    //     if (nextBtn) nextBtn.style.display = "none";
-    //     if (orText) orText.style.display = "none";
-    // } else {
     if (nextBtn) {
         nextBtn.style.display = "block";
         nextBtn.onclick = () => {
-            document.getElementById('medicine-game').style.display = "none";
-            document.getElementById('game-popup').style.display = "none";
+            hideAllScreens();
+            document.getElementById('progress_bar').style.display = "block";
             document.getElementById('medicine-box-page').style.display = "block";
-            document.getElementById("five").checked = false;
-            document.getElementById("twentyfive").checked = true;
+            setRadioProgress("twentyfive");
 
             const practiceBtn = document.getElementById('practice-button');
             if (practiceBtn) {
@@ -540,33 +464,25 @@ const endMedicineGame = () => {
         };
     }
     if (orText) orText.style.display = "block";
-    // }
-
 };
 
-const calculateMedicineGrade = () => {
-    const penaltyPerMistake = 100 / 12;
-    // let grade = 100 - ((incorrectAnswers) * penaltyPerMistake) + rightAnswers * 4;
-    console.log("usertries" + userTries);
-
-    let grade = (rightAnswers * 100) / userTries;
-
-    return Math.max(0, Math.round(grade));
-
-    return Math.max(0, Math.round(grade));
+const resetMedicineGame = () => {
+    document.getElementById('game-popup').style.display = "none";
+    document.getElementById('bag-page').style.display = "none";
+    medicineGame();
 };
 
-const possibleAnswers = ['name', 'expiry-date', 'medicine', 'batch-number'];
-let userChoice = [];
-
+// ==========================================
+// 6. BAG GAME LOGIC
+// ==========================================
 const bagGame = () => {
     userTries = 0;
-    document.getElementById("bag-page").style.display = "flex";
-    document.getElementById('medicine-game').style.display = "none";
-    document.getElementById("medicine-bag-page").style.display = "none";
-    document.getElementById("medicine-box-page").style.display = "none";
-
     userChoice = [];
+
+    hideAllScreens();
+    document.getElementById("bag-page").style.display = "flex";
+    document.getElementById('medicine-bag-page').style.display = "none";
+
 
     document.querySelectorAll('[id$="-choice"]').forEach(choice => {
         choice.style.display = "none";
@@ -580,13 +496,8 @@ const bagGame = () => {
         btn.onclick = addChoice;
     });
 
-    // if (userChoice.length < 4) {
-    //     document.getElementById("dispense-btn").disabled = true;
-    // } else {
-    //     document.getElementById("dispense-btn").disabled = false;
-    //     document.getElementById("dispense-btn").onclick = endBagGame;
-    // }
-
+    const dispenseBtn = document.getElementById("dispense-btn");
+    if (dispenseBtn) dispenseBtn.disabled = true;
 };
 
 const addChoice = (event) => {
@@ -594,7 +505,6 @@ const addChoice = (event) => {
     if (!btn) return;
 
     const clickedId = btn.id;
-
     if (userChoice.includes(clickedId) || userChoice.length >= 4) return;
 
     userChoice.push(clickedId);
@@ -608,26 +518,27 @@ const addChoice = (event) => {
         row.style.display = "none";
         btn.style.visibility = "visible";
         userChoice = userChoice.filter(item => item !== clickedId);
+
+        if (userChoice.length < 4) {
+            document.getElementById("dispense-btn").disabled = true;
+        }
     };
 
-    if (userChoice.length < 4) {
-        document.getElementById("dispense-btn").disabled = true;
-    } else {
-        document.getElementById("dispense-btn").disabled = false;
-        document.getElementById("dispense-btn").onclick = endBagGame;
+    const dispenseBtn = document.getElementById("dispense-btn");
+    if (userChoice.length === 4) {
+        dispenseBtn.disabled = false;
+        dispenseBtn.onclick = endBagGame;
     }
 };
 
 const endBagGame = () => {
-
-    console.log("hfhfhfhhfhf")
     let totalRight = 0;
     let totalWrong = 0;
 
     userChoice.forEach(id => {
         const row = document.getElementById(`${id}-choice`);
         if (row) {
-            if (possibleAnswers.includes(id)) {
+            if (POSSIBLE_BAG_ANSWERS.includes(id)) {
                 row.classList.add("selected-right");
                 totalRight++;
             } else {
@@ -637,7 +548,7 @@ const endBagGame = () => {
         }
     });
 
-    possibleAnswers.forEach(id => {
+    POSSIBLE_BAG_ANSWERS.forEach(id => {
         if (!userChoice.includes(id)) {
             const row = document.getElementById(`${id}-choice`);
             if (row) {
@@ -648,39 +559,25 @@ const endBagGame = () => {
     });
 
     const finalGrade = calculateBagGrade(totalWrong);
+    const popup = document.getElementById("game-popup");
+    popup.style.display = "flex";
+    popup.dataset.gameType = "bag";
 
-    document.getElementById("game-popup").style.display = "flex";
-    document.getElementById('game-popup').dataset.gameType = "bag"; // סימון הפופאפ למשחק השקיות
-
-    document.getElementById("popup-title").innerText =
-        finalGrade >= 75
-            ? "כל הכבוד! ציונך הוא:"
-            : "אולי נתרגל עוד קצת? ציונך הוא:";
+    document.getElementById("popup-title").innerText = finalGrade >= 75
+        ? "כל הכבוד! ציונך הוא:"
+        : "אולי נתרגל עוד קצת? ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
     document.getElementById("time").innerText = `${totalRight}/4`;
 
     const mistakeLine = document.getElementById("mistake-line");
-    if (totalWrong === 0) {
-        mistakeLine.innerText = "לא טעית בכלל!";
-    } else if (totalWrong === 1) {
-        mistakeLine.innerText = "טעית פעם אחת";
-    } else {
-        mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
-    }
+    if (totalWrong === 0) mistakeLine.innerText = "לא טעית בכלל!";
+    else if (totalWrong === 1) mistakeLine.innerText = "טעית פעם אחת";
+    else mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
 
-    document.getElementById('retry-btn').onclick = () => {
-        document.getElementById('medicine-game').style.display = "none";
-        resetBagGame();
-    };
+    document.getElementById('retry-btn').onclick = resetBagGame;
 
     const nextBtn = document.getElementById('next-btn');
-    const orText = document.getElementById('or-text');
-
-    // if (finalGrade < 100) {
-    //     if (nextBtn) nextBtn.style.display = "none";
-    //     if (orText) orText.style.display = "none";
-    // } else {
     if (nextBtn) {
         nextBtn.style.display = "block";
         nextBtn.onclick = () => {
@@ -689,68 +586,34 @@ const endBagGame = () => {
             if (practiceButton) practiceButton.onclick = bagGame;
         };
     }
-    if (orText) orText.style.display = "block";
-    // }
 };
 
 const calculateBagGrade = (mistakeCount) => {
-    const total = 4;
-    const correct = total - mistakeCount;
-    const grade = (correct / total) * 100;
-    return Math.max(0, Math.min(100, Math.round(grade)));
+    const correct = 4 - mistakeCount;
+    return Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
 };
 
 const resetBagGame = () => {
-    userChoice = [];
-    const bagChoices = document.querySelectorAll('.option-btn');
-    bagChoices.forEach(btn => {
-        btn.style.visibility = "visible";
-    });
-
-    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
-        choice.style.display = "none";
-        choice.classList.remove("selected-right", "selected-wrong");
-        choice.onclick = null;
-    });
-
     document.getElementById("game-popup").style.display = "none";
-    document.getElementById("bag-page").style.display = "flex";
-
-    if (typeof bagGame === 'function') bagGame();
+    bagGame();
 };
 
+// ==========================================
+// 7. CONTENT PAGES & NAVIGATION FLOW
+// ==========================================
 const setTomerPage = () => {
-    document.getElementById('game-popup').style.display = "none";
-    document.getElementById('medicine-box-page').style.display = "none";
-
-    const bagPage = document.getElementById('bag-page');
-    if (bagPage) bagPage.style.display = "none";
-
-    const medBagPage = document.getElementById('medicine-bag-page');
-    if (medBagPage) medBagPage.style.display = "none";
+    hideAllScreens();
+    document.getElementById('tomer-system').style.display = "block";
+    document.getElementById('progress_bar').style.display = "block";
+    setRadioProgress("fifty");
 
     currPage = 1;
-
-    for (let i = 1; i <= 5; i++) {
-        const img = document.getElementById(`tomer${i}`);
-        if (img) img.style.display = "none";
-    }
-
     const firstImg = document.getElementById('tomer1');
     if (firstImg) firstImg.style.display = "block";
 
-    const fiftyRadio = document.getElementById("fifty");
-    if (fiftyRadio) fiftyRadio.checked = true;
-
-    document.getElementById('tomer-system').style.display = "block";
-
     const nextBtn = document.getElementById('next-page-btn');
-    if (nextBtn) {
-        nextBtn.onclick = nextTomerPage;
-    }
+    if (nextBtn) nextBtn.onclick = nextTomerPage;
 };
-
-let currPage = 1;
 
 const nextTomerPage = () => {
     if (currPage === 5) {
@@ -759,37 +622,37 @@ const nextTomerPage = () => {
     }
 
     const currentImg = document.getElementById(`tomer${currPage}`);
-    if (currentImg) {
-        currentImg.style.display = "none";
-    }
+    if (currentImg) currentImg.style.display = "none";
 
     currPage++;
     const nextImg = document.getElementById(`tomer${currPage}`);
-    if (nextImg) {
-        nextImg.style.display = "block";
-    }
+    if (nextImg) nextImg.style.display = "block";
 };
 
 const asmachtaPage = () => {
-    document.getElementById("seventyfive").checked = true;
-    document.getElementById('tomer-system').style.display = "none";
+    hideAllScreens();
     document.getElementById('asmachta-page').style.display = "flex";
-    document.getElementById('next-button').onclick = toDigitalPage;
+    document.getElementById('progress_bar').style.display = "block";
+    setRadioProgress("seventyfive");
+
+    const nextBtn = document.getElementById('next-button');
+    if (nextBtn) nextBtn.onclick = toDigitalPage;
 };
 
 const toDigitalPage = () => {
-    document.getElementById('asmachta-page').style.display = "none";
+    hideAllScreens();
     document.getElementById('digital-page').style.display = "flex";
-    document.getElementById('digital-next-btn').onclick = availablePage;
+    document.getElementById('progress_bar').style.display = "block";
+
+    const nextBtn = document.getElementById('digital-next-btn');
+    if (nextBtn) nextBtn.onclick = availablePage;
 };
 
 const availablePage = () => {
     hideAllScreens();
     document.getElementById('progress_bar').style.display = "block";
-    document.getElementById("onehundred").checked = true;
-
-    const page1 = document.getElementById('available-page');
-    if (page1) page1.style.display = "flex";
+    document.getElementById('available-page').style.display = "flex";
+    setRadioProgress("onehundred");
 
     const nextBtn = document.getElementById('available-next-btn');
     if (nextBtn) nextBtn.onclick = availableStep2;
@@ -798,10 +661,8 @@ const availablePage = () => {
 const availableStep2 = () => {
     hideAllScreens();
     document.getElementById('progress_bar').style.display = "block";
-    document.getElementById("onehundred").checked = true;
-
-    const page2 = document.getElementById('tomer-system-page');
-    if (page2) page2.style.display = "flex";
+    document.getElementById('tomer-system-page').style.display = "flex";
+    setRadioProgress("onehundred");
 
     const finalBtn = document.getElementById('finish-btn');
     if (finalBtn) {
@@ -813,28 +674,21 @@ const availableStep2 = () => {
     }
 };
 
-const hideAllScreens = () => {
-    const screens = [
-        'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
-        'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
-        'bag-page', 'tomer-system', 'asmachta-page', 'digital-page', 'available-page',
-        'tomer-system-page', 'popup', 'game-popup'
-    ];
+// ==========================================
+// 8. INITIALIZATION & LISTENERS
+// ==========================================
+window.addEventListener('load', () => {
+    const startBtn = document.getElementById('start_button');
+    if (startBtn) startBtn.addEventListener('click', pharmacyPage);
 
-    screens.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = "none";
-    });
-
-    for (let i = 1; i <= 5; i++) {
-        const img = document.getElementById(`tomer${i}`);
-        if (img) img.style.display = "none";
+    const lomdaTitle = document.getElementById('lomda_title');
+    if (lomdaTitle) {
+        lomdaTitle.addEventListener('click', () => location.reload());
     }
 
-    if (typeof timerInterval !== 'undefined' && timerInterval) {
-        clearInterval(timerInterval);
-    }
-};
+    const topicsPage = document.getElementById('topics_page');
+    if (topicsPage) topicsPage.style.display = "flex";
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const progressRadios = document.querySelectorAll('.progress_bar input[type="radio"]');
@@ -845,42 +699,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (e.target.id) {
                 case 'five':
-                    if (typeof pharmacyPage === 'function') pharmacyPage();
+                    pharmacyPage();
                     break;
                 case 'twentyfive':
                     document.getElementById('progress_bar').style.display = "block";
-                    document.getElementById("twentyfive").checked = true;
+                    setRadioProgress("twentyfive");
                     document.getElementById('medicine-table-page').style.display = "block";
-
-                    const practiceBtn = document.getElementById('practice-btn');
-                    if (practiceBtn) {
-                        practiceBtn.onclick = () => {
-                            document.getElementById('medicine-table-page').style.display = "none";
-                            document.getElementById('medicine-page').style.display = "block";
-                        };
-                    }
-
-                    const returnBtn = document.getElementById('return-btn');
-                    if (returnBtn) {
-                        returnBtn.addEventListener('click', () => {
-                            document.getElementById('medicine-table-page').style.display = "block";
-                            document.getElementById('medicine-page').style.display = "none";
-                        });
-                    }
-
-                    const startGameBtn = document.getElementById('start-game');
-                    if (startGameBtn) startGameBtn.onclick = medicineGame;
+                    setupMedicinePageEvents();
                     break;
                 case 'fifty':
-                    document.getElementById('progress_bar').style.display = "block";
                     setTomerPage();
                     break;
                 case 'seventyfive':
-                    document.getElementById('progress_bar').style.display = "block";
                     asmachtaPage();
                     break;
                 case 'onehundred':
-                    document.getElementById('progress_bar').style.display = "block";
                     availablePage();
                     break;
             }
