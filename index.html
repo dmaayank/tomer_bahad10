@@ -282,6 +282,7 @@
     <div class="game-popup" id="game-popup">
         <div class="pop-up-card">
             <!-- כפתור סגירה פינתי (X) -->
+            <p id="close-popup-btn">X</p>
 
             <p class="popup-title" id="popup-title"> ציונך הוא:</p>
 
@@ -497,7 +498,13 @@
         <!-- כפתור הניפוק הסופי -->
         <div class="submit-container">
             <button class="next-button" id="dispense-btn">נפק תרופה</button>
-            <p id = "answer-explain">עליך לבחור ארבע תשובות</p>
+
+            <div id="bag-result-buttons">
+                <button class="next-button" id="bag-retry-btn">נסה שוב</button>
+                <button class="next-button" id="bag-next-btn">הבא</button>
+            </div>
+
+            <p id="answer-explain">עליך לבחור ארבע תשובות</p>
         </div>
     </div>
 

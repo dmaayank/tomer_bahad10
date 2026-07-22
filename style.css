@@ -290,7 +290,7 @@ svg {
 
     /* Pushes the start button down to the bottom of the container naturally */
     margin-bottom: auto;
-    margin-top: 25px;
+    margin-top: 35px;
 }
 
 /* Remove absolute positioning from the icon */
@@ -1201,20 +1201,17 @@ svg {
 }
 
 /* כפתור ה-X לסגירה */
-.close-popup-btn {
+#close-popup-btn {
     position: absolute;
     top: 8px;
-    right: 12px;
+    right: 7px;
     background: none;
     border: none;
-    font-size: 1.25rem;
-    color: #666;
+    display: none;
+    font-size: 1.1rem;
+    color: #000000;
     cursor: pointer;
     line-height: 1;
-}
-
-.close-popup-btn:hover {
-    color: #000;
 }
 
 .popup-title {
@@ -1294,6 +1291,18 @@ svg {
 
 .retry-btn {
     color: #b31010 !important;
+}
+
+.next-btn-popup {
+    width: 140px;
+    display: block;
+
+}
+
+.retry-btn-popup {
+    width: 140px;
+    display: block;
+
 }
 
 /* אפקט לחיצה מותאם */
@@ -1499,7 +1508,7 @@ tr:nth-child(even) {
     position: absolute;
 
     left: 50%;
-    top: 40%;
+    top: 35%;
 
     transform: translate(-50%, -50%);
 
@@ -1514,7 +1523,7 @@ tr:nth-child(even) {
 
     border: 1px solid #617274;
 
-    text-align:center;
+    text-align: center;
 
     box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
 
@@ -1694,16 +1703,14 @@ tr:nth-child(even) {
 =========================== */
 
 .selected-right {
-
     filter:
-        drop-shadow(0 0 10px rgba(0, 180, 70, .8));
+        drop-shadow(0 0 5px rgba(0, 202, 78, 0.8));
 
 }
 
 .selected-wrong {
-
     filter:
-        drop-shadow(0 0 10px rgba(255, 0, 0, .8));
+        drop-shadow(0 0 5px rgba(255, 0, 0, 0.87));
 
 }
 
@@ -2017,9 +2024,12 @@ tr:nth-child(even) {
 /* מיכל עוטף שדואג להציב את הלחצן והטקסט אחד מתחת לשני */
 .submit-container {
     display: flex;
-    flex-direction: column; /* מסדר את האלמנטים בטור (זה תחת זה) */
-    align-items: center;     /* ממורכז אופקית */
-    gap: 8px;                /* רווח נקי וגמיש בין הלחצן לטקסט */
+    flex-direction: column;
+    /* מסדר את האלמנטים בטור (זה תחת זה) */
+    align-items: center;
+    /* ממורכז אופקית */
+    gap: 8px;
+    /* רווח נקי וגמיש בין הלחצן לטקסט */
     margin-top: 20px;
 }
 
@@ -2038,13 +2048,90 @@ tr:nth-child(even) {
 
 /* סגנון לטקסט ההסבר שמתחת לחצן */
 #answer-explain {
-    margin: 0;  
-    position: absolute;             /* איפוס מרג'ין ברירת מחדל של פסקה */
+    margin: 0;
+    position: absolute;
+    /* איפוס מרג'ין ברירת מחדל של פסקה */
     font-size: 0.95rem;
     color: #555555;
     text-align: center;
     bottom: 0%;
     font-family: 'heebo-bold';
+}
+
+#bag-result-buttons {
+    display: none;
+    width: min(94%, 420px);
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    bottom: 3%;
+    position: absolute;
+}
+
+#bag-result-buttons .next-button {
+    flex: 1;
+    width: auto;
+    max-width: 190px;
+    margin: 0;
+}
+
+.next-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 140px !important;
+    max-width: 160px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.next-button:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+#answer-explain {
+    display: block;
 }
 
 .bag-img {
@@ -2167,6 +2254,14 @@ tr:nth-child(even) {
     padding: 2px 0;
     cursor: pointer;
     height: 2vh;
+}
+
+#bag-retry-btn{
+
+}
+
+#bag-next-btn {
+
 }
 
 /*tomer system page */

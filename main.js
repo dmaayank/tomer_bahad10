@@ -129,15 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (e.target.id) {
                 case 'five':
                     pharmacyPage();
+                    document.getElementById('close-popup-btn').style.display = "none";
+
                     break;
                 case 'twentyfive':
                     document.getElementById('progress_bar').style.display = "block";
                     setRadioProgress("twentyfive");
+                    document.getElementById('close-popup-btn').style.display = "none";
+
                     document.getElementById('medicine-table-page').style.display = "block";
                     setupMedicinePageEvents();
                     break;
                 case 'fifty':
                     setTomerPage();
+                    document.getElementById('close-popup-btn').style.display = "none";
+
                     break;
                 case 'seventyfive':
                     asmachtaPage();
@@ -357,6 +363,8 @@ const endGame = () => {
 const resetGame = () => {
     document.getElementById('score-counter').innerText = `0/${PHARMACY_QUIZ_DATA.length}`;
     document.getElementById('game-popup').style.display = "none";
+    document.getElementById('close-popup-btn').style.display = "none";
+
 
     setTimeout(() => {
         pharmacyGame();
@@ -537,6 +545,8 @@ const endMedicineGame = () => {
 const resetMedicineGame = () => {
     document.getElementById('game-popup').style.display = "none";
     document.getElementById('bag-page').style.display = "none";
+    document.getElementById('close-popup-btn').style.display = "none";
+
     medicineGame();
 };
 
@@ -548,8 +558,29 @@ const bagGame = () => {
     userChoice = [];
 
     hideAllScreens();
+
     document.getElementById("bag-page").style.display = "flex";
-    document.getElementById('medicine-bag-page').style.display = "none";
+    document.getElementById("medicine-bag-page").style.display = "none";
+
+    const dispenseBtn = document.getElementById("dispense-btn");
+
+    if (dispenseBtn) {
+        dispenseBtn.style.display = "flex";
+        dispenseBtn.disabled = true;
+        dispenseBtn.onclick = endBagGame;
+    }
+
+    const resultButtons = document.getElementById("bag-result-buttons");
+
+    if (resultButtons) {
+        resultButtons.style.display = "none";
+    }
+
+    const answerExplain = document.getElementById("answer-explain");
+
+    if (answerExplain) {
+        answerExplain.style.display = "block";
+    }
 
     document.querySelectorAll('[id$="-choice"]').forEach(choice => {
         choice.style.display = "none";
@@ -557,17 +588,13 @@ const bagGame = () => {
         choice.onclick = null;
     });
 
-    const bagChoices = document.querySelectorAll('.option-btn');
+    const bagChoices = document.querySelectorAll(".option-btn");
+
     bagChoices.forEach(btn => {
         btn.style.visibility = "visible";
         btn.onclick = addChoice;
     });
-
-    const dispenseBtn = document.getElementById("dispense-btn");
-    if (dispenseBtn) dispenseBtn.disabled = true;
-};
-
-const addChoice = (event) => {
+}; const addChoice = (event) => {
     const btn = event.currentTarget || event.target.closest('.option-btn');
     if (!btn) return;
 
@@ -581,96 +608,174 @@ const addChoice = (event) => {
     if (!row) return;
 
     row.style.display = "block";
+
+    // Deselect handler
     row.onclick = () => {
         row.style.display = "none";
         btn.style.visibility = "visible";
         userChoice = userChoice.filter(item => item !== clickedId);
 
-        if (userChoice.length < 4) {
-            document.getElementById("dispense-btn").disabled = true;
+        const dispenseBtn = document.getElementById("dispense-btn");
+        if (dispenseBtn && userChoice.length < 4) {
+            dispenseBtn.disabled = true;
         }
     };
 
     const dispenseBtn = document.getElementById("dispense-btn");
-    if (userChoice.length === 4) {
+    if (userChoice.length === 4 && dispenseBtn) {
         dispenseBtn.disabled = false;
-        dispenseBtn.onclick = endBagGame;
     }
 };
 
 const endBagGame = () => {
     let totalRight = 0;
     let totalWrong = 0;
+
     exercisesDone[currExercise] = 1;
     currExercise++;
 
-
+    // Check only the answers that the user clicked
     userChoice.forEach(id => {
         const row = document.getElementById(`${id}-choice`);
-        if (row) {
-            if (POSSIBLE_BAG_ANSWERS.includes(id)) {
-                row.classList.add("selected-right");
-                totalRight++;
-            } else {
-                row.classList.add("selected-wrong");
-                totalWrong++;
-            }
-        }
-    });
+        if (!row) return;
 
-    POSSIBLE_BAG_ANSWERS.forEach(id => {
-        if (!userChoice.includes(id)) {
-            const row = document.getElementById(`${id}-choice`);
-            if (row) {
-                row.style.display = "block";
-                row.classList.add("selected-wrong");
-            }
+        row.style.display = "block";
+        row.onclick = null;
+
+        if (POSSIBLE_BAG_ANSWERS.includes(id)) {
+            row.classList.add("selected-right");
+            totalRight++;
+        } else {
+            row.classList.add("selected-wrong");
+            totalWrong++;
+            console.log(totalWrong);
         }
     });
 
     const finalGrade = calculateBagGrade(totalWrong);
-    gameScores.bag = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+    gameScores.bag = finalGrade;
 
     const popup = document.getElementById("game-popup");
     popup.style.display = "flex";
     popup.dataset.gameType = "bag";
 
-    document.getElementById("popup-title").innerText = finalGrade >= 75
-        ? "כל הכבוד! ציונך הוא:"
-        : "אולי נתרגל עוד קצת? ציונך הוא:";
+    document.getElementById("popup-title").innerText =
+        finalGrade >= 75
+            ? "כל הכבוד! ציונך הוא:"
+            : "אולי נתרגל עוד קצת? ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
-    document.getElementById("time").innerText = `${totalRight}/4`;
+
+    const time = document.getElementById("time");
+    if (time) {
+        time.style.display = "block";
+        time.innerText = `${totalRight}/4`;
+    }
 
     const mistakeLine = document.getElementById("mistake-line");
-    if (totalWrong === 0) mistakeLine.innerText = "לא טעית בכלל!";
-    else if (totalWrong === 1) mistakeLine.innerText = "טעית פעם אחת";
-    else mistakeLine.innerText = `טעית -ב ${totalWrong} דברים מתוך 4`;
 
-    document.getElementById('retry-btn').onclick = resetBagGame;
+    if (totalWrong === 0) {
+        mistakeLine.innerText = "לא טעית בכלל!";
+    } else if (totalWrong === 1) {
+        mistakeLine.innerText = "טעית פעם אחת";
+    } else {
+        mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
+    }
 
-    const nextBtn = document.getElementById('next-btn');
+    const retryBtn = document.getElementById("retry-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const orText = document.getElementById("or-text");
+
+    if (retryBtn) {
+        retryBtn.style.display = "block";
+        retryBtn.onclick = resetBagGame;
+    }
+
     if (nextBtn) {
         nextBtn.style.display = "block";
-        nextBtn.onclick = () => {
+        nextBtn.onclick = setTomerPage;
+    }
+
+    if (orText) {
+        orText.style.display = "block";
+    }
+
+    const closeBtn = document.getElementById("close-popup-btn");
+
+    if (closeBtn) {
+        closeBtn.style.display = "block";
+
+        closeBtn.onclick = () => {
+            // Hide the popup
+            popup.style.display = "none";
+
+            // Hide the dispense button
+            const dispenseBtn = document.getElementById("dispense-btn");
+            if (dispenseBtn) {
+                dispenseBtn.style.display = "none";
+            }
+
+            // Hide the explanation text
+            const answerExplain = document.getElementById("answer-explain");
+            if (answerExplain) {
+                answerExplain.style.display = "none";
+            }
+
+            // Show the retry and next buttons on the bag page
+            const resultButtons =
+                document.getElementById("bag-result-buttons");
+
+            if (resultButtons) {
+                resultButtons.style.display = "flex";
+            }
+        };
+    }
+
+    const bagRetryBtn = document.getElementById("bag-retry-btn");
+    const bagNextBtn = document.getElementById("bag-next-btn");
+
+    if (bagRetryBtn) {
+        bagRetryBtn.onclick = resetBagGame;
+    }
+
+    if (bagNextBtn) {
+        bagNextBtn.onclick = () => {
             setTomerPage();
-            const practiceButton = document.getElementById("practice-button");
-            if (practiceButton) practiceButton.onclick = bagGame;
         };
     }
 };
-
 const calculateBagGrade = (mistakeCount) => {
     const correct = 4 - mistakeCount;
-    const grade = Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
-    return grade;
+    return Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
 };
 
 const resetBagGame = () => {
+    // Hide popup
     document.getElementById("game-popup").style.display = "none";
+
+    // Hide the X again
+    document.getElementById("close-popup-btn").style.display = "none";
+
+    // Clear selections
+    userChoice = [];
+
+    totalWrong = 0;
+    totalRight = 0;
+
+    // Reset all answer rows
+    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
+        choice.style.display = "none";
+        choice.classList.remove("selected-right", "selected-wrong");
+    });
+
+    // Show all option buttons again
+    document.querySelectorAll(".option-btn").forEach(btn => {
+        btn.style.visibility = "visible";
+    });
+
+    // Restart the game
     bagGame();
 };
-
 // ==========================================
 // 7. CONTENT PAGES & NAVIGATION FLOW
 // ==========================================
