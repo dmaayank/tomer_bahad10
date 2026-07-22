@@ -1475,7 +1475,7 @@ tr:nth-child(even) {
 
 .medicine-game .title {
     position: absolute;
-    top: 15vh;
+    top: 17%;
     left: 50%;
     transform: translateX(-50%);
     width: 92%;
@@ -1513,6 +1513,8 @@ tr:nth-child(even) {
     background: #d7ecef;
 
     border: 1px solid #617274;
+
+    text-align:center;
 
     box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
 
@@ -1712,7 +1714,7 @@ tr:nth-child(even) {
 @media (max-height:700px) {
 
     .title {
-        top: 13vh;
+        top: 7%;
     }
 
     .question-prompt {
@@ -1979,6 +1981,8 @@ tr:nth-child(even) {
     gap: 8px;
     width: 100%;
 }
+
+#answer-explain {}
 
 /* עיצוב כפתור בחירה שגרתי */
 .option-btn {
