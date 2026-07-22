@@ -1452,199 +1452,359 @@ tr:nth-child(even) {
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
 }
 
-/* אזור המשחק הכללי */
+/* =========================
+   GAME CONTAINER
+========================= */
+
+/* ===========================
+   GAME
+=========================== */
+
 .medicine-game {
+    position: relative;
     width: 100%;
-    /* 100dvh מונע בעיות גלישה בדפדפנים בסלולר */
     height: 100vh;
     height: 100dvh;
-    position: relative;
-    box-sizing: border-box;
-    padding-top: 10px;
-    display: none;
     overflow: hidden;
+    display: none;
 }
 
-/* כותרת המשחק */
+/* ===========================
+   TITLE
+=========================== */
+
 .medicine-game .title {
     position: absolute;
-    top: 18vh;
+    top: 15vh;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    font-family: 'heebo-bold', sans-serif;
+    width: 92%;
+
+    text-align: center;
+
+    font-family: 'heebo-bold';
+    font-size: clamp(1.4rem, 5vw, 2rem);
+
     color: #b7473a;
-    text-align: center;
-    font-size: 1.8rem;
-    margin: 0;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-    z-index: 5;
+
+    z-index: 20;
 }
 
-/* קוביות בחירת התרופה */
-.medicine-choice {
-    position: absolute;
-    width: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
+/* ===========================
+   QUESTION
+=========================== */
 
-/* עטיפה לבקבוק כדי לאפשר מיקום מוחלט של התג מעליו */
-.pill-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-/* תמונת הבקבוק עם צל ברירת מחדל לבן/רך */
-.pill-img {
-    width: 50px;
-    height: auto;
-    filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.12)) drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.8));
-    transition: filter 0.2s ease, transform 0.2s ease;
-}
-
-/* --- מצבי פידבק לבקבוקים --- */
-
-/* במידה והבחירה שגויה - הילה אדומה */
-.selected-wrong {
-    filter: drop-shadow(0px 0px 8px rgba(255, 0, 0, 0.75)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2));
-}
-
-/* התג הסגול (האות M) */
-.badge-icon {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #a855b7;
-    color: white;
-    font-family: 'heebo-bold', sans-serif;
-    font-size: 0.85rem;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #ffffff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 2;
-    user-select: none;
-}
-
-/* טקסט מתחת לבקבוק */
-.medicine-choice p {
-    font-family: 'heebo-bold', sans-serif;
-    font-size: 0.95rem;
-    margin: 5px 0 0 0;
-    color: #333;
-    white-space: nowrap;
-}
-
-/* מיקומים אחידים ברשת המשחק */
-#asmachta {
-    top: 50vh;
-    left: 4vw;
-    padding-top: 15px;
-}
-
-#teken15 {
-    top: 50vh;
-    padding-top: 15px;
-    right: 4vw;
-}
-
-#teken15d {
-    bottom: 11vh;
-    left: 4vw;
-}
-
-#mumhim {
-    bottom: 11vh;
-    right: 4vw;
-}
-
-/* תיבת השאלה המרכזית */
 .question-prompt {
-    text-align: center;
+
     position: absolute;
-    direction: rtl;
-    background-color: #D4E8EA;
-    width: 86%;
-    max-width: 500px;
-    /* תוספת: מונע מהתיבה להיות רחבה מדי במסכים גדולים */
-    border: #526365 solid 1px;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 10px;
+
     left: 50%;
-    top: 39%;
+    top: 40%;
+
     transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.15);
-    z-index: 10;
+
+    width: 80%;
+    max-width: 430px;
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background: #d7ecef;
+
+    border: 1px solid #617274;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
+
+    direction: rtl;
 }
 
 #question-progress {
-    font-size: 0.85rem;
-    margin: 0 0 10px 0;
-    color: #555;
+
+    font-size: .9rem;
+    margin-bottom: 10px;
+
 }
 
 #question {
-    font-family: 'heebo-regular', sans-serif;
-    font-size: 1.15rem;
-    line-height: 1.4;
-    margin: 5px 0;
-    color: #111;
-    word-break: break-word;
-    /* מונע חריגה של טקסט ארוך */
-}
 
-/* באנר שגיאה תחתון קבוע */
-.answer-banner {
-    position: absolute;
-    bottom: 0vh;
-    left: 5%;
-    width: 90%;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: 8px 12px;
-}
+    font-size: clamp(1rem, 4vw, 1.25rem);
 
-.answer-text {
-    font-family: 'heebo-regular', sans-serif;
-    font-size: 0.9rem;
-    color: #333;
+    line-height: 1.45;
+
     margin: 0;
-    direction: rtl;
-    text-align: right;
-    width: 85%;
-    line-height: 1.3;
+
 }
 
-.answer-icon {
-    color: #d9381e;
-    font-size: 1.3rem;
-    cursor: pointer;
-    font-weight: bold;
-    width: 10%;
+/* ===========================
+   CHOICES
+=========================== */
+
+.medicine-choice {
+
+    position: absolute;
+
+    width: 120px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pill-wrapper {
+
+    position: relative;
+
+}
+
+.pill-img {
+
+    width: 64px;
+
+    transition: .2s;
+
+    filter:
+        drop-shadow(0 6px 8px rgba(0, 0, 0, .15));
+
+}
+
+.badge-icon {
+
+    position: absolute;
+
+    top: -6px;
+    right: -6px;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: #a855b7;
+
+    color: white;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    user-select: none;
-    /* מונע סימון טקסט בלחיצה */
+
+    font-size: .8rem;
+
+    border: 2px solid white;
+
 }
 
-/* --- מצב פידבק לבחירה נכונה --- */
+.medicine-choice p {
 
-/* במידה והבחירה נכונה - הילה ירוקה זוהרת */
+    margin-top: 8px;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: .95rem;
+
+    line-height: 1.2;
+
+}
+
+/* ===========================
+   POSITIONS
+=========================== */
+
+#asmachta {
+
+    left: 7%;
+    top: 49%;
+
+}
+
+#teken15 {
+
+    right: 7%;
+    top: 49%;
+
+}
+
+#teken15d {
+
+    left: 7%;
+    top: 73%;
+
+}
+
+#mumhim {
+
+    right: 7%;
+    top: 73%;
+
+}
+
+/* ===========================
+   ANSWER
+=========================== */
+
+.answer-banner {
+
+    position: absolute;
+
+    bottom: 1.5vh;
+
+    left: 5%;
+
+    width: 90%;
+
+    display: flex;
+
+    flex-direction: row-reverse;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.answer-text {
+
+    flex: 1;
+
+    direction: rtl;
+
+    font-size: .9rem;
+
+}
+
+.answer-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+
+}
+
+/* ===========================
+   STATES
+=========================== */
+
 .selected-right {
-    filter: drop-shadow(0px 0px 8px rgba(40, 167, 69, 0.8)) drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2));
+
+    filter:
+        drop-shadow(0 0 10px rgba(0, 180, 70, .8));
+
+}
+
+.selected-wrong {
+
+    filter:
+        drop-shadow(0 0 10px rgba(255, 0, 0, .8));
+
+}
+
+/* ===========================
+   SMALL PHONES
+=========================== */
+
+@media (max-height:700px) {
+
+    .title {
+        top: 13vh;
+    }
+
+    .question-prompt {
+
+        top: 36%;
+
+    }
+
+    #asmachta,
+    #teken15 {
+
+        top: 53%;
+
+    }
+
+    #teken15d,
+    #mumhim {
+
+        top: 72%;
+
+    }
+
+    .pill-img {
+
+        width: 58px;
+
+    }
+
+}
+
+/* ===========================
+   VERY SMALL PHONES
+=========================== */
+
+@media (max-width:360px) {
+
+    .question-prompt {
+
+        width: 85%;
+
+    }
+
+    .medicine-choice {
+
+        width: 100px;
+
+    }
+
+    .pill-img {
+
+        width: 54px;
+
+    }
+
+    .medicine-choice p {
+
+        font-size: .8rem;
+
+    }
+
+}
+
+/* ===========================
+   BIG PHONES
+=========================== */
+
+@media (min-width:430px) {
+
+    .question-prompt {
+
+        max-width: 470px;
+
+    }
+
+    .pill-img {
+
+        width: 70px;
+
+    }
+
+    .medicine-choice {
+
+        width: 135px;
+
+    }
+
+    .medicine-choice p {
+
+        font-size: 1rem;
+
+    }
+
 }
 
 /* medicine box page */
