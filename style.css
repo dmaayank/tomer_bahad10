@@ -1122,7 +1122,7 @@ svg {
     object-fit: contain;
     user-select: none;
     pointer-events: none;
-    top: 3vh;
+    top: 4vh;
     /* מונע גרירה של התמונה בטעות בלחיצה על נקודות */
 
     /* מסירים מיקום absolute מיותר שמבלבל את הדפדפן */
@@ -1303,6 +1303,10 @@ svg {
     width: 140px;
     display: block;
 
+}
+
+#skip-game {
+    display:none;
 }
 
 /* אפקט לחיצה מותאם */
@@ -1953,6 +1957,10 @@ tr:nth-child(even) {
 
 
 /*medicine bag page*/
+
+#skip-bag-game {
+    display:none;
+}
 .bag-page {
     width: 100%;
     display: none;

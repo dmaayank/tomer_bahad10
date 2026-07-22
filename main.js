@@ -248,6 +248,7 @@ const pharmacyGame = () => {
     userTries = 0;
     correctAnswers = 0;
     wrongAnswers = 0;
+
     remainingLocations = PHARMACY_QUIZ_DATA.length;
     tempArr = [];
     copyArr = [...PHARMACY_QUIZ_DATA];
@@ -320,15 +321,23 @@ const endGame = () => {
     const finalGrade = calculateGrade();
     gameScores.pharmacy = finalGrade; // <-- שמירת הציון באובייקט המרכזי
     exercisesDone[currExercise] = 1;
-    currExercise++;
 
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
     popup.dataset.gameType = "pharmacy";
 
-    document.getElementById('popup-title').innerText = finalGrade < 75
-        ? "אולי נתרגל עוד קצת? ציונך הוא:"
-        : "כל הכבוד! ציונך הוא:";
+    if (finalGrade >= 85) {
+        document.getElementById("popup-title").innerText = "כל הכבוד!";
+
+    }
+    else if (finalGrade < 85 && finalGrade >= 65) {
+        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
+
+    }
+    else {
+        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
+
+    }
 
     if (timerDisplay) {
         document.getElementById('time').innerText = timerDisplay.innerText;
@@ -375,6 +384,7 @@ const resetGame = () => {
 // 5. MEDICINE QUIZ GAME LOGIC
 // ==========================================
 const setupMedicinePageEvents = () => {
+    currExercise = 1;
     const practiceBtn = document.getElementById('practice-btn');
     if (practiceBtn) {
         practiceBtn.onclick = () => {
@@ -390,6 +400,26 @@ const setupMedicinePageEvents = () => {
             document.getElementById('medicine-page').style.display = "none";
         };
     }
+
+    console.log(exercisesDone[currExercise] === 1);
+    console.log(currExercise);
+
+    if (exercisesDone[currExercise] === 1) {
+
+        const skipGameBtn = document.getElementById('skip-game');
+
+        skipGameBtn.style.display = "flex";
+
+        if (skipGameBtn) {
+            skipGameBtn.onclick = () => {
+
+                document.getElementById('medicine-box-page').style.display = "block";
+
+                document.getElementById('medicine-page').style.display = "none";
+            }
+        }
+    }
+
 
     const startGameBtn = document.getElementById('start-game');
     if (startGameBtn) startGameBtn.onclick = medicineGame;
@@ -488,16 +518,23 @@ const endMedicineGame = () => {
     const finalGrade = calculateMedicineGrade();
     gameScores.medicine = finalGrade; // <-- שמירת הציון באובייקט המרכזי
     exercisesDone[currExercise] = 1;
-    currExercise++;
 
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
     popup.dataset.gameType = "medicine";
 
-    document.getElementById('popup-title').innerText = finalGrade < 75
-        ? "אולי נתרגל עוד קצת? ציונך הוא:"
-        : "כל הכבוד! ציונך הוא:";
+    if (finalGrade >= 85) {
+        document.getElementById("popup-title").innerText = "כל הכבוד! ציונך הוא:";
 
+    }
+    else if (finalGrade < 85 && finalGrade >= 65) {
+        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
+
+    }
+    else {
+        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
+
+    }
     document.getElementById("grade").innerText = `${finalGrade}%`;
     document.getElementById("time").style.display = "none";
 
@@ -525,6 +562,8 @@ const endMedicineGame = () => {
                     document.getElementById('medicine-box-page').style.display = "none";
                     document.getElementById('medicine-bag-page').style.display = "block";
 
+                    currExercise = 2;
+
                     const returnBtn = document.getElementById('return-bag-btn');
                     if (returnBtn) {
                         returnBtn.onclick = () => {
@@ -532,6 +571,23 @@ const endMedicineGame = () => {
                             document.getElementById('medicine-bag-page').style.display = "none";
                         };
                     }
+
+                    if (exercisesDone[currExercise] === 1) {
+
+                        const skipGameBtn = document.getElementById('skip-bag-game');
+
+                        skipGameBtn.style.display = "flex";
+
+                        if (skipGameBtn) {
+                            skipGameBtn.onclick = () => {
+
+                                setTomerPage();
+                                document.getElementById('medicine-bag-page').style.display = "none";
+                            }
+                        }
+                    }
+
+
 
                     const startGameBtn = document.getElementById('start-bag-game');
                     if (startGameBtn) startGameBtn.onclick = bagGame;
@@ -555,6 +611,7 @@ const resetMedicineGame = () => {
 // ==========================================
 const bagGame = () => {
     userTries = 0;
+    currExercise = 2;
     userChoice = [];
 
     hideAllScreens();
@@ -632,7 +689,6 @@ const endBagGame = () => {
     let totalWrong = 0;
 
     exercisesDone[currExercise] = 1;
-    currExercise++;
 
     // Check only the answers that the user clicked
     userChoice.forEach(id => {
@@ -659,10 +715,21 @@ const endBagGame = () => {
     popup.style.display = "flex";
     popup.dataset.gameType = "bag";
 
-    document.getElementById("popup-title").innerText =
-        finalGrade >= 75
-            ? "כל הכבוד! ציונך הוא:"
-            : "אולי נתרגל עוד קצת? ציונך הוא:";
+    if (finalGrade >= 85) {
+        document.getElementById("popup-title").innerText = "כל הכבוד! ציונך הוא:";
+
+    }
+    else if (finalGrade < 85 && finalGrade >= 65) {
+        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
+
+    }
+    else {
+        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
+
+    }
+    finalGrade >= 75
+        ? "כל הכבוד! ציונך הוא:"
+        : "אולי נתרגל עוד קצת? ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
 
