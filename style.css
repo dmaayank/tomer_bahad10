@@ -1506,7 +1506,7 @@ tr:nth-child(even) {
     width: 80%;
     max-width: 430px;
 
-    padding: 14px;
+    padding: 5px;
 
     border-radius: 16px;
 
@@ -1650,7 +1650,7 @@ tr:nth-child(even) {
 
     position: absolute;
 
-    bottom: 1.5vh;
+    bottom: 0.5vh;
 
     left: 5%;
 
@@ -1982,7 +1982,13 @@ tr:nth-child(even) {
     width: 100%;
 }
 
-#answer-explain {}
+#answer-explain {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555555;
+    text-align: center;
+    max-width: 80vw;
+}
 
 /* עיצוב כפתור בחירה שגרתי */
 .option-btn {
@@ -2008,7 +2014,17 @@ tr:nth-child(even) {
 }
 
 /* כפתור נפק תרופה התחתון */
-.dispense-btn {
+/* מיכל עוטף שדואג להציב את הלחצן והטקסט אחד מתחת לשני */
+.submit-container {
+    display: flex;
+    flex-direction: column; /* מסדר את האלמנטים בטור (זה תחת זה) */
+    align-items: center;     /* ממורכז אופקית */
+    gap: 8px;                /* רווח נקי וגמיש בין הלחצן לטקסט */
+    margin-top: 20px;
+}
+
+/* סגנון הלחצן - עודכן השם ל-ID/Class הנכון */
+#dispense-btn {
     background-color: #f2dede;
     border: 3px solid #b7473a;
     color: #b7473a;
@@ -2017,8 +2033,18 @@ tr:nth-child(even) {
     padding: 8px 40px;
     border-radius: 25px;
     cursor: pointer;
-    margin-top: 25px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* סגנון לטקסט ההסבר שמתחת לחצן */
+#answer-explain {
+    margin: 0;  
+    position: absolute;             /* איפוס מרג'ין ברירת מחדל של פסקה */
+    font-size: 0.95rem;
+    color: #555555;
+    text-align: center;
+    bottom: 0%;
+    font-family: 'heebo-bold';
 }
 
 .bag-img {

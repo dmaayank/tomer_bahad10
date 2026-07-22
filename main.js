@@ -12,6 +12,8 @@ const PHARMACY_QUIZ_DATA = [
     { id: "עובדה", name: 'מרפ"א ערבה' }
 ];
 
+const exercisesDone = [0, 0, 0];
+
 const MEDICINE_GAME_DATA = [
     {
         id: 1,
@@ -63,7 +65,7 @@ const MEDICINE_GAME_DATA = [
     }
 ];
 
-const POSSIBLE_BAG_ANSWERS = ['name', 'expiry-date', 'medicine', 'batch-number'];
+const POSSIBLE_BAG_ANSWERS = ['dosage-instruction', 'expiry-date', 'medicine', 'batch-number'];
 
 // ==========================================
 // 2. GLOBAL STATE
@@ -76,6 +78,8 @@ let locIndex = 0;
 let userTries = 0;
 let correctAnswers = 0;
 let wrongAnswers = 0;
+
+let currExercise = 0;
 
 let timerDisplay = null;
 let timerInterval = null;
@@ -171,7 +175,7 @@ const hideAllScreens = () => {
     if (timerInterval) {
         clearInterval(timerInterval);
     }
-}; 
+};
 
 const setRadioProgress = (radioId) => {
     const radio = document.getElementById(radioId);
@@ -309,6 +313,8 @@ const calculateGrade = () => {
 const endGame = () => {
     const finalGrade = calculateGrade();
     gameScores.pharmacy = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+    exercisesDone[currExercise] = 1;
+    currExercise++;
 
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
@@ -473,6 +479,8 @@ const calculateMedicineGrade = () => {
 const endMedicineGame = () => {
     const finalGrade = calculateMedicineGrade();
     gameScores.medicine = finalGrade; // <-- שמירת הציון באובייקט המרכזי
+    exercisesDone[currExercise] = 1;
+    currExercise++;
 
     const popup = document.getElementById('game-popup');
     popup.style.display = "flex";
@@ -483,7 +491,7 @@ const endMedicineGame = () => {
         : "כל הכבוד! ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
-    document.getElementById("time").innerText = `${MEDICINE_GAME_DATA.length}/${MEDICINE_GAME_DATA.length}`;
+    document.getElementById("time").style.display = "none";
 
     const mistakeLine = document.getElementById('mistake-line');
     if (incorrectAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
@@ -593,6 +601,9 @@ const addChoice = (event) => {
 const endBagGame = () => {
     let totalRight = 0;
     let totalWrong = 0;
+    exercisesDone[currExercise] = 1;
+    currExercise++;
+
 
     userChoice.forEach(id => {
         const row = document.getElementById(`${id}-choice`);
@@ -634,7 +645,7 @@ const endBagGame = () => {
     const mistakeLine = document.getElementById("mistake-line");
     if (totalWrong === 0) mistakeLine.innerText = "לא טעית בכלל!";
     else if (totalWrong === 1) mistakeLine.innerText = "טעית פעם אחת";
-    else mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
+    else mistakeLine.innerText = `טעית -ב ${totalWrong} דברים מתוך 4`;
 
     document.getElementById('retry-btn').onclick = resetBagGame;
 
