@@ -2652,9 +2652,9 @@ tr:nth-child(even) {
 
 .score-box {
     position: relative;
-    background-color: #d9edf7;
+    background-color: #D4E8EA;
     /* תכלת בהיר תואם לתמונה */
-    border: 1px solid #bce8f1;
+    border: 1px solid #6CA1A6;
     border-radius: 20px;
     padding: 30px 20px 45px 20px;
     margin-bottom: 50px;
