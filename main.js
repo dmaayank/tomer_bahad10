@@ -98,6 +98,54 @@ const gameScores = {
     bag: null
 };
 
+
+// ==========================================
+// 9. INITIALIZATION & LISTENERS
+// ==========================================
+window.addEventListener('load', () => {
+    const startBtn = document.getElementById('start_button');
+    if (startBtn) startBtn.addEventListener('click', pharmacyPage);
+
+    const lomdaTitle = document.getElementById('lomda_title');
+    if (lomdaTitle) {
+        lomdaTitle.addEventListener('click', () => location.reload());
+    }
+
+    const topicsPage = document.getElementById('topics_page');
+    if (topicsPage) topicsPage.style.display = "flex";
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const progressRadios = document.querySelectorAll('.progress_bar input[type="radio"]');
+
+    progressRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            hideAllScreens();
+
+            switch (e.target.id) {
+                case 'five':
+                    pharmacyPage();
+                    break;
+                case 'twentyfive':
+                    document.getElementById('progress_bar').style.display = "block";
+                    setRadioProgress("twentyfive");
+                    document.getElementById('medicine-table-page').style.display = "block";
+                    setupMedicinePageEvents();
+                    break;
+                case 'fifty':
+                    setTomerPage();
+                    break;
+                case 'seventyfive':
+                    asmachtaPage();
+                    break;
+                case 'onehundred':
+                    availablePage();
+                    break;
+            }
+        });
+    });
+});
+
 // ==========================================
 // 3. UTILS & NAVIGATION
 // ==========================================
@@ -105,6 +153,7 @@ const hideAllScreens = () => {
     const screens = [
         'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
         'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
+        'medicine-bag-page', // <-- זה ה-ID שהיה חסר!
         'bag-page', 'tomer-system', 'asmachta-page', 'digital-page', 'available-page',
         'tomer-system-page', 'popup', 'game-popup', 'summary-page'
     ];
@@ -122,7 +171,7 @@ const hideAllScreens = () => {
     if (timerInterval) {
         clearInterval(timerInterval);
     }
-};
+}; 
 
 const setRadioProgress = (radioId) => {
     const radio = document.getElementById(radioId);
@@ -434,7 +483,7 @@ const endMedicineGame = () => {
         : "כל הכבוד! ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
-    document.getElementById("time").innerText = `${MEDICINE_GAME_DATA.length - incorrectAnswers}/${MEDICINE_GAME_DATA.length}`;
+    document.getElementById("time").innerText = `${MEDICINE_GAME_DATA.length}/${MEDICINE_GAME_DATA.length}`;
 
     const mistakeLine = document.getElementById('mistake-line');
     if (incorrectAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
@@ -696,10 +745,10 @@ const showSummaryPage = () => {
     // סינון ציונים שבוצעו וחישוב ממוצע מדויק
     const validScores = Object.values(gameScores).filter(score => score !== null);
     const sum = validScores.reduce((acc, score) => acc + score, 0);
-    
-    const avgScore = validScores.length > 0 
-        ? Math.round(sum / validScores.length) 
-        : 100;
+
+    const avgScore = validScores.length > 0
+        ? Math.round(sum / validScores.length)
+        : 0;
 
     document.getElementById('final-score-display').innerText = avgScore;
 
@@ -729,50 +778,3 @@ const showSummaryPage = () => {
         };
     }
 };
-
-// ==========================================
-// 9. INITIALIZATION & LISTENERS
-// ==========================================
-window.addEventListener('load', () => {
-    const startBtn = document.getElementById('start_button');
-    if (startBtn) startBtn.addEventListener('click', pharmacyPage);
-
-    const lomdaTitle = document.getElementById('lomda_title');
-    if (lomdaTitle) {
-        lomdaTitle.addEventListener('click', () => location.reload());
-    }
-
-    const topicsPage = document.getElementById('topics_page');
-    if (topicsPage) topicsPage.style.display = "flex";
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const progressRadios = document.querySelectorAll('.progress_bar input[type="radio"]');
-
-    progressRadios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            hideAllScreens();
-
-            switch (e.target.id) {
-                case 'five':
-                    pharmacyPage();
-                    break;
-                case 'twentyfive':
-                    document.getElementById('progress_bar').style.display = "block";
-                    setRadioProgress("twentyfive");
-                    document.getElementById('medicine-table-page').style.display = "block";
-                    setupMedicinePageEvents();
-                    break;
-                case 'fifty':
-                    setTomerPage();
-                    break;
-                case 'seventyfive':
-                    asmachtaPage();
-                    break;
-                case 'onehundred':
-                    availablePage();
-                    break;
-            }
-        });
-    });
-});
