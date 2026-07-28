@@ -2416,33 +2416,40 @@ tr:nth-child(even) {
 
 .modal-nav {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
 
     width: 55px;
     height: 55px;
-    color: rgb(0, 0, 0);
-    border: none;
 
-    z-index:1000;
-    text-align:center;
-    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #000;
+    border: none;
+    z-index: 1000;
 
     background-color: #e2e2e2a6;
     border-radius: 50%;
 
     font-size: 2.4rem;
+    line-height: 1;
+
+    padding: 0;
+    margin: 0;
 }
 
 #modal-prev {
-    top: 92%;
-    transform: rotate(90deg);
+    top: 95%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
 #modal-next {
-    top: -3%;
-    transform: rotate(90deg);
+    top: 5%;
+    left: 50%;
 
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
 .modal-image-wrapper {
