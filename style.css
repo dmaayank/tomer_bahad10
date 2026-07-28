@@ -2518,6 +2518,15 @@ tr:nth-child(even) {
     animation: guide-move 1s ease-in-out infinite alternate;
 }
 
+#picture-click {
+    font-family:"heebo-bold";
+    font-size: 1rem;
+    position: absolute;
+    top: 67%;
+}
+
+
+
 @keyframes guide-move {
     from {
         translate: 0 0;
