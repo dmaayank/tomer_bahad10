@@ -18,13 +18,14 @@
     src: url('assets/fonts/PlaypenSansHebrew-VariableFont_wght.ttf')
 }
 
-
 body,
 html {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
+    /* CHANGE THIS: allow body to handle dynamic mobile height */
+    height: 100dvh; 
     overflow: hidden;
 }
 
@@ -1335,13 +1336,15 @@ tr:nth-child(even) {
 }
 
 .important {
-    display: flex;
-    color: #b31010 !important;
+    display: flex !important;
     flex-direction: row-reverse;
     align-items: center;
+    justify-content: center; /* Ensures content centers horizontally */
+    color: #b31010 !important;
     font-family: 'heebo-bold';
-    position: relative;
-    top: 5vh;
+    margin-top: 4vh; /* Use margin instead of top: 5vh to push elements naturally */
+    margin-bottom: 2vh;
+    visibility: visible !important;
 }
 
 /* medicine page */
@@ -3129,9 +3132,45 @@ tr:nth-child(even) {
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
 }
 
-select, input, button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 0; /* iOS applies default rounded corners */
+/* Fix for top bar navigation tab buttons on iOS Safari */
+.upper_bar button,
+.upper_bar select,
+.upper_bar input[type="button"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #d09477; /* Set to your tab button color */
+    color: #000000;             /* Text color */
+    border: 1px solid #a67258;
+    border-radius: 6px;
+    padding: 6px 12px;
+    display: inline-block;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Style for active selected tab button */
+.upper_bar button.active,
+.upper_bar .active_tab {
+    background-color: #bb7c5d;
+    font-family: 'heebo-bold', sans-serif;
+}
+
+/* Update your bottom action buttons CSS */
+#to-practice-btn,
+#practice-btn,
+#practice-button,
+#next-page-btn,
+#dispense-btn,
+.next-button {
+    /* Respect iPhone safe area (home bar & address bar) */
+    margin-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+    bottom: 0 !important;
+}
+
+/* Allow scrolling on page containers if content overflows vertical space */
+.medicine-table-page,
+.pharmacy_page,
+.medicine-page {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
