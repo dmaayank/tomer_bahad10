@@ -2411,7 +2411,7 @@ tr:nth-child(even) {
     color: white;
     font-size: 30px;
     cursor: pointer;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .modal-nav {
@@ -2421,14 +2421,14 @@ tr:nth-child(even) {
 
     width: 55px;
     height: 55px;
-    color: white;
+    color: rgb(0, 0, 0);
     border: none;
 
-    z-index:100;
+    z-index:1000;
     text-align:center;
     margin: auto;
 
-    background-color: #0000002d;
+    background-color: #e2e2e2a6;
     border-radius: 50%;
 
     font-size: 2.4rem;
