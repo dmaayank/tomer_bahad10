@@ -843,35 +843,232 @@ const resetBagGame = () => {
     // Restart the game
     bagGame();
 };
-// ==========================================
-// 7. CONTENT PAGES & NAVIGATION FLOW
-// ==========================================
+
+let currentModalIndex = 0;
+let tomerImages = [];
+let imageModal;
+let modalImage;
+
+const tomerGuides = [
+    [{
+        arrowTop: 63,
+        arrowLeft: 40,
+        rotation: -45,
+
+        text: 'בחרו בתפריט "ניפוק תרופות"',
+        textTop: 60,
+        textLeft: -150
+    }],
+    [{
+        arrowTop: 22,
+        arrowLeft: 25,
+        rotation: -75,
+
+        text: "יש ללחוץ על התרופה הרצויה",
+        textTop: 70,
+        textLeft: -90
+    }],
+    [{
+        arrowTop: 54,
+        arrowLeft: 45,
+        rotation: -40,
+
+        text: "יש לסרוק את הברקוד של התרופה שרוצים לנפק",
+        textTop: 25,
+        textLeft: -225
+    }],
+    [{
+        arrowTop: 55,
+        arrowLeft: 35,
+        rotation: 75,
+
+        text: 'יש לראות כי הכמות אכן נכונה ולאחר מכן ללחוץ על הפלוס',
+        textTop: -60,
+        textLeft: -150
+    },
+    {
+        arrowTop: 87,
+        arrowLeft: 10,
+        rotation: -165,
+
+        text: 'ולסיום ללחוץ על ניפוק',
+        textTop: 30,
+        textLeft: 35
+    }, {
+        arrowTop: 55,
+        arrowLeft: 12,
+        rotation: 120,
+
+        text: '',
+        textTop: 20,
+        textLeft: -80
+    }],
+    [{
+        arrowTop: 40,
+        arrowLeft: 30,
+        rotation: 35,
+
+        text: "במידה ומופיעה ההתראה הבאה יש להזין את הסיבה לניפוק בכמות הרשומה",
+        textTop: -75,
+        textLeft: -165
+    }]
+];
+
+
+function showTomerImage(index) {
+    if (!tomerImages[index]) return;
+
+    tomerImages.forEach((img) => {
+        img.style.display = "none";
+    });
+
+    tomerImages[index].style.display = "block";
+
+    currentModalIndex = index;
+    currPage = index + 1;
+}
+
+function showModalImage(index) {
+    if (!tomerImages[index]) return;
+
+    showTomerImage(index);
+    modalImage.src = tomerImages[index].src;
+
+    const guidesContainer = document.getElementById("image-guides");
+    const pageGuides = tomerGuides[index] || [];
+
+    // Remove the previous image's guides
+    guidesContainer.innerHTML = "";
+
+    pageGuides.forEach((guideData) => {
+        const guide = document.createElement("div");
+        guide.className = "image-guide";
+
+        guide.style.top = `${guideData.arrowTop}%`;
+        guide.style.left = `${guideData.arrowLeft}%`;
+
+        // Add text only when this guide has text
+        if (guideData.text) {
+            const guideText = document.createElement("div");
+            guideText.className = "guide-text";
+            guideText.innerText = guideData.text;
+
+            guideText.style.top = `${guideData.textTop ?? 0}px`;
+            guideText.style.left = `${guideData.textLeft ?? 0}px`;
+
+            guideText.style.writingMode =
+                guideData.horizontal === false
+                    ? "vertical-rl"
+                    : "horizontal-tb";
+
+            guide.appendChild(guideText);
+        }
+
+        // Add arrow unless arrow is explicitly disabled
+        if (guideData.showArrow !== false) {
+            const guideArrow = document.createElement("div");
+            guideArrow.className = "guide-arrow";
+            guideArrow.innerText = "➜";
+
+            guideArrow.style.transform =
+                `rotate(${guideData.rotation ?? 0}deg)`;
+
+            guide.appendChild(guideArrow);
+        }
+
+        guidesContainer.appendChild(guide);
+    });
+
+    const prevBtn = document.getElementById("modal-prev");
+    const nextBtn = document.getElementById("modal-next");
+
+    if (prevBtn) {
+        prevBtn.style.display = index === 0 ? "none" : "flex";
+    }
+
+    if (nextBtn) {
+        nextBtn.style.display =
+            index === tomerImages.length - 1 ? "none" : "flex";
+    }
+}
+
+window.addEventListener("load", () => {
+    imageModal = document.getElementById("image-modal");
+    modalImage = document.getElementById("modal-image");
+    tomerImages = [...document.querySelectorAll(".tomer-photo")];
+
+    tomerImages.forEach((img, index) => {
+        img.addEventListener("click", () => {
+            showModalImage(index);
+            imageModal.classList.add("open");
+        });
+    });
+
+    const prevBtn = document.getElementById("modal-prev");
+    const nextBtn = document.getElementById("modal-next");
+    const closeBtn = document.getElementById("close-image-modal");
+
+    if (prevBtn) {
+        prevBtn.onclick = (event) => {
+            event.stopPropagation();
+
+            if (currentModalIndex > 0) {
+                showModalImage(currentModalIndex - 1);
+            }
+        };
+    }
+
+    if (nextBtn) {
+        nextBtn.onclick = (event) => {
+            event.stopPropagation();
+
+            if (currentModalIndex < tomerImages.length - 1) {
+                showModalImage(currentModalIndex + 1);
+            }
+        };
+    }
+
+    if (closeBtn) {
+        closeBtn.onclick = (event) => {
+            event.stopPropagation();
+            imageModal.classList.remove("open");
+        };
+    }
+
+    if (imageModal) {
+        imageModal.addEventListener("click", (event) => {
+            if (event.target === imageModal) {
+                imageModal.classList.remove("open");
+            }
+        });
+    }
+});
+
 const setTomerPage = () => {
     hideAllScreens();
-    document.getElementById('tomer-system').style.display = "block";
-    document.getElementById('progress_bar').style.display = "block";
+
+    document.getElementById("tomer-system").style.display = "flex";
+    document.getElementById("progress_bar").style.display = "block";
+
     setRadioProgress("fifty");
 
     currPage = 1;
-    const firstImg = document.getElementById('tomer1');
-    if (firstImg) firstImg.style.display = "block";
+    showTomerImage(0);
 
-    const nextBtn = document.getElementById('next-page-btn');
-    if (nextBtn) nextBtn.onclick = nextTomerPage;
+    const nextBtn = document.getElementById("next-page-btn");
+
+    if (nextBtn) {
+        nextBtn.onclick = nextTomerPage;
+    }
 };
 
 const nextTomerPage = () => {
-    if (currPage === 5) {
+    if (currPage === tomerImages.length) {
         asmachtaPage();
         return;
     }
 
-    const currentImg = document.getElementById(`tomer${currPage}`);
-    if (currentImg) currentImg.style.display = "none";
-
-    currPage++;
-    const nextImg = document.getElementById(`tomer${currPage}`);
-    if (nextImg) nextImg.style.display = "block";
+    showTomerImage(currPage);
 };
 
 const asmachtaPage = () => {

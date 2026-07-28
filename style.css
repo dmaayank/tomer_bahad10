@@ -1306,7 +1306,7 @@ svg {
 }
 
 #skip-game {
-    display:none;
+    display: none;
 }
 
 /* אפקט לחיצה מותאם */
@@ -1959,8 +1959,9 @@ tr:nth-child(even) {
 /*medicine bag page*/
 
 #skip-bag-game {
-    display:none;
+    display: none;
 }
+
 .bag-page {
     width: 100%;
     display: none;
@@ -2264,13 +2265,9 @@ tr:nth-child(even) {
     height: 2vh;
 }
 
-#bag-retry-btn{
+#bag-retry-btn {}
 
-}
-
-#bag-next-btn {
-
-}
+#bag-next-btn {}
 
 /*tomer system page */
 
@@ -2311,9 +2308,9 @@ tr:nth-child(even) {
 
 .tomer-photo {
     position: absolute;
-    width: 75%;
+    width: 100%;
     /* משמר צורה ריבועית מותאמת לכל גודל מסך */
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1.5 / 1;
 
     /* מיקום במרכז המסך */
     left: 50%;
@@ -2390,6 +2387,150 @@ tr:nth-child(even) {
 
     /* Faster transition into the press */
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-modal.open {
+    display: flex;
+}
+
+
+.close-image-modal {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 55px;
+    height: 55px;
+    color: white;
+    border: none;
+
+    background-color: #00000000;
+
+    font-size: 2.4rem;
+}
+
+#modal-prev {
+    top: 92%;
+    transform: rotate(90deg);
+}
+
+#modal-next {
+    top: -3%;
+    transform: rotate(90deg);
+
+}
+
+.modal-image-wrapper {
+    position: relative;
+    display: inline-block;
+
+    transform: rotate(90deg);
+
+    max-width: 90vh;
+    max-height: 90vw;
+}
+
+#modal-image {
+    display: block;
+
+    max-width: 90vh;
+    max-height: 90vw;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+}
+
+#image-guides {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.image-guide {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-guide {
+    position: absolute;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.guide-text {
+    position: absolute;
+
+    width: max-content;
+    max-width: 200px;
+
+    padding: 6px 10px;
+
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #aa3a3a;
+    border-radius: 8px;
+
+    color: #222;
+    font-size: 0.8rem;
+    font-family: 'heebo-bold', sans-serif;
+    text-align: center;
+    direction: rtl;
+
+    writing-mode: horizontal-tb;
+
+    box-sizing: border-box;
+}
+
+.guide-arrow {
+    color: #ba0000;
+    font-size: 3rem;
+    line-height: 1;
+
+    transform: rotate(45deg);
+    position: absolute;
+    top: 10px;
+
+    animation: guide-move 1s ease-in-out infinite alternate;
+}
+
+@keyframes guide-move {
+    from {
+        translate: 0 0;
+    }
+
+    to {
+        translate: 7px 7px;
+    }
 }
 
 /*asmachta page*/
@@ -2856,11 +2997,7 @@ tr:nth-child(even) {
 .image-placeholder {
     width: 100%;
     height: 140px;
-    margin-top: 10px;
     border: 1px solid #999;
-    background-color: #fff;
-    background-image: linear-gradient(to top right, transparent 49.5%, #888 49.5%, #888 50.5%, transparent 50.5%),
-        linear-gradient(to top left, transparent 49.5%, #888 49.5%, #888 50.5%, transparent 50.5%);
 }
 
 /* כפתור סיים לומדה */
