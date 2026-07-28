@@ -191,44 +191,89 @@ const setRadioProgress = (radioId) => {
 // ==========================================
 // 4. MAP / PHARMACY GAME LOGIC
 // ==========================================
+const MAP_URL =
+    "https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1";
+
+const loadPharmacyMap = () => {
+    const mapIframe = document.getElementById("pharmacy-map");
+
+    if (!mapIframe) return;
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            if (mapIframe.src !== MAP_URL) {
+                mapIframe.src = MAP_URL;
+            }
+        });
+    });
+};
+
 const pharmacyPage = () => {
     hideAllScreens();
-    document.getElementById('pharmacy_page').style.display = "block";
-    document.getElementById('progress_bar').style.display = "block";
+
+    const page = document.getElementById("pharmacy_page");
+    const progressBar = document.getElementById("progress_bar");
+    const popup = document.getElementById("popup");
+
+    page.style.display = "flex";
+    progressBar.style.display = "block";
+
     setRadioProgress("five");
 
-    const toPracticeBtn = document.getElementById('to-practice-btn');
+    // Load the map only after the hidden page becomes visible
+    loadPharmacyMap();
+
+    const toPracticeBtn = document.getElementById("to-practice-btn");
+
     if (toPracticeBtn) {
-        toPracticeBtn.style.display = "block";
+        toPracticeBtn.style.display = "flex";
+
         toPracticeBtn.onclick = () => {
-            document.getElementById('popup').style.display = "flex";
+            popup.style.display = "flex";
         };
     }
 
-    const yesBtn = document.getElementById('yes-btn');
+    const yesBtn = document.getElementById("yes-btn");
+
     if (yesBtn) {
         yesBtn.onclick = () => {
-            document.getElementById('exercise-page').style.display = "block";
-            document.getElementById('pharmacy_page').style.display = "none";
+            page.style.display = "none";
+            popup.style.display = "none";
 
-            document.getElementById('back-btn').onclick = () => {
-                document.getElementById('pharmacy_page').style.display = "block";
-                document.getElementById('exercise-page').style.display = "none";
-                document.getElementById('popup').style.display = "none";
-            };
+            const exercisePage = document.getElementById("exercise-page");
+            exercisePage.style.display = "block";
 
-            document.getElementById('start-exercise').onclick = pharmacyGame;
+            const backBtn = document.getElementById("back-btn");
+
+            if (backBtn) {
+                backBtn.onclick = () => {
+                    exercisePage.style.display = "none";
+                    popup.style.display = "none";
+
+                    page.style.display = "flex";
+
+                    // Safari may need the iframe refreshed again
+                    loadPharmacyMap();
+                };
+            }
+
+            const startExerciseBtn =
+                document.getElementById("start-exercise");
+
+            if (startExerciseBtn) {
+                startExerciseBtn.onclick = pharmacyGame;
+            }
         };
     }
 
-    const noBtn = document.getElementById('no-btn');
+    const noBtn = document.getElementById("no-btn");
+
     if (noBtn) {
         noBtn.onclick = () => {
-            document.getElementById('popup').style.display = "none";
+            popup.style.display = "none";
         };
     }
 };
-
 const startTimer = () => {
     if (!timerDisplay) {
         timerDisplay = document.getElementById("game-timer");

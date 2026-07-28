@@ -192,39 +192,32 @@
 
     <div class="pharmacy_page" id="pharmacy_page">
 
-        <h1 class="title"> פיזור בתי מרקחת צבאיים</h1>
-
+        <h1 class="title">פיזור בתי מרקחת צבאיים</h1>
 
         <div class="map-viewport">
             <div class="map-container" id="mapContainer">
 
-
-                <iframe
+                <iframe id="pharmacy-map"
                     src="https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1"
-                    class="responsive-map-iframe" loading="lazy" allowfullscreen>
+                    class="responsive-map-iframe" allowfullscreen>
                 </iframe>
-
 
             </div>
         </div>
 
         <div class="location-card" id="location-card">
-            <!-- The small drag handle/chevron arrow at the top -->
             <div class="card-header">
                 <span class="chevron-icon">▼</span>
                 <h3 id="card-region-title">צפון</h3>
             </div>
 
-            <!-- Inside contents list -->
             <div class="card-content">
                 <div class="location-item">
                     <span class="pin-icon">📍</span>
                     <p id="card-location-text">מרפ"א 8280 - פילון</p>
                 </div>
-                <!-- You can add more list items here dynamically -->
             </div>
         </div>
-
 
         <button class="button" id="to-practice-btn">
             לתרגול
@@ -232,18 +225,22 @@
 
         <div class="popup" id="popup">
             <div class="pop-up-card">
-
                 <p>האם אתה בטוח שאתה רוצה לעבור לתרגול?</p>
-                <div class="button-row">
 
-                    <button class="button" id="yes-btn"> כן, המשך לתרגול</button>
-                    <button class="button" id="no-btn"> לא, חזור למפה</button>
+                <div class="button-row">
+                    <button class="button" id="yes-btn">
+                        כן, המשך לתרגול
+                    </button>
+
+                    <button class="button" id="no-btn">
+                        לא, חזור למפה
+                    </button>
                 </div>
             </div>
         </div>
 
-
     </div>
+
     <div class="exercise-page" id="exercise-page">
         <p>לפניכם תופיע מפה של ארץ ישראל ושמה של מרפאה. עליכם ללחוץ על המיקום שבו נמצאת המרפאה על גבי המפה.</p>
         <div class="button-row">
