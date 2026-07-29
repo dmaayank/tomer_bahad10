@@ -25,7 +25,7 @@ html {
     margin: 0;
     padding: 0;
     /* CHANGE THIS: allow body to handle dynamic mobile height */
-    height: 100dvh; 
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -1339,10 +1339,12 @@ tr:nth-child(even) {
     display: flex !important;
     flex-direction: row-reverse;
     align-items: center;
-    justify-content: center; /* Ensures content centers horizontally */
+    justify-content: center;
+    /* Ensures content centers horizontally */
     color: #b31010 !important;
     font-family: 'heebo-bold';
-    margin-top: 4vh; /* Use margin instead of top: 5vh to push elements naturally */
+    margin-top: 4vh;
+    /* Use margin instead of top: 5vh to push elements naturally */
     margin-bottom: 2vh;
     visibility: visible !important;
 }
@@ -2519,10 +2521,18 @@ tr:nth-child(even) {
 }
 
 #picture-click {
-    font-family:"heebo-bold";
+    font-family: "heebo-bold";
     font-size: 1rem;
     position: absolute;
-    top: 72%;
+    top: 68%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tap-icon {
+    width: 8vw;
+    height: 4vh;
 }
 
 
@@ -3147,8 +3157,10 @@ tr:nth-child(even) {
 .upper_bar input[type="button"] {
     -webkit-appearance: none;
     appearance: none;
-    background-color: #d09477; /* Set to your tab button color */
-    color: #000000;             /* Text color */
+    background-color: #d09477;
+    /* Set to your tab button color */
+    color: #000000;
+    /* Text color */
     border: 1px solid #a67258;
     border-radius: 6px;
     padding: 6px 12px;
@@ -3181,5 +3193,6 @@ tr:nth-child(even) {
 .pharmacy_page,
 .medicine-page {
     overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
 }

@@ -971,6 +971,15 @@ function showTomerImage(index) {
 
     currentModalIndex = index;
     currPage = index + 1;
+
+    const nextBtn = document.getElementById("next-page-btn");
+
+    if (nextBtn) {
+        nextBtn.style.display =
+            index === tomerImages.length - 1
+                ? "flex"
+                : "none";
+    }
 }
 
 function showModalImage(index) {
@@ -1094,6 +1103,8 @@ const setTomerPage = () => {
 
     document.getElementById("tomer-system").style.display = "flex";
     document.getElementById("progress_bar").style.display = "block";
+    document.getElementById('next-page-btn').style.display = "none";
+
 
     setRadioProgress("fifty");
 
@@ -1112,6 +1123,7 @@ const nextTomerPage = () => {
         asmachtaPage();
         return;
     }
+
 
     showTomerImage(currPage);
 };
