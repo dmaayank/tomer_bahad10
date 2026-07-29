@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     break;
                 case 'seventyfive':
+                    document.getElementById('close-popup-btn').style.display = "none";
+
                     asmachtaPage();
                     break;
                 case 'onehundred':
@@ -164,7 +166,7 @@ const hideAllScreens = () => {
         'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
         'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
         'medicine-bag-page', // <-- זה ה-ID שהיה חסר!
-        'bag-page', 'tomer-system', 'asmachta-page', 'digital-page', 'available-page',
+        'bag-page', 'tomer-system', 'asmachta-page', 'asmachta-pre-page', 'asmachta-test', 'digital-page', 'available-page',
         'tomer-system-page', 'popup', 'game-popup', 'summary-page'
     ];
 
@@ -445,9 +447,6 @@ const setupMedicinePageEvents = () => {
             document.getElementById('medicine-page').style.display = "none";
         };
     }
-
-    console.log(exercisesDone[currExercise] === 1);
-    console.log(currExercise);
 
     if (exercisesDone[currExercise] === 1) {
 
@@ -856,6 +855,7 @@ const endBagGame = () => {
         };
     }
 };
+
 const calculateBagGrade = (mistakeCount) => {
     const correct = 4 - mistakeCount;
     return Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
@@ -1047,6 +1047,7 @@ function showModalImage(index) {
 }
 
 window.addEventListener("load", () => {
+
     imageModal = document.getElementById("image-modal");
     modalImage = document.getElementById("modal-image");
     tomerImages = [...document.querySelectorAll(".tomer-photo")];
@@ -1128,16 +1129,223 @@ const nextTomerPage = () => {
     showTomerImage(currPage);
 };
 
+
+const asmachtaQuestions = [
+    {
+        question: 'אסמכתא תקציבית ניתנת על ידי ענף שר"פ או באישור הרת"ח.',
+        answer: true,
+    },
+    {
+        question: 'תוקף אסמכתא תקציבית הוא שלושה חודשים.',
+        answer: true,
+    },
+    {
+        question: 'לא ניתן לקצר בקשה לתוקף אסמכתא במלל החופשי',
+        answer: true,
+    },
+    {
+        question: 'תרופות מקור או גנריקה ספציפית מצריכות אסמכתא.',
+        answer: true,
+    },
+    {
+        question: 'שינוי מינון דורש הגשת בקשה חדשה.',
+        answer: true,
+    }
+];
+
+let currentTestQuestion = 0;
+let correctTestAnswers = 0;
+
+
 const asmachtaPage = () => {
     hideAllScreens();
     document.getElementById('asmachta-page').style.display = "flex";
     document.getElementById('progress_bar').style.display = "block";
+
     setRadioProgress("seventyfive");
 
     const nextBtn = document.getElementById('next-button');
-    if (nextBtn) nextBtn.onclick = toDigitalPage;
+    if (nextBtn) nextBtn.onclick = setUpAsmachtaTest;
 };
 
+const setUpAsmachtaTest = () => {
+    currExercise = 4;
+
+    document.getElementById('asmachta-page').style.display = "none";
+    document.getElementById('asmachta-pre-page').style.display = "block";
+
+    const startGameBtn = document.getElementById("start-test-game");
+    if (startGameBtn) {
+        startGameBtn.onclick = asmachtaTest;
+    }
+
+    const skipGameBtn = document.getElementById("skip-test-game");
+    if (skipGameBtn) {
+        if (exercisesDone[currExercise] === 1) {
+            skipGameBtn.style.display = "flex";
+            skipGameBtn.onclick = () => {
+                toDigitalPage();
+            };
+        } else {
+            skipGameBtn.style.display = "none";
+        }
+    }
+
+    const returnBtn = document.getElementById('return-test-btn');
+    if (returnBtn) {
+        returnBtn.onclick = () => {
+            document.getElementById('asmachta-page').style.display = "flex";
+            document.getElementById('asmachta-pre-page').style.display = "none";
+        };
+    }
+};
+
+const asmachtaTest = () => {
+    hideAllScreens();
+
+    document.getElementById("asmachta-pre-page").style.display = "none";
+    document.getElementById("asmachta-test").style.display = "flex";
+    document.getElementById("progress_bar").style.display = "block";
+    document.getElementById('close-popup-btn').style.display = "none";
+
+
+    setRadioProgress("sixty");
+
+    currentTestQuestion = 0;
+    correctTestAnswers = 0;
+
+    loadAsmachtaQuestion();
+
+    document.getElementById("answer-true").onclick = () => {
+        checkAsmachtaAnswer(true);
+    };
+
+    document.getElementById("answer-false").onclick = () => {
+        checkAsmachtaAnswer(false);
+    };
+};
+
+const loadAsmachtaQuestion = () => {
+    const questionData = asmachtaQuestions[currentTestQuestion];
+    if (!questionData) return;
+
+    const questionElement = document.getElementById("asmachta-question");
+    const questionNumber = document.getElementById("question-number");
+
+    if (questionElement) {
+        questionElement.innerText = questionData.question;
+    }
+
+    if (questionNumber) {
+        questionNumber.innerText = `${currentTestQuestion + 1}/${asmachtaQuestions.length}`;
+    }
+
+    resetAsmachtaButtons();
+};
+
+const checkAsmachtaAnswer = (userAnswer) => {
+    const questionData = asmachtaQuestions[currentTestQuestion];
+    if (!questionData) return;
+
+    const trueBtn = document.getElementById("answer-true");
+    const falseBtn = document.getElementById("answer-false");
+
+    trueBtn.disabled = true;
+    falseBtn.disabled = true;
+
+    const selectedBtn = userAnswer ? trueBtn : falseBtn;
+
+    if (userAnswer === questionData.answer) {
+        correctTestAnswers++;
+        selectedBtn.classList.add("selected-right");
+    } else {
+        selectedBtn.classList.add("selected-wrong");
+    }
+
+    setTimeout(() => {
+        currentTestQuestion++;
+
+        if (currentTestQuestion >= asmachtaQuestions.length) {
+            endAsmachtaTest();
+        } else {
+            loadAsmachtaQuestion();
+        }
+    }, 1000);
+};
+
+const resetAsmachtaButtons = () => {
+    const buttons = document.querySelectorAll("#asmachta-test .answer-btn");
+    buttons.forEach((button) => {
+        button.disabled = false;
+        button.classList.remove("selected-right", "selected-wrong");
+    });
+};
+
+const calculateFinalGrade = () => {
+    if (asmachtaQuestions.length === 0) return 0;
+    const grade = (correctTestAnswers * 100) / asmachtaQuestions.length;
+    return Math.round(grade);
+};
+
+const endAsmachtaTest = () => {
+    const score = calculateFinalGrade();
+    const totalRight = correctTestAnswers;
+    const totalWrong = asmachtaQuestions.length - correctTestAnswers;
+
+    gameScores.medicine = score;
+    exercisesDone[currExercise] = 1;
+
+    const popup = document.getElementById("game-popup");
+    popup.style.display = "flex";
+    popup.dataset.gameType = "asmachta";
+
+    const popupTitle = document.getElementById("popup-title");
+    if (score >= 85) {
+        popupTitle.innerText = "כל הכבוד! ציונך הוא:";
+    } else if (score >= 65) {
+        popupTitle.innerText = "אחלה, בוא נמשיך";
+    } else {
+        popupTitle.innerText = "אולי נתרגל שוב?";
+    }
+
+    document.getElementById("grade").innerText = `${score}%`;
+
+    const time = document.getElementById("time");
+    if (time) {
+        time.style.display = "block";
+        time.innerText = `${totalRight}/${asmachtaQuestions.length}`;
+    }
+
+    const mistakeLine = document.getElementById("mistake-line");
+    if (mistakeLine) {
+        if (totalWrong === 0) {
+            mistakeLine.innerText = "לא טעית בכלל!";
+        } else if (totalWrong === 1) {
+            mistakeLine.innerText = "טעית פעם אחת";
+        } else {
+            mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
+        }
+    }
+
+    const retryBtn = document.getElementById("retry-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const orText = document.getElementById("or-text");
+
+    if (retryBtn) {
+        retryBtn.style.display = "block";
+        retryBtn.onclick = asmachtaTest; // Restart test on retry
+    }
+
+    if (nextBtn) {
+        nextBtn.style.display = "block";
+        nextBtn.onclick = toDigitalPage;
+    }
+
+    if (orText) {
+        orText.style.display = "block";
+    }
+
+};
 const toDigitalPage = () => {
     hideAllScreens();
     document.getElementById('digital-page').style.display = "flex";

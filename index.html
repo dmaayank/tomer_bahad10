@@ -523,7 +523,7 @@
 
         <div id="picture-click">
             <p>לחץ על התמונה</p>
-            <img src = "assets/images/tap.png" class = "tap-icon">
+            <img src="assets/images/tap.png" class="tap-icon">
         </div>
 
 
@@ -588,7 +588,50 @@
         </div>
 
         <!-- כפתור הבא -->
-        <button class="next-button" id="next-button">הבא</button>
+        <button class="next-button" id="next-button">לתרגול</button>
+    </div>
+
+
+    <div class="medicine-page" id="asmachta-pre-page">
+        <p>לפניכם יופיעו מספר משפטים, עליכם להחליט האם המשפט נכון או לא נכון
+        </p>
+        <div class="button-row">
+            <button class="button" id="return-test-btn"> חזור לעמוד</button>
+            <button class="button" id="start-test-game"> !בואו נתחיל</button>
+            <button class="button" id="skip-test-game"> דגל על התרגול</button>
+
+        </div>
+
+    </div>
+
+    <div id="asmachta-test" class="asmachta-test">
+
+        <h1 class="title" id = "asmachta-title">תרגול - אסמכתא תקציבית</h1>
+
+        <div class="asmachta-card">
+
+            <div class="question-counter">
+                שאלה <span id="question-number"></span>
+            </div>
+
+            <p class="asmachta-question" id="asmachta-question">
+                כאן תופיע השאלה
+            </p>
+
+            <div class="answers">
+
+                <button class="answer-btn" id="answer-true">
+                    נכון
+                </button>
+
+                <button class="answer-btn" id="answer-false">
+                    לא נכון
+                </button>
+
+            </div>
+
+        </div>
+
     </div>
 
     <div id="digital-page">

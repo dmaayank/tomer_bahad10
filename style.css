@@ -2570,6 +2570,8 @@ tr:nth-child(even) {
     position: relative;
 }
 
+
+
 /* כותרת הדף - הסרת ה-top שגרם לחפיפה */
 .asmachta-page .title {
     position: relative !important;
@@ -2586,6 +2588,123 @@ tr:nth-child(even) {
     font-size: 1.8rem;
     text-align: center;
     width: 100%;
+}
+
+/*asmachta pre page */
+.asmachta-pre-page {}
+
+/* medicine page */
+#asmachta-pre-page {
+    display: none;
+    text-align: center;
+
+}
+
+#asmachta-pre-page p {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    direction: rtl;
+}
+
+#asmachta-pre-page .button-row {
+    gap: 10px;
+}
+
+#asmachta-pre-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+
+/*asmachta-test*/
+
+.asmachta-test {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.asmachta-card {
+    width: min(90%, 430px);
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    direction: rtl;
+}
+
+.asmachta-test .title {
+    top: -1%;
+}
+
+.question-counter {
+    text-align: center;
+    font-family: "heebo-bold";
+    color: #888;
+}
+
+.asmachta-question {
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    font-family: "heebo-medium";
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.answer-btn {
+    height: 55px;
+
+    border: solid rgb(38, 71, 38) 2px;
+    border-radius: 100px;
+
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.26);
+
+
+    background: #adb999;
+    color: white;
+
+    font-size: 1.2rem;
+    font-family: "heebo-bold";
+
+    cursor: pointer;
 }
 
 /* ריכוז השלבים */
