@@ -3315,6 +3315,12 @@ tr:nth-child(even) {
     bottom: 0 !important;
 }
 
+#dispense-btn {
+    margin-bottom: calc(25px + env(safe-area-inset-bottom)) !important;
+
+}
+
+
 /* Allow scrolling on page containers if content overflows vertical space */
 .medicine-table-page,
 .pharmacy_page,
