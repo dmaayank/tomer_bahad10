@@ -12,7 +12,7 @@ const PHARMACY_QUIZ_DATA = [
     { id: "עובדה", name: 'מרפ"א ערבה' }
 ];
 
-const exercisesDone = [0, 0, 0];
+const exercisesDone = [0, 0, 0, 0];
 
 const MEDICINE_GAME_DATA = [
     {
@@ -99,9 +99,9 @@ let currPage = 1;
 const gameScores = {
     pharmacy: null,
     medicine: null,
-    bag: null
+    bag: null,
+    asmachta: null
 };
-
 
 // ==========================================
 // 9. INITIALIZATION & LISTENERS
@@ -373,6 +373,13 @@ const endGame = () => {
     popup.style.display = "flex";
     popup.dataset.gameType = "pharmacy";
 
+    const timeElement = document.getElementById("time");
+
+    if (timeElement && timerDisplay) {
+        timeElement.style.display = "block";
+        timeElement.innerText = timerDisplay.innerText;
+    }
+
     if (finalGrade >= 85) {
         document.getElementById("popup-title").innerText = "כל הכבוד!";
 
@@ -448,19 +455,18 @@ const setupMedicinePageEvents = () => {
         };
     }
 
-    if (exercisesDone[currExercise] === 1) {
+    const skipGameBtn = document.getElementById('skip-game');
 
-        const skipGameBtn = document.getElementById('skip-game');
+    if (skipGameBtn) {
+        if (exercisesDone[currExercise] === 1) {
+            skipGameBtn.style.display = "flex";
 
-        skipGameBtn.style.display = "flex";
-
-        if (skipGameBtn) {
             skipGameBtn.onclick = () => {
-
                 document.getElementById('medicine-box-page').style.display = "block";
-
                 document.getElementById('medicine-page').style.display = "none";
-            }
+            };
+        } else {
+            skipGameBtn.style.display = "none";
         }
     }
 
@@ -580,6 +586,7 @@ const endMedicineGame = () => {
 
     }
     document.getElementById("grade").innerText = `${finalGrade}%`;
+
     document.getElementById("time").style.display = "none";
 
     const mistakeLine = document.getElementById('mistake-line');
@@ -616,18 +623,18 @@ const endMedicineGame = () => {
                         };
                     }
 
-                    if (exercisesDone[currExercise] === 1) {
+                    const skipGameBtn = document.getElementById('skip-bag-game');
 
-                        const skipGameBtn = document.getElementById('skip-bag-game');
+                    if (skipGameBtn) {
+                        if (exercisesDone[currExercise] === 1) {
+                            skipGameBtn.style.display = "flex";
 
-                        skipGameBtn.style.display = "flex";
-
-                        if (skipGameBtn) {
                             skipGameBtn.onclick = () => {
-
                                 setTomerPage();
                                 document.getElementById('medicine-bag-page').style.display = "none";
-                            }
+                            };
+                        } else {
+                            skipGameBtn.style.display = "none";
                         }
                     }
 
@@ -695,19 +702,21 @@ const bagGame = () => {
         btn.style.visibility = "visible";
         btn.onclick = addChoice;
     });
-}; const addChoice = (event) => {
+};
+
+const addChoice = (event) => {
     const btn = event.currentTarget || event.target.closest('.option-btn');
     if (!btn) return;
+
 
     const clickedId = btn.id;
     if (userChoice.includes(clickedId) || userChoice.length >= 4) return;
 
-    userChoice.push(clickedId);
-    btn.style.visibility = "hidden";
-
     const row = document.getElementById(`${clickedId}-choice`);
     if (!row) return;
 
+    userChoice.push(clickedId);
+    btn.style.visibility = "hidden";
     row.style.display = "block";
 
     // Deselect handler
@@ -771,9 +780,6 @@ const endBagGame = () => {
         document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
 
     }
-    finalGrade >= 75
-        ? "כל הכבוד! ציונך הוא:"
-        : "אולי נתרגל עוד קצת? ציונך הוא:";
 
     document.getElementById("grade").innerText = `${finalGrade}%`;
 
@@ -871,9 +877,6 @@ const resetBagGame = () => {
     // Clear selections
     userChoice = [];
 
-    totalWrong = 0;
-    totalRight = 0;
-
     // Reset all answer rows
     document.querySelectorAll('[id$="-choice"]').forEach(choice => {
         choice.style.display = "none";
@@ -918,8 +921,8 @@ const tomerGuides = [
         arrowLeft: 45,
         rotation: -40,
 
-        text: "יש לסרוק את הברקוד של התרופה שרוצים לנפק",
-        textTop: 25,
+        text: "יש לסרוק את הברקוד של התרופה שרוצים לנפק/ללחוץ על התרופה הרצויה בשקופית של הברקוד",
+        textTop: 20,
         textLeft: -225
     }],
     [{
@@ -983,7 +986,7 @@ function showTomerImage(index) {
 }
 
 function showModalImage(index) {
-    if (!tomerImages[index]) return;
+    if (!tomerImages[index] || !modalImage) return;
 
     showTomerImage(index);
     modalImage.src = tomerImages[index].src;
@@ -992,6 +995,8 @@ function showModalImage(index) {
     const pageGuides = tomerGuides[index] || [];
 
     // Remove the previous image's guides
+    if (!guidesContainer) return;
+
     guidesContainer.innerHTML = "";
 
     pageGuides.forEach((guideData) => {
@@ -1055,7 +1060,9 @@ window.addEventListener("load", () => {
     tomerImages.forEach((img, index) => {
         img.addEventListener("click", () => {
             showModalImage(index);
-            imageModal.classList.add("open");
+            if (imageModal) {
+                imageModal.classList.add("open");
+            }
         });
     });
 
@@ -1169,7 +1176,7 @@ const asmachtaPage = () => {
 };
 
 const setUpAsmachtaTest = () => {
-    currExercise = 4;
+    currExercise = 3;
 
     document.getElementById('asmachta-page').style.display = "none";
     document.getElementById('asmachta-pre-page').style.display = "block";
@@ -1207,9 +1214,6 @@ const asmachtaTest = () => {
     document.getElementById("asmachta-test").style.display = "flex";
     document.getElementById("progress_bar").style.display = "block";
     document.getElementById('close-popup-btn').style.display = "none";
-
-
-    setRadioProgress("sixty");
 
     currentTestQuestion = 0;
     correctTestAnswers = 0;
@@ -1292,7 +1296,7 @@ const endAsmachtaTest = () => {
     const totalRight = correctTestAnswers;
     const totalWrong = asmachtaQuestions.length - correctTestAnswers;
 
-    gameScores.medicine = score;
+    gameScores.asmachta = score;
     exercisesDone[currExercise] = 1;
 
     const popup = document.getElementById("game-popup");
@@ -1382,13 +1386,17 @@ const availableStep2 = () => {
 // ==========================================
 const showSummaryPage = () => {
     hideAllScreens();
-    document.getElementById('summary-page').style.display = "flex";
+
+    const summaryPage = document.getElementById('summary-page');
+    summaryPage.style.display = "flex";
 
     document.getElementById('progress_bar').style.display = "block";
     setRadioProgress("onehundred");
 
-    // סינון ציונים שבוצעו וחישוב ממוצע מדויק
-    const validScores = Object.values(gameScores).filter(score => score !== null);
+    const validScores = Object.values(gameScores).filter(
+        score => score !== null && typeof score === "number"
+    );
+
     const sum = validScores.reduce((acc, score) => acc + score, 0);
 
     const avgScore = validScores.length > 0
@@ -1398,6 +1406,7 @@ const showSummaryPage = () => {
     document.getElementById('final-score-display').innerText = avgScore;
 
     const titleEl = document.getElementById('final-title');
+
     if (avgScore >= 75) {
         titleEl.innerText = "כל הכבוד! סיימתם את הלומדה בהצלחה.";
     } else {
@@ -1405,21 +1414,33 @@ const showSummaryPage = () => {
     }
 
     const starsContainer = document.getElementById('stars-container');
-    let starsHTML = '';
 
     if (avgScore >= 90) {
-        starsHTML = '⭐ ⭐ ⭐';
+        starsContainer.innerHTML = '⭐ ⭐ ⭐';
     } else if (avgScore >= 70) {
-        starsHTML = '⭐ ⭐ <span class="star gray">⭐</span>';
+        starsContainer.innerHTML =
+            '⭐ ⭐ <span class="star gray">⭐</span>';
     } else {
-        starsHTML = '⭐ <span class="star gray">⭐</span> <span class="star gray">⭐</span>';
+        starsContainer.innerHTML =
+            '⭐ <span class="star gray">⭐</span> <span class="star gray">⭐</span>';
     }
-    starsContainer.innerHTML = starsHTML;
 
-    const redoBtn = document.getElementById('redo-lomda-btn');
-    if (redoBtn) {
-        redoBtn.onclick = () => {
-            location.reload();
+    const finishBtn = document.getElementById('end-lomda-btn');
+
+    if (finishBtn) {
+        finishBtn.onclick = () => {
+            finishBtn.disabled = true;
+
+            // Attempts to close only when the browser allows it
+            window.close();
+
+            // LMS tabs/iframes frequently cannot be closed with window.close()
+            setTimeout(() => {
+                if (!window.closed) {
+                    finishBtn.disabled = false;
+                    finishBtn.innerText = "הלומדה הסתיימה – ניתן לסגור את החלון";
+                }
+            }, 500);
         };
     }
 };
