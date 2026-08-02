@@ -1144,11 +1144,11 @@ const asmachtaQuestions = [
     },
     {
         question: 'תוקף אסמכתא תקציבית הוא שלושה חודשים.',
-        answer: true,
+        answer: false,
     },
     {
-        question: 'לא ניתן לקצר בקשה לתוקף אסמכתא במלל החופשי',
-        answer: true,
+        question: 'אי אפשר לקצר בקשה לתוקף אסמכתא במלל החופשי',
+        answer: false,
     },
     {
         question: 'תרופות מקור או גנריקה ספציפית מצריכות אסמכתא.',
