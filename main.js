@@ -1261,9 +1261,9 @@ const checkAsmachtaAnswer = (userAnswer) => {
 
     if (userAnswer === questionData.answer) {
         correctTestAnswers++;
-        selectedBtn.classList.add("selected-right");
+        selectedBtn.classList.add("right-answer");
     } else {
-        selectedBtn.classList.add("selected-wrong");
+        selectedBtn.classList.add("wrong-answer");
     }
 
     setTimeout(() => {
@@ -1281,7 +1281,7 @@ const resetAsmachtaButtons = () => {
     const buttons = document.querySelectorAll("#asmachta-test .answer-btn");
     buttons.forEach((button) => {
         button.disabled = false;
-        button.classList.remove("selected-right", "selected-wrong");
+        button.classList.remove("right-answer", "wrong-answer");
     });
 };
 

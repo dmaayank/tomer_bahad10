@@ -3270,6 +3270,14 @@ tr:nth-child(even) {
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
 }
 
+.right-answer { 
+    background-color:green;
+}
+
+.wrong-answer{
+    background-color: rgb(173, 27, 27);
+}
+
 /* Fix for top bar navigation tab buttons on iOS Safari */
 .upper_bar button,
 .upper_bar select,
