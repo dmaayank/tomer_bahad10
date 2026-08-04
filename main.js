@@ -167,7 +167,7 @@ const hideAllScreens = () => {
         'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
         'medicine-bag-page', // <-- זה ה-ID שהיה חסר!
         'bag-page', 'tomer-system', 'asmachta-page', 'asmachta-pre-page', 'asmachta-test', 'digital-page', 'available-page',
-        'tomer-system-page', 'popup', 'game-popup', 'summary-page'
+        'tomer-system-page', 'popup', 'game-popup', 'summary-page', 'superpharm-page', 'reserve-dispensing-page'
     ];
 
     screens.forEach(id => {
@@ -1371,18 +1371,86 @@ const availablePage = () => {
 
 const availableStep2 = () => {
     hideAllScreens();
+
     document.getElementById('progress_bar').style.display = "block";
     document.getElementById('tomer-system-page').style.display = "flex";
+
     setRadioProgress("onehundred");
 
-    const finalBtn = document.getElementById('finish-btn');
-    if (finalBtn) {
-        finalBtn.onclick = showSummaryPage;
+    const nextBtn = document.getElementById('finish-btn');
+
+    if (nextBtn) {
+        nextBtn.innerText = "הבא";
+        nextBtn.onclick = showSuperpharmPage;
     }
 };
 
 // ==========================================
-// 8. SUMMARY & FINAL PAGE
+// 8. SUPERPHARM PAGE
+// ==========================================
+const showSuperpharmPage = () => {
+    hideAllScreens();
+
+    const superpharmPage =
+        document.getElementById("superpharm-page");
+
+    if (superpharmPage) {
+        superpharmPage.style.display = "flex";
+    }
+
+    const progressBar =
+        document.getElementById("progress_bar");
+
+    if (progressBar) {
+        progressBar.style.display = "block";
+    }
+
+    setRadioProgress("onehundred");
+
+    const finishBtn =
+        document.getElementById("superpharm-finish-btn");
+
+    if (finishBtn) {
+        finishBtn.onclick = showReserveDispensingPage;
+    }
+};
+
+const showReserveDispensingPage = () => {
+    hideAllScreens();
+
+    const reservePage =
+        document.getElementById("reserve-dispensing-page");
+
+    if (reservePage) {
+        reservePage.style.display = "flex";
+        reservePage.scrollTop = 0;
+
+        requestAnimationFrame(() => {
+            reservePage.scrollTo({
+                top: 0,
+                behavior: "auto"
+            });
+        });
+    }
+
+    const progressBar =
+        document.getElementById("progress_bar");
+
+    if (progressBar) {
+        progressBar.style.display = "block";
+    }
+
+    setRadioProgress("onehundred");
+
+    const finishBtn =
+        document.getElementById("reserve-finish-btn");
+
+    if (finishBtn) {
+        finishBtn.onclick = showSummaryPage;
+    }
+};
+// ==========================================
+// 9. SUMMARY & FINAL PAGE
 // ==========================================
 const showSummaryPage = () => {
     hideAllScreens();

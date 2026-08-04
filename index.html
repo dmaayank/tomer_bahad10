@@ -148,7 +148,7 @@
 
     <div class="topics_page" id="topics_page">
 
-        <h1 class="title" id="lomda-title"> רוקחות בצה"ל ומערכת תומ"ר</h1>
+        <h1 class="title page-title" id="lomda-title"> רוקחות בצה"ל ומערכת תומ"ר</h1>
         <p id="title_text"> על מה נלמד בלומדה? </p>
 
         <div class="topics">
@@ -192,7 +192,7 @@
 
     <div class="pharmacy_page" id="pharmacy_page">
 
-        <h1 class="title">פיזור בתי מרקחת צבאיים</h1>
+        <h1 class="title page-title">פיזור בתי מרקחת צבאיים</h1>
 
         <div class="map-viewport">
             <div class="map-container" id="mapContainer">
@@ -308,7 +308,7 @@
 
     <div class="medicine-table-page" id="medicine-table-page">
 
-        <h1 class="title"> תקני תרופות בצה”ל</h1>
+        <h1 class="title page-title"> תקני תרופות בצה”ל</h1>
 
         <table class="medicine-table" style="width:100%">
             <tr>
@@ -321,7 +321,7 @@
             <tr>
                 <td>15ד</td>
                 <td>חובש</td>
-                <td>חובש</td>
+                <td>חובש, רוקח</td>
                 <td>מרפאת יחידה</td>
 
             </tr>
@@ -367,7 +367,7 @@
     </div>
 
     <div class="medicine-game" id="medicine-game">
-        <h1 class="title">תקני תרופות בצה”ל</h1>
+        <h1 class="title page-title">תקני תרופות בצה”ל</h1>
 
         <!-- דוגמה לבקבוק עם הילה אדומה ותג סגול מעליו -->
         <div class="medicine-choice selected-wrong" id="asmachta">
@@ -411,7 +411,7 @@
     </div>
 
     <div class="medicine-box-page" id="medicine-box-page">
-        <h1 class="title">איך מנפקים תרופה משולחן הטיפולים/ארגז חופ”ל?</h1>
+        <h1 class="title page-title">איך מנפקים תרופה משולחן הטיפולים/ארגז חופ”ל?</h1>
 
         <div class="info-steps">
             <div class="info-step">
@@ -455,7 +455,7 @@
     </div>
 
     <div class="bag-page" id="bag-page">
-        <h1 class="title">הכנת התרופה לניפוק</h1>
+        <h1 class="title page-title">הכנת התרופה לניפוק</h1>
 
         <!-- תמונת השקית והתרופה -->
         <div class="bag-container">
@@ -511,7 +511,7 @@
     </div>
 
     <div class="tomer-system" id="tomer-system">
-        <h1 class="title" id="tomer-title">איך מנפקים תרופות במערכת התומ"ר</h1>
+        <h1 class="title page-title" id="tomer-title">איך מנפקים תרופות במערכת התומ"ר</h1>
 
 
 
@@ -550,7 +550,7 @@
 
     <div class="asmachta-page" id="asmachta-page">
         <!-- כותרת העמוד -->
-        <h1 class="title">אסמכתא תקציבית -<br>דגשים</h1>
+        <h1 class="title page-title">אסמכתא תקציבית -<br>דגשים</h1>
 
         <!-- רשימת הסעיפים -->
         <div class="bullets-container">
@@ -606,7 +606,7 @@
 
     <div id="asmachta-test" class="asmachta-test">
 
-        <h1 class="title" id="asmachta-title">תרגול - אסמכתא תקציבית</h1>
+        <h1 class="title page-title" id="asmachta-title">תרגול - אסמכתא תקציבית</h1>
 
         <div class="asmachta-card">
 
@@ -755,10 +755,280 @@
 
         </div>
 
-        <!-- כפתור סיום (מופיע בסוף) -->
-        <button id="finish-btn" class="finish-btn">סיים לומדה</button>
+        <button id="finish-btn" class="next-button">
+            הבא
+        </button>
+    </div>
+
+    <div id="superpharm-page" class="superpharm-page">
+
+        <div class="header">
+            <h1>נוהל ודגשים: ניפוק תרופות לחיילים בבית מרקחת</h1>
+
+        </div>
+
+        <div class="grid-container">
+
+            <div class="column">
+
+                <div class="card">
+                    <div class="card-title">📱 1. מרשם דיגיטלי</div>
+
+                    <ul>
+                        <li>
+                            <strong>זיהוי חובה:</strong>
+                            העברת
+                            <span class="badge badge-danger">חוגר פיזי בלבד</span>
+                            בקורא הכרטיסים.
+                        </li>
+
+                        <li>
+                            לא ניתן לנפק באמצעות הקראת מספר אישי,
+                            תעודת זהות או צילום חוגר.
+                        </li>
+
+                        <li>
+                            אנשי מילואים לא יוכלו להשתמש בשירות ללא חוגר.
+                        </li>
+
+                        <li>
+                            למשוך עבור אדם אחר אפשרי רק כאשר החוגר הפיזי
+                            של המטופל נמצא ברשות האדם שמושך את התרופה.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">🖥️ 2. מרשם ממוחשב</div>
+
+                    <ul>
+                        <li>
+                            המרשם מודפס מתוך מערכת CPR וחייב להיות חתום.
+                        </li>
+
+                        <li>
+                            מיועד בעיקר לתרופות נרקוטיות.
+                        </li>
+
+                        <li>
+                            צריך להעביר חוגר פיזי. לא ניתן להשתמש בצילום חוגר.
+                        </li>
+
+                        <li>
+                            אם הופק מרשם ממוחשב, לא ניתן למשוך אותו
+                            כמרשם דיגיטלי.
+                        </li>
+
+                        <li>
+                            יש להגיע עם המרשם המודפס והחתום.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card accent-green">
+                    <div class="card-title">📝 3. מרשם לבן</div>
+
+                    <ul>
+                        <li>
+                            ניתן בדרך כלל מבתי חולים, רופאי שיניים,
+                            רופאים פרטיים, ביקורופא או רופא יחידה.
+                        </li>
+
+                        <li>
+                            חייב להיות מרשם מקורי וחתום.
+                        </li>
+
+                        <li>
+                            ניתן לנפק באמצעות צילום חוגר ותעודה מזהה נוספת.
+                        </li>
+
+                        <li>
+                            ניתן למשוך עבור אדם אחר באמצעות ייפוי כוח.
+                        </li>
+
+                        <li>
+                            אנשי מילואים ללא חוגר יכולים לקבל תרופות באמצעות
+                            צו מילואים פעיל ותעודה מזהה.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card accent-red">
+                    <div class="card-title">🔒 4. מרשם נרקוטי</div>
+
+                    <ul>
+                        <li>
+                            הניפוק יתבצע בנוכחות המטופל בלבד ובהעברת חוגר פיזי.
+                        </li>
+
+                        <li>
+                            ניתן לנפק להורה או לבן/בת זוג ללא נוכחות החייל,
+                            בהצגת:
+                            <ul>
+                                <li>החוגר הפיזי של המטופל.</li>
+                                <li>תעודה מזהה קשיחה וספח.</li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            ניתן לקבל רק מרשמים מקוריים וחתומים.
+                        </li>
+
+                        <li>
+                            המרשם יכול להיות מרשם צבאי עם לוגו CPR
+                            או מרשם מקורי מבית חולים.
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="column">
+
+                <div class="card accent-orange">
+                    <div class="card-title">📅 5. תוקף מרשמים</div>
+
+                    <div class="validity-grid">
+
+                        <div class="validity-box">
+                            <div>מרשם רגיל</div>
+                            <span class="days">30 יום</span>
+                        </div>
+
+                        <div class="validity-box red">
+                            <div>מרשם נרקוטי</div>
+                            <span class="days">15 יום</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card accent-purple">
+                    <div class="card-title">💳 6. אסמכתא תקציבית</div>
+
+                    <ul>
+                        <li>
+                            יש תרופות המחייבות אסמכתא תקציבית.
+                        </li>
+
+                        <li>
+                            ניתן למצוא אותה ב־CPR תחת
+                            <strong>מעקב הפניות</strong>.
+                        </li>
+
+                        <li>
+                            ניתן להנחות את החייל לבדוק אותה גם
+                            בהפניות באפליקציית מדיתיק.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">👶 7. תרופות פריון</div>
+
+                    <ul>
+                        <li>
+                            יש להגיע עם אסמכתא תקציבית לטיפולי פריון.
+                        </li>
+
+                        <li>
+                            ניתן לקבל תרופות מקסימליות לסבב טיפולים אחד.
+                        </li>
+
+                        <li>
+                            לרוב נדרש בהזמנה מיוחדת מביתי מרקחת אזרחיים.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card accent-red">
+                    <div class="card-title">🚫 8. תרופות שאינן בסל</div>
+
+                    <ul>
+                        <li>
+                            לא ניתן לקבל תרופות שאינן בסל בהליך דיגיטלי.
+                        </li>
+
+                        <li>
+                            יש להגיע עם מדפס מודפס וחתום
+                            או מרשם ידני וחתום.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <button id="superpharm-finish-btn" class="next-button">
+            הבא
+        </button>
 
     </div>
+
+    <div id="reserve-dispensing-page" class="reserve-dispensing-page">
+
+        <div class="reserve-header">
+            <h1>
+                נוהל ניפוק תרופות עבור אנשי המילואים
+            </h1>
+        </div>
+
+        <div class="reserve-card">
+
+            <h2>
+                חייל מילואים הינו חייל עם צו מילואים פעיל
+            </h2>
+
+            <p class="reserve-intro">
+                בהתאם להנחיות צה"ל, אנשי מילואים מקבלים מרשמים רק עבור
+                תרופות לטיפול אקוטי במהלך שירות המילואים הפעיל שלהם,
+                ובהתאם לנהלים הבאים:
+            </p>
+
+            <ol class="reserve-list">
+
+                <li>
+                    הצגת
+                    <strong>צו מילואים פעיל + תעודת זהות</strong>
+                    וחוגר במידה וקיים.
+                </li>
+
+                <li>
+                    <strong>מרשם צבאי</strong>
+                    ממערכת CPR או מרשם ידני עם חתימה צבאית,
+                    או מרשם מבית חולים.
+                </li>
+
+                <li>
+                    מרשם ממרפאה פרטית או מקופת חולים
+                    <strong>לא משולם דרך הצבא</strong>.
+                </li>
+
+                <li>
+                    ניפוק עבור
+                    <strong>כמות חודשית בלבד</strong>
+                    ולא מעבר.
+                </li>
+
+                <li>
+                   מקרים חריגים נדרש להעביר למדור רוקחות או מדור תרופות
+                </li>
+
+            </ol>
+
+        </div>
+
+        <button id="reserve-finish-btn">
+            סיום הלומדה
+        </button>
+
+    </div>
+
+
 
     <!-- עמוד סיכום וסיום הלומדה -->
     <!-- עמוד סיכום וסיום הלומדה -->
