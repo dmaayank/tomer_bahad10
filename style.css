@@ -1,1562 +1,4415 @@
-// ==========================================
-// 1. DATA & CONSTANTS
-// ==========================================
-const PHARMACY_QUIZ_DATA = [
-    { id: "פילון", name: 'מר"ג פילון' },
-    { id: "ירושלים", name: 'מרפ"א ירושלים' },
-    { id: "בהדים", name: '8283 מרפ"א דרום' },
-    { id: "חיפה", name: 'מרפ"א צפון - בי"ח 10' },
-    { id: "צריפין", name: 'מרפ"א מרכז 8282' },
-    { id: "גלילות", name: 'בית מרקחת בה"ד 15 ' },
-    { id: "קרייה", name: 'מטכ"ל 911 ' },
-    { id: "עובדה", name: 'מרפ"א ערבה' }
-];
+@font-face {
+    font-family: 'heebo-bold';
+    src: url('assets/fonts/Heebo-Bold.ttf')
+}
 
-const exercisesDone = [0, 0, 0, 0];
+@font-face {
+    font-family: 'heebo-medium';
+    src: url('assets/fonts/Heebo-Medium.ttf')
+}
 
-const MEDICINE_GAME_DATA = [
-    {
-        id: 1,
-        progress: "1/4",
-        question: "איזו תרופה ניתן להנפיק רק לאחר אישור של ענף שר״פ?",
-        correctAnswer: "asmachta",
-        successText: "נכון מאוד!",
-        wrongAnswers: {
-            teken15d:
-                "טעות! תרופות תקן 15ד נמצאות בסמכות הרישום והניפוק של חובש ואינן דורשות אישור ענף שר״פ.",
+@font-face {
+    font-family: 'heebo-regular';
+    src: url('assets/fonts/Heebo-Regular.ttf')
+}
 
-            teken15:
-                "טעות! תרופות תקן 15 נרשמות על ידי רופא יחידה ויכולות להיות מנופקות על ידי חובש או רוקח.",
+@font-face {
+    font-family: 'playpen';
+    src: url('assets/fonts/PlaypenSansHebrew-VariableFont_wght.ttf')
+}
 
-            mumhim:
-                "טעות! תרופות מומחים נרשמות על ידי רופא מומחה ומנופקות על ידי רוקח."
-        }
-    },
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* CHANGE THIS: allow body to handle dynamic mobile height */
+    height: 100dvh;
+    overflow: hidden;
+}
 
-    {
-        id: 2,
-        progress: "2/4",
-        question: "איזו תרופה נרשמת על ידי רופא מומחה ומנופקת בבית המרקחת על ידי רוקח?",
-        correctAnswer: "mumhim",
-        successText: "נכון מאוד!",
-        wrongAnswers: {
-            teken15d:
-                "טעות! תרופות תקן 15ד נרשמות ומנופקות על ידי חובש במרפאת היחידה.",
+body {
+    background-color: #F4F4F4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'heebo-regular';
+}
 
-            teken15:
-                "טעות! תרופות תקן 15 נרשמות על ידי רופא יחידה ויכולות להיות מנופקות על ידי חובש או רוקח.",
+/* lomda upper bar */
+.upper_bar {
+    width: 100%;
+    height: 8vh;
+    position: absolute;
+    background-color: #869B7E;
+    top: 0;
+    z-index: 1000;
+    /* Keeps it strictly above the scrolling content */
+}
 
-            asmachta:
-                "טעות! תרופות באסמכתא תקציבית מחייבות אישור של ענף שר״פ."
-        }
-    },
 
-    {
-        id: 3,
-        progress: "3/4",
-        question: "לאיזו קבוצת תרופות יש לחובש סמכות לרשום את המרשם?",
-        correctAnswer: "teken15d",
-        successText: "נכון מאוד!",
-        wrongAnswers: {
-            teken15:
-                "טעות! תרופות תקן 15 נרשמות על ידי רופא יחידה.",
+#lomda_title {
+    font-size: 1.5rem;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    margin: 0;
+    font-family: 'heebo-bold';
 
-            mumhim:
-                "טעות! תרופות מומחים נרשמות על ידי רופא מומחה בלבד.",
+}
 
-            asmachta:
-                "טעות! אסמכתא תקציבית היא אישור לתרופות חריגות ואינה סמכות רישום של חובש."
-        }
-    },
+.upperBar_logo {
+    width: 12vw;
+    height: 6vh;
+}
 
-    {
-        id: 4,
-        progress: "4/4",
-        question: "איזו קבוצת תרופות נרשמת על ידי רופא יחידה וניתנת להנפקה על ידי חובש או רוקח?",
-        correctAnswer: "teken15",
-        successText: "נכון מאוד!",
-        wrongAnswers: {
-            teken15d:
-                "טעות! גם תרופות תקן 15ד יכולות להיות מנופקות על ידי חובש או רוקח, אך סמכות הרישום שלהן היא של חובש ולא של רופא יחידה.",
+#bahad10_symbol {
+    width: 10vw;
+}
 
-            mumhim:
-                "טעות! תרופות מומחים נרשמות על ידי רופא מומחה ומנופקות על ידי רוקח בלבד.",
+.symbol_row {
+    display: flex;
+    position: absolute;
+    top: 10%;
+    left: 2%;
+    gap: 5px;
+}
 
-            asmachta:
-                "טעות! תרופות באסמכתא תקציבית דורשות אישור ענף שר״פ ואינן מוגדרות לפי סמכות הרישום של רופא יחידה."
-        }
-    }
-];
+/* progress bar */
 
-const POSSIBLE_BAG_ANSWERS = ['dosage-instruction', 'expiry-date', 'medicine', 'batch-number'];
+.progress_bar {
+    /* Changed position to relative without 'top: 8vh' so it stays 
+       in the normal layout flow right under the green header */
+    position: absolute;
+    top: 8vh;
+    /* Sits perfectly below the 8vh green header */
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    height: 8vh;
+    display: none;
+    /* Modified from none for illustration */
+    background-color: #C9CAAC;
+    flex-shrink: 0;
+    /* Prevents the progress bar from squeezing */
+}
 
-// ==========================================
-// 2. GLOBAL STATE
-// ==========================================
-let copyArr = [];
-let tempArr = [];
-let remainingLocations = 8;
-let currPharmacy = null;
-let locIndex = 0;
-let userTries = 0;
-let correctAnswers = 0;
-let wrongAnswers = 0;
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allows the progress bar line to sit below the labels */
+    justify-content: space-between;
+    align-items: center;
 
-let currExercise = 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 480px;
+    /* Looks great on both tiny screens and tablets */
+    direction: rtl;
+    box-sizing: border-box;
+    padding: 2px 6px;
+    height: 100%;
+    /* Fits perfectly within the 7vh progress bar height */
+}
 
-let timerDisplay = null;
-let timerInterval = null;
-let secondsElapsed = 0;
+.container .progress {
+    flex-basis: 100%;
+    /* Forces a line-break after the labels */
+    width: 100%;
+    margin: 4px auto 0 auto;
+    /* Pushes it slightly below the text row */
+    box-sizing: border-box;
+}
 
-let medicineQuestionsQueue = [];
-let currentQuestion = null;
-let cntr = 1;
-let rightAnswers = 0;
-let incorrectAnswers = 0;
-let hasAnsweredCurrent = false;
+.progress {
+    direction: rtl;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
 
-let userChoice = [];
-let currPage = 1;
+.progress-bar {
+    height: 16px;
+    border-radius: 4px;
+    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    -webkit-transition: 0.4s linear;
+    -moz-transition: 0.4s linear;
+    -o-transition: 0.4s linear;
+    transition: 0.4s linear;
+    -webkit-transition-property: width, background-color;
+    -moz-transition-property: width, background-color;
+    -o-transition-property: width, background-color;
+    transition-property: width, background-color;
+    -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+}
 
-// אובייקט שמנהל את כל ציוני המשחקים
-const gameScores = {
-    pharmacy: null,
-    medicine: null,
-    bag: null,
-    asmachta: null
-};
+/*
+ * Note: using adjacent or general sibling selectors combined with
+ *       pseudo classes doesn't work in Safari 5.0 and Chrome 12.
+ *       See this article for more info and a potential fix:
+ *       https://css-tricks.com/webkit-sibling-bug/
+ */
 
-// ==========================================
-// 9. INITIALIZATION & LISTENERS
-// ==========================================
-window.addEventListener("load", () => {
-    const loader = document.getElementById("course-loader");
-    const topicsPage = document.getElementById("topics_page");
+#five:checked~.progress>.progress-bar {
+    width: 5%;
+    background-color: #d84828;
+}
 
-    const startBtn = document.getElementById("start_button");
-    if (startBtn) {
-        startBtn.addEventListener("click", pharmacyPage);
-    }
+#twentyfive:checked~.progress>.progress-bar {
+    width: 25%;
+    background-color: #c57c51;
+}
 
-    const lomdaTitle = document.getElementById("lomda_title");
-    if (lomdaTitle) {
-        lomdaTitle.addEventListener("click", () => {
-            location.reload();
-        });
-    }
+#fifty:checked~.progress>.progress-bar {
+    width: 50%;
+    background-color: #eedf9b;
+}
 
-    if (topicsPage) {
-        topicsPage.style.display = "none";
-    }
+#seventyfive:checked~.progress>.progress-bar {
+    width: 75%;
+    background-color: #558a41;
+}
 
-    // נותן למסך הטעינה להופיע לזמן קצר ולא להיעלם בהבהוב
-    setTimeout(() => {
-        if (loader) {
-            loader.classList.add("hide");
-        }
+#onehundred:checked~.progress>.progress-bar {
+    width: 100%;
+    background-color: #6CA1A6;
+}
 
-        if (topicsPage) {
-            topicsPage.style.display = "flex";
-        }
+.radio {
+    display: none;
+}
 
-        setTimeout(() => {
-            if (loader) {
-                loader.style.display = "none";
-            }
-        }, 400);
-    }, 700);
-});
+.label {
+    font-family: 'heebo-bold';
+    display: inline-block;
+    margin: 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-    const progressRadios = document.querySelectorAll('.progress_bar input[type="radio"]');
+    /* Responsive horizontal padding so labels don't overlap on tiny screens */
+    padding: 2px clamp(4px, 1.5vw, 8px);
+    color: #000000;
+    border-radius: 3px;
+    cursor: pointer;
 
-    progressRadios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            hideAllScreens();
+    /* Fluid font size based on screen width */
+    font-size: clamp(0.6rem, 2vw, 1.0rem);
+    white-space: nowrap;
+    /* Prevents ugly text-wrapping inside the small labels */
+}
 
-            switch (e.target.id) {
-                case 'five':
-                    pharmacyPage();
-                    document.getElementById('close-popup-btn').style.display = "none";
+.radio:checked+.label {
+    color: white;
+    background: rgba(0, 0, 0, 0.25);
+}
 
-                    break;
-                case 'twentyfive':
-                    document.getElementById('progress_bar').style.display = "block";
-                    setRadioProgress("twentyfive");
-                    document.getElementById('close-popup-btn').style.display = "none";
+#five {
+    padding: 3px 0px;
+}
 
-                    document.getElementById('medicine-table-page').style.display = "block";
-                    setupMedicinePageEvents();
-                    break;
-                case 'fifty':
-                    setTomerPage();
-                    document.getElementById('close-popup-btn').style.display = "none";
+#onehundred {
+    padding: 3px 0px;
+}
 
-                    break;
-                case 'seventyfive':
-                    document.getElementById('close-popup-btn').style.display = "none";
+/* beginning animation */
+svg {
+    height: 70%;
+    width: 70%;
+    display: block;
+}
 
-                    asmachtaPage();
-                    break;
-                case 'onehundred':
-                    availablePage();
-                    break;
-            }
-        });
-    });
-});
 
-// ==========================================
-// 3. UTILS & NAVIGATION
-// ==========================================
-const hideAllScreens = () => {
-    const screens = [
-        'topics_page', 'pharmacy_page', 'exercise-page', 'seterra-game-container',
-        'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
-        'medicine-bag-page', // <-- זה ה-ID שהיה חסר!
-        'bag-page', 'tomer-system', 'asmachta-page', 'asmachta-pre-page', 'asmachta-test', 'digital-page', 'available-page',
-        'tomer-system-page', 'popup', 'game-popup', 'summary-page', 'superpharm-page', 'reserve-dispensing-page','course-loader'
-    ];
+.opening_sentence {
+    direction: rtl;
+    font-size: 1.5rem;
+}
 
-    screens.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = "none";
-    });
+.opening_animation {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
 
-    for (let i = 1; i <= 5; i++) {
-        const img = document.getElementById(`tomer${i}`);
-        if (img) img.style.display = "none";
-    }
+.course-loader {
+    position: fixed;
+    inset: 0;
 
-    if (timerInterval) {
-        clearInterval(timerInterval);
-    }
-};
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-const setRadioProgress = (radioId) => {
-    const radio = document.getElementById(radioId);
-    if (radio) radio.checked = true;
-};
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
 
-// ==========================================
-// 4. MAP / PHARMACY GAME LOGIC
-// ==========================================
-const MAP_URL =
-    "https://www.google.com/maps/d/embed?mid=1Jfo1Z5wsw23jtb2Z_uLcDcMtAJZRMds&ehbc=2E312F&noprof=1";
+    background: #f4f4f4;
+    z-index: 20000;
 
-const loadPharmacyMap = () => {
-    const mapIframe = document.getElementById("pharmacy-map");
+    direction: rtl;
+}
 
-    if (!mapIframe) return;
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
 
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            if (mapIframe.src !== MAP_URL) {
-                mapIframe.src = MAP_URL;
-            }
-        });
-    });
-};
+    width: min(80%, 320px);
 
-const pharmacyPage = () => {
-    hideAllScreens();
+    text-align: center;
+}
 
-    const page = document.getElementById("pharmacy_page");
-    const progressBar = document.getElementById("progress_bar");
-    const popup = document.getElementById("popup");
+.loader-pill {
+    font-size: 3.5rem;
+    animation: loaderBounce 1s ease-in-out infinite;
+}
 
-    page.style.display = "flex";
-    progressBar.style.display = "block";
+.loader-content p {
+    margin: 0;
 
-    setRadioProgress("five");
+    color: #b7473a;
+    font-family: "heebo-bold", sans-serif;
+    font-size: 1.3rem;
+}
 
-    // Load the map only after the hidden page becomes visible
-    loadPharmacyMap();
+.loader-bar {
+    width: 100%;
+    height: 10px;
 
-    const toPracticeBtn = document.getElementById("to-practice-btn");
+    overflow: hidden;
 
-    if (toPracticeBtn) {
-        toPracticeBtn.style.display = "flex";
+    background: #dedede;
+    border-radius: 100px;
+}
 
-        toPracticeBtn.onclick = () => {
-            popup.style.display = "flex";
-        };
-    }
+.loader-bar-fill {
+    width: 35%;
+    height: 100%;
 
-    const yesBtn = document.getElementById("yes-btn");
+    background: linear-gradient(90deg,
+            #a4b787,
+            #869b7e,
+            #b7473a);
 
-    if (yesBtn) {
-        yesBtn.onclick = () => {
-            page.style.display = "none";
-            popup.style.display = "none";
+    border-radius: 100px;
 
-            const exercisePage = document.getElementById("exercise-page");
-            exercisePage.style.display = "block";
+    animation: loaderMove 1.2s ease-in-out infinite;
+}
 
-            const backBtn = document.getElementById("back-btn");
 
-            if (backBtn) {
-                backBtn.onclick = () => {
-                    exercisePage.style.display = "none";
-                    popup.style.display = "none";
+@keyframes loaderBounce {
 
-                    page.style.display = "flex";
-
-                    // Safari may need the iframe refreshed again
-                    loadPharmacyMap();
-                };
-            }
-
-            const startExerciseBtn =
-                document.getElementById("start-exercise");
-
-            if (startExerciseBtn) {
-                startExerciseBtn.onclick = pharmacyGame;
-            }
-        };
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
-    const noBtn = document.getElementById("no-btn");
-
-    if (noBtn) {
-        noBtn.onclick = () => {
-            popup.style.display = "none";
-        };
-    }
-};
-const startTimer = () => {
-    if (!timerDisplay) {
-        timerDisplay = document.getElementById("game-timer");
-    }
-    if (!timerDisplay) return;
-
-    timerDisplay.innerText = "00:00";
-    timerInterval = setInterval(() => {
-        secondsElapsed++;
-        const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, "0");
-        const secs = String(secondsElapsed % 60).padStart(2, "0");
-        timerDisplay.innerText = `${mins}:${secs}`;
-    }, 1000);
-};
-
-const pharmacyGame = () => {
-    userTries = 0;
-    correctAnswers = 0;
-    wrongAnswers = 0;
-
-    remainingLocations = PHARMACY_QUIZ_DATA.length;
-    tempArr = [];
-    copyArr = [...PHARMACY_QUIZ_DATA];
-
-    document.getElementById('exercise-page').style.display = "none";
-    document.getElementById('seterra-game-container').style.display = "flex";
-
-    clearInterval(timerInterval);
-    secondsElapsed = 0;
-    startTimer();
-
-    const answersArr = document.getElementsByClassName('map-target-dot');
-    for (let i = 0; i < answersArr.length; i++) {
-        answersArr[i].classList.remove("correct", "wrong");
-        answersArr[i].removeEventListener('click', checkAnswer);
-        answersArr[i].addEventListener('click', checkAnswer);
-    }
-    nextPharmacy();
-};
-
-const nextPharmacy = () => {
-    if (copyArr.length === 0) {
-        endGame();
-        return;
-    }
-
-    locIndex = Math.floor(Math.random() * copyArr.length);
-    currPharmacy = copyArr[locIndex];
-
-    const targetName = document.getElementById('target-name');
-    if (targetName) targetName.innerText = currPharmacy.name;
-};
-
-const checkAnswer = (event) => {
-    userTries++;
-
-    if (event.target.id === currPharmacy.id) {
-        event.target.classList.add('correct');
-        event.target.removeEventListener('click', checkAnswer);
-
-        tempArr.push(currPharmacy);
-        copyArr.splice(locIndex, 1);
-        correctAnswers++;
-
-        document.getElementById('score-counter').innerText = `${correctAnswers}/${PHARMACY_QUIZ_DATA.length}`;
-        remainingLocations--;
-
-        if (remainingLocations === 0) {
-            clearInterval(timerInterval);
-            endGame();
-        } else {
-            nextPharmacy();
-        }
-    } else {
-        event.target.classList.add('wrong');
-        setTimeout(() => {
-            event.target.classList.remove('wrong');
-        }, 1000);
-        wrongAnswers++;
-    }
-};
-
-const calculateGrade = () => {
-    if (userTries === 0) return 0;
-    const grade = (correctAnswers * 100) / userTries;
-    return Math.max(0, Math.round(grade));
-};
-
-const endGame = () => {
-    const finalGrade = calculateGrade();
-    gameScores.pharmacy = finalGrade; // <-- שמירת הציון באובייקט המרכזי
-    exercisesDone[currExercise] = 1;
-
-    const popup = document.getElementById('game-popup');
-    popup.style.display = "flex";
-    popup.dataset.gameType = "pharmacy";
-
-    const timeElement = document.getElementById("time");
-
-    if (timeElement && timerDisplay) {
-        timeElement.style.display = "block";
-        timeElement.innerText = timerDisplay.innerText;
-    }
-
-    if (finalGrade >= 85) {
-        document.getElementById("popup-title").innerText = "כל הכבוד!";
-
-    }
-    else if (finalGrade < 85 && finalGrade >= 65) {
-        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
-
-    }
-    else {
-        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
-
-    }
-
-    if (timerDisplay) {
-        document.getElementById('time').innerText = timerDisplay.innerText;
-    }
-
-    const mistakeLine = document.getElementById('mistake-line');
-    if (wrongAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
-    else if (wrongAnswers === 1) mistakeLine.innerText = `טעית פעם אחת`;
-    else mistakeLine.innerText = `טעית ${wrongAnswers} פעמים`;
-
-    const gradeElement = document.getElementById("grade");
-    if (gradeElement) gradeElement.innerText = `${finalGrade}%`;
-
-    document.getElementById('retry-btn').onclick = resetGame;
-
-    const nextBtn = document.getElementById('next-btn');
-    const orText = document.getElementById('or-text');
-
-    if (nextBtn) {
-        nextBtn.style.display = "block";
-        nextBtn.onclick = () => {
-            hideAllScreens();
-            document.getElementById('progress_bar').style.display = "block";
-            document.getElementById('medicine-table-page').style.display = "block";
-            setRadioProgress("twentyfive");
-            setupMedicinePageEvents();
-        };
-    }
-    if (orText) orText.style.display = "block";
-};
-
-const resetGame = () => {
-    document.getElementById('score-counter').innerText = `0/${PHARMACY_QUIZ_DATA.length}`;
-    document.getElementById('game-popup').style.display = "none";
-    document.getElementById('close-popup-btn').style.display = "none";
-
-
-    setTimeout(() => {
-        pharmacyGame();
-    }, 100);
-};
-
-// ==========================================
-// 5. MEDICINE QUIZ GAME LOGIC
-// ==========================================
-const setupMedicinePageEvents = () => {
-    currExercise = 1;
-    const practiceBtn = document.getElementById('practice-btn');
-    if (practiceBtn) {
-        practiceBtn.onclick = () => {
-            document.getElementById('medicine-table-page').style.display = "none";
-            document.getElementById('medicine-page').style.display = "block";
-        };
-    }
-
-    const returnBtn = document.getElementById('return-btn');
-    if (returnBtn) {
-        returnBtn.onclick = () => {
-            document.getElementById('medicine-table-page').style.display = "block";
-            document.getElementById('medicine-page').style.display = "none";
-        };
-    }
-
-    const skipGameBtn = document.getElementById('skip-game');
-
-    if (skipGameBtn) {
-        if (exercisesDone[currExercise] === 1) {
-            skipGameBtn.style.display = "flex";
-
-            skipGameBtn.onclick = () => {
-                document.getElementById('medicine-box-page').style.display = "block";
-                document.getElementById('medicine-page').style.display = "none";
-            };
-        } else {
-            skipGameBtn.style.display = "none";
-        }
-    }
-
-
-    const startGameBtn = document.getElementById('start-game');
-    if (startGameBtn) startGameBtn.onclick = medicineGame;
-};
-
-const medicineGame = () => {
-    document.getElementById('medicine-page').style.display = "none";
-    document.getElementById('medicine-game').style.display = "block";
-
-    const answerBanner = document.getElementById('answer-banner');
-    if (answerBanner) answerBanner.style.display = 'none';
-
-    const choices = document.getElementsByClassName('medicine-choice');
-    for (let i = 0; i < choices.length; i++) {
-        choices[i].classList.remove('selected-wrong', 'selected-right');
-        choices[i].onclick = checkMedicineAnswer;
-    }
-
-    medicineQuestionsQueue = [...MEDICINE_GAME_DATA].sort(() => Math.random() - 0.5);
-    rightAnswers = 0;
-    cntr = 1;
-    incorrectAnswers = 0;
-    userTries = 0;
-    loadNextQuestion();
-};
-
-const loadNextQuestion = () => {
-    if (medicineQuestionsQueue.length === 0) {
-        endMedicineGame();
-        return;
-    }
-
-    hasAnsweredCurrent = false;
-    document.getElementById('answer-banner').style.display = 'none';
-
-    const choices = document.getElementsByClassName('medicine-choice');
-    for (let i = 0; i < choices.length; i++) {
-        choices[i].classList.remove('selected-wrong', 'selected-right');
-    }
-
-    currentQuestion = medicineQuestionsQueue.pop();
-    document.getElementById('question-progress').innerText = `${cntr}/${MEDICINE_GAME_DATA.length}`;
-    document.getElementById('question-text').innerText = currentQuestion.question;
-    cntr++;
-};
-
-const checkMedicineAnswer = (event) => {
-    if (hasAnsweredCurrent) return;
-
-    const clickedElement = event.currentTarget || event.target.closest('.medicine-choice');
-    if (!clickedElement) return;
-
-    const selectedId = clickedElement.id;
-    const errorBanner = document.getElementById('answer-banner');
-    const answerIcon = document.getElementById('answer-icon');
-    const answerText = document.getElementById('answer-text');
-
-    const choices = document.getElementsByClassName('medicine-choice');
-    for (let i = 0; i < choices.length; i++) {
-        choices[i].classList.remove('selected-wrong', 'selected-right');
-    }
-
-    userTries++;
-
-    if (selectedId === currentQuestion.correctAnswer) {
-        hasAnsweredCurrent = true;
-        rightAnswers++;
-        clickedElement.classList.add('selected-right');
-
-        if (answerIcon) answerIcon.src = "assets/images/right.png";
-        if (answerText) answerText.innerText = currentQuestion.successText || "נכון מאוד!";
-        if (errorBanner) errorBanner.style.display = 'flex';
-
-        setTimeout(loadNextQuestion, 2000);
-    } else {
-        incorrectAnswers++;
-        clickedElement.classList.add('selected-wrong');
-        if (answerIcon) answerIcon.src = "assets/images/wrong.png";
-
-        if (currentQuestion.wrongAnswers && currentQuestion.wrongAnswers[selectedId]) {
-            answerText.innerText = currentQuestion.wrongAnswers[selectedId];
-        } else {
-            answerText.innerText = "טעות, נסה שוב!";
-        }
-        if (errorBanner) errorBanner.style.display = 'flex';
-    }
-};
-
-const calculateMedicineGrade = () => {
-    if (userTries === 0) return 0;
-    const grade = (rightAnswers * 100) / userTries;
-    return Math.max(0, Math.round(grade));
-};
-
-const endMedicineGame = () => {
-    const finalGrade = calculateMedicineGrade();
-    gameScores.medicine = finalGrade; // <-- שמירת הציון באובייקט המרכזי
-    exercisesDone[currExercise] = 1;
-
-    const popup = document.getElementById('game-popup');
-    popup.style.display = "flex";
-    popup.dataset.gameType = "medicine";
-
-    if (finalGrade >= 85) {
-        document.getElementById("popup-title").innerText = "כל הכבוד! ציונך הוא:";
-
-    }
-    else if (finalGrade < 85 && finalGrade >= 65) {
-        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
-
-    }
-    else {
-        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
-
-    }
-    document.getElementById("grade").innerText = `${finalGrade}%`;
-
-    document.getElementById("time").style.display = "none";
-
-    const mistakeLine = document.getElementById('mistake-line');
-    if (incorrectAnswers === 0) mistakeLine.innerText = `לא טעית בכלל!`;
-    else if (incorrectAnswers === 1) mistakeLine.innerText = `טעית פעם אחת`;
-    else mistakeLine.innerText = `טעית ${incorrectAnswers} פעמים`;
-
-    document.getElementById('retry-btn').onclick = resetMedicineGame;
-
-    const nextBtn = document.getElementById('next-btn');
-    const orText = document.getElementById('or-text');
-
-    if (nextBtn) {
-        nextBtn.style.display = "block";
-        nextBtn.onclick = () => {
-            hideAllScreens();
-            document.getElementById('progress_bar').style.display = "block";
-            document.getElementById('medicine-box-page').style.display = "block";
-            setRadioProgress("twentyfive");
-
-            const practiceBtn = document.getElementById('practice-button');
-            if (practiceBtn) {
-                practiceBtn.onclick = () => {
-                    document.getElementById('medicine-box-page').style.display = "none";
-                    document.getElementById('medicine-bag-page').style.display = "block";
-
-                    currExercise = 2;
-
-                    const returnBtn = document.getElementById('return-bag-btn');
-                    if (returnBtn) {
-                        returnBtn.onclick = () => {
-                            document.getElementById('medicine-box-page').style.display = "block";
-                            document.getElementById('medicine-bag-page').style.display = "none";
-                        };
-                    }
-
-                    const skipGameBtn = document.getElementById('skip-bag-game');
-
-                    if (skipGameBtn) {
-                        if (exercisesDone[currExercise] === 1) {
-                            skipGameBtn.style.display = "flex";
-
-                            skipGameBtn.onclick = () => {
-                                setTomerPage();
-                                document.getElementById('medicine-bag-page').style.display = "none";
-                            };
-                        } else {
-                            skipGameBtn.style.display = "none";
-                        }
-                    }
-
-
-
-                    const startGameBtn = document.getElementById('start-bag-game');
-                    if (startGameBtn) startGameBtn.onclick = bagGame;
-                };
-            }
-        };
-    }
-    if (orText) orText.style.display = "block";
-};
-
-const resetMedicineGame = () => {
-    document.getElementById('game-popup').style.display = "none";
-    document.getElementById('bag-page').style.display = "none";
-    document.getElementById('close-popup-btn').style.display = "none";
-
-    medicineGame();
-};
-
-// ==========================================
-// 6. BAG GAME LOGIC
-// ==========================================
-const bagGame = () => {
-    userTries = 0;
-    currExercise = 2;
-    userChoice = [];
-
-    hideAllScreens();
-
-    document.getElementById("bag-page").style.display = "flex";
-    document.getElementById("medicine-bag-page").style.display = "none";
-
-    const dispenseBtn = document.getElementById("dispense-btn");
-
-    if (dispenseBtn) {
-        dispenseBtn.style.display = "flex";
-        dispenseBtn.disabled = true;
-        dispenseBtn.onclick = endBagGame;
-    }
-
-    const resultButtons = document.getElementById("bag-result-buttons");
-
-    if (resultButtons) {
-        resultButtons.style.display = "none";
-    }
-
-    const answerExplain = document.getElementById("answer-explain");
-
-    if (answerExplain) {
-        answerExplain.style.display = "block";
-    }
-
-    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
-        choice.style.display = "none";
-        choice.classList.remove("selected-right", "selected-wrong");
-        choice.onclick = null;
-    });
-
-    const bagChoices = document.querySelectorAll(".option-btn");
-
-    bagChoices.forEach(btn => {
-        btn.style.visibility = "visible";
-        btn.onclick = addChoice;
-    });
-};
-
-const addChoice = (event) => {
-    const btn = event.currentTarget || event.target.closest('.option-btn');
-    if (!btn) return;
-
-
-    const clickedId = btn.id;
-    if (userChoice.includes(clickedId) || userChoice.length >= 4) return;
-
-    const row = document.getElementById(`${clickedId}-choice`);
-    if (!row) return;
-
-    userChoice.push(clickedId);
-    btn.style.visibility = "hidden";
-    row.style.display = "block";
-
-    // Deselect handler
-    row.onclick = () => {
-        row.style.display = "none";
-        btn.style.visibility = "visible";
-        userChoice = userChoice.filter(item => item !== clickedId);
-
-        const dispenseBtn = document.getElementById("dispense-btn");
-        if (dispenseBtn && userChoice.length < 4) {
-            dispenseBtn.disabled = true;
-        }
-    };
-
-    const dispenseBtn = document.getElementById("dispense-btn");
-    if (userChoice.length === 4 && dispenseBtn) {
-        dispenseBtn.disabled = false;
-    }
-};
-
-const endBagGame = () => {
-    let totalRight = 0;
-    let totalWrong = 0;
-
-    exercisesDone[currExercise] = 1;
-
-    // Check only the answers that the user clicked
-    userChoice.forEach(id => {
-        const row = document.getElementById(`${id}-choice`);
-        if (!row) return;
-
-        row.style.display = "block";
-        row.onclick = null;
-
-        if (POSSIBLE_BAG_ANSWERS.includes(id)) {
-            row.classList.add("selected-right");
-            totalRight++;
-        } else {
-            row.classList.add("selected-wrong");
-            totalWrong++;
-            console.log(totalWrong);
-        }
-    });
-
-    const finalGrade = calculateBagGrade(totalWrong);
-    gameScores.bag = finalGrade;
-
-    const popup = document.getElementById("game-popup");
-    popup.style.display = "flex";
-    popup.dataset.gameType = "bag";
-
-    if (finalGrade >= 85) {
-        document.getElementById("popup-title").innerText = "כל הכבוד! ציונך הוא:";
-
-    }
-    else if (finalGrade < 85 && finalGrade >= 65) {
-        document.getElementById("popup-title").innerText = "אחלה, בוא נמשיך";
-
-    }
-    else {
-        document.getElementById("popup-title").innerText = "אולי נתרגל שוב?"
-
-    }
-
-    document.getElementById("grade").innerText = `${finalGrade}%`;
-
-    const time = document.getElementById("time");
-    if (time) {
-        time.style.display = "block";
-        time.innerText = `${totalRight}/4`;
-    }
-
-    const mistakeLine = document.getElementById("mistake-line");
-
-    if (totalWrong === 0) {
-        mistakeLine.innerText = "לא טעית בכלל!";
-    } else if (totalWrong === 1) {
-        mistakeLine.innerText = "טעית פעם אחת";
-    } else {
-        mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
-    }
-
-    const retryBtn = document.getElementById("retry-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const orText = document.getElementById("or-text");
-
-    if (retryBtn) {
-        retryBtn.style.display = "block";
-        retryBtn.onclick = resetBagGame;
-    }
-
-    if (nextBtn) {
-        nextBtn.style.display = "block";
-        nextBtn.onclick = setTomerPage;
-    }
-
-    if (orText) {
-        orText.style.display = "block";
-    }
-
-    const closeBtn = document.getElementById("close-popup-btn");
-
-    if (closeBtn) {
-        closeBtn.style.display = "block";
-
-        closeBtn.onclick = () => {
-            // Hide the popup
-            popup.style.display = "none";
-
-            // Hide the dispense button
-            const dispenseBtn = document.getElementById("dispense-btn");
-            if (dispenseBtn) {
-                dispenseBtn.style.display = "none";
-            }
-
-            // Hide the explanation text
-            const answerExplain = document.getElementById("answer-explain");
-            if (answerExplain) {
-                answerExplain.style.display = "none";
-            }
-
-            // Show the retry and next buttons on the bag page
-            const resultButtons =
-                document.getElementById("bag-result-buttons");
-
-            if (resultButtons) {
-                resultButtons.style.display = "flex";
-            }
-        };
-    }
-
-    const bagRetryBtn = document.getElementById("bag-retry-btn");
-    const bagNextBtn = document.getElementById("bag-next-btn");
-
-    if (bagRetryBtn) {
-        bagRetryBtn.onclick = resetBagGame;
-    }
-
-    if (bagNextBtn) {
-        bagNextBtn.onclick = () => {
-            setTomerPage();
-        };
-    }
-};
-
-const calculateBagGrade = (mistakeCount) => {
-    const correct = 4 - mistakeCount;
-    return Math.max(0, Math.min(100, Math.round((correct / 4) * 100)));
-};
-
-const resetBagGame = () => {
-    // Hide popup
-    document.getElementById("game-popup").style.display = "none";
-
-    // Hide the X again
-    document.getElementById("close-popup-btn").style.display = "none";
-
-    // Clear selections
-    userChoice = [];
-
-    // Reset all answer rows
-    document.querySelectorAll('[id$="-choice"]').forEach(choice => {
-        choice.style.display = "none";
-        choice.classList.remove("selected-right", "selected-wrong");
-    });
-
-    // Show all option buttons again
-    document.querySelectorAll(".option-btn").forEach(btn => {
-        btn.style.visibility = "visible";
-    });
-
-    // Restart the game
-    bagGame();
-};
-
-let currentModalIndex = 0;
-let tomerImages = [];
-let imageModal;
-let modalImage;
-
-const tomerGuides = [
-    [{
-        arrowTop: 63,
-        arrowLeft: 40,
-        rotation: -45,
-
-        text: 'בחרו בתפריט "ניפוק תרופות"',
-        textTop: 60,
-        textLeft: -150
-    }],
-    [{
-        arrowTop: 22,
-        arrowLeft: 25,
-        rotation: -75,
-
-        text: "יש ללחוץ על התרופה הרצויה",
-        textTop: 70,
-        textLeft: -90
-    }],
-    [{
-        arrowTop: 54,
-        arrowLeft: 45,
-        rotation: -40,
-
-        text: "יש לסרוק את הברקוד של התרופה שרוצים לנפק/ללחוץ על התרופה הרצויה בשקופית של הברקוד",
-        textTop: 20,
-        textLeft: -225
-    }],
-    [{
-        arrowTop: 55,
-        arrowLeft: 35,
-        rotation: 75,
-
-        text: 'יש לראות כי הכמות אכן נכונה ולאחר מכן ללחוץ על הפלוס',
-        textTop: -60,
-        textLeft: -150
-    },
-    {
-        arrowTop: 87,
-        arrowLeft: 10,
-        rotation: -165,
-
-        text: 'ולסיום ללחוץ על ניפוק',
-        textTop: 30,
-        textLeft: 35
-    }, {
-        arrowTop: 55,
-        arrowLeft: 12,
-        rotation: 120,
-
-        text: '',
-        textTop: 20,
-        textLeft: -80
-    }],
-    [{
-        arrowTop: 40,
-        arrowLeft: 30,
-        rotation: 35,
-
-        text: "במידה ומופיעה ההתראה הבאה יש להזין את הסיבה לניפוק בכמות הרשומה",
-        textTop: -75,
-        textLeft: -165
-    }]
-];
-
-
-function showTomerImage(index) {
-    if (!tomerImages[index]) return;
-
-    tomerImages.forEach((img) => {
-        img.style.display = "none";
-    });
-
-    tomerImages[index].style.display = "block";
-
-    currentModalIndex = index;
-    currPage = index + 1;
-
-    const nextBtn = document.getElementById("next-page-btn");
-
-    if (nextBtn) {
-        nextBtn.style.display =
-            index === tomerImages.length - 1
-                ? "flex"
-                : "none";
+    50% {
+        transform: translateY(-10px);
     }
 }
 
-function showModalImage(index) {
-    if (!tomerImages[index] || !modalImage) return;
-
-    showTomerImage(index);
-    modalImage.src = tomerImages[index].src;
-
-    const guidesContainer = document.getElementById("image-guides");
-    const pageGuides = tomerGuides[index] || [];
-
-    // Remove the previous image's guides
-    if (!guidesContainer) return;
-
-    guidesContainer.innerHTML = "";
-
-    pageGuides.forEach((guideData) => {
-        const guide = document.createElement("div");
-        guide.className = "image-guide";
-
-        guide.style.top = `${guideData.arrowTop}%`;
-        guide.style.left = `${guideData.arrowLeft}%`;
-
-        // Add text only when this guide has text
-        if (guideData.text) {
-            const guideText = document.createElement("div");
-            guideText.className = "guide-text";
-            guideText.innerText = guideData.text;
-
-            guideText.style.top = `${guideData.textTop ?? 0}px`;
-            guideText.style.left = `${guideData.textLeft ?? 0}px`;
-
-            guideText.style.writingMode =
-                guideData.horizontal === false
-                    ? "vertical-rl"
-                    : "horizontal-tb";
-
-            guide.appendChild(guideText);
-        }
-
-        // Add arrow unless arrow is explicitly disabled
-        if (guideData.showArrow !== false) {
-            const guideArrow = document.createElement("div");
-            guideArrow.className = "guide-arrow";
-            guideArrow.innerText = "➜";
-
-            guideArrow.style.transform =
-                `rotate(${guideData.rotation ?? 0}deg)`;
-
-            guide.appendChild(guideArrow);
-        }
-
-        guidesContainer.appendChild(guide);
-    });
-
-    const prevBtn = document.getElementById("modal-prev");
-    const nextBtn = document.getElementById("modal-next");
-
-    if (prevBtn) {
-        prevBtn.style.display = index === 0 ? "none" : "flex";
+@keyframes loaderMove {
+    0% {
+        transform: translateX(220%);
     }
 
-    if (nextBtn) {
-        nextBtn.style.display =
-            index === tomerImages.length - 1 ? "none" : "flex";
+    100% {
+        transform: translateX(-320%);
     }
 }
 
-window.addEventListener("load", () => {
+/* topics page */
 
-    imageModal = document.getElementById("image-modal");
-    modalImage = document.getElementById("modal-image");
-    tomerImages = [...document.querySelectorAll(".tomer-photo")];
+/* ========================================================= */
+/* 1. Page Wrapper (Locks height to exactly the remaining screen) */
+/* ========================================================= */
+#topics_page {
+    position: absolute;
+    top: 8vh;
+    /* Starts right below your 8vh header */
+    left: 0;
+    width: 100vw;
+    height: 92vh;
+    /* Remaining height of the screen (100 - 8) */
+    height: 92dvh;
 
-    tomerImages.forEach((img, index) => {
-        img.addEventListener("click", () => {
-            showModalImage(index);
-            if (imageModal) {
-                imageModal.classList.add("open");
-            }
-        });
-    });
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
 
-    const prevBtn = document.getElementById("modal-prev");
-    const nextBtn = document.getElementById("modal-next");
-    const closeBtn = document.getElementById("close-image-modal");
+    /* Responsive vertical padding to save space on small screens */
+    padding: clamp(10px, 3vh, 25px) 20px;
+    overflow: hidden;
+    /* Stops layout elements from expanding the page */
+}
 
-    if (prevBtn) {
-        prevBtn.onclick = (event) => {
-            event.stopPropagation();
+.topics,
+#topics_page>div:nth-child(2) {
+    /* Adjust selector to match your HTML wrapper if needed */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
 
-            if (currentModalIndex > 0) {
-                showModalImage(currentModalIndex - 1);
-            }
-        };
+    /* This makes the gap shrink on small screens and grow on larger screens */
+    gap: clamp(8px, 1.8vh, 16px);
+    margin-bottom: auto;
+    /* Pushes the start button down cleanly */
+}
+
+#topics_page {
+    display: none;
+    /* Keep it completely hidden until JS turns it on */
+}
+
+.topics {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 340px;
+
+    gap: clamp(9px, 1.8vh, 15px);
+
+    margin-top: 35px;
+    margin-bottom: auto;
+
+    direction: rtl;
+}
+
+/* Remove absolute positioning from the icon */
+.topic .icon {
+    width: clamp(22px, 3vh, 28px);
+    height: clamp(22px, 3vh, 28px);
+
+    margin-left: 13px;
+
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.topic {
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    min-height: clamp(54px, 7vh, 66px);
+
+    padding: 10px 15px;
+
+    background-color: #dfdcd1;
+    border: 1px solid #a4b787;
+    border-radius: 12px;
+
+    box-sizing: border-box;
+
+    box-shadow: none;
+    cursor: default;
+
+    opacity: 0;
+    animation-name: slideInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+
+
+.topics_page .title {
+    font-family: 'heebo-bold';
+    color: #BA0000;
+    text-align: center;
+    margin: 0 0 4px 0;
+    font-size: clamp(1.5rem, 5.5vw, 2rem);
+    line-height: 1.2;
+}
+
+/* Delays */
+#topic1 {
+    animation-delay: 0s;
+}
+
+#topic2 {
+    animation-delay: 0.3s;
+}
+
+#topic3 {
+    animation-delay: 0.6s;
+}
+
+#topic4 {
+    animation-delay: 0.9s;
+}
+
+#topic5 {
+    animation-delay: 1.2s;
+}
+
+#start_button {
+    animation-delay: 1.5s;
+    flex-shrink: 0;
+    /* Prevents the button from shrinking under pressure */
+    margin-bottom: clamp(10px, 2.5vh, 20px);
+    /* Keeps a safe gap from the device bottom */
+    /* Never allow the button to flatten or compress */
+}
+
+
+.topic_name {
+    flex: 1;
+
+    margin: 0;
+
+    font-family: "heebo-regular", sans-serif;
+    font-size: clamp(0.85rem, 3.2vw, 1rem);
+    line-height: 1.3;
+
+    color: #242424;
+
+    text-align: right;
+    direction: rtl;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.button {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    max-width: 250px;
+
+    /* Fixed height relative to screen height */
+    height: 6.5vh;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 10px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    z-index: 100;
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 4px 4px 5px rgb(161, 161, 161);
+    opacity: 0;
+    flex-shrink: 0;
+    /* Ensures the start button never gets crushed */
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out, background-color 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    animation-name: slideInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* Pressed state animation */
+.button:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/* ========================================================= */
+/* 2. Titles Container (Compact spacing)                     */
+/* ========================================================= */
+.title-container {
+    text-align: center;
+    width: 100%;
+    /* Flex-shrink prevents this container from squishing */
+    flex-shrink: 0;
+}
+
+.title {
+    position: relative;
+    font-family: 'heebo-bold';
+    /* Using viewport-width (vw) makes text size fluid based on screen width */
+    font-size: clamp(1.8rem, 7vw, 2.3rem);
+    color: #AA3A3A;
+    margin: 0 0 4px 0;
+    padding: 0;
+    padding-top: 10px;
+    top: 5%;
+    text-align: center;
+    direction: rtl;
+}
+
+#title_text {
+    position: relative;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    color: #333;
+    margin: 0;
+    top: 0;
+    direction: rtl;
+    text-align: center;
+}
+
+#lomda-title {
+    top: 0%;
+
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        /* 30px is a bit subtler and smoother than 100% */
+        opacity: 0;
     }
 
-    if (nextBtn) {
-        nextBtn.onclick = (event) => {
-            event.stopPropagation();
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
-            if (currentModalIndex < tomerImages.length - 1) {
-                showModalImage(currentModalIndex + 1);
-            }
-        };
+/* pharmacy israel page */
+/* ========================================================= */
+/* 1. Page and Layout Controls                               */
+/* ========================================================= */
+.pharmacy_page {
+    position: absolute;
+    top: 16vh;
+    top: 16dvh;
+    left: 0;
+
+    width: 100%;
+    height: 84vh;
+    height: 84dvh;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#to-practice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+
+}
+
+#to-practice-btn:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/* ========================================================= */
+/* 2. Map Viewport and Container                             */
+/* ========================================================= */
+.map-viewport {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.map-container {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+.responsive-map-iframe {
+    position: absolute;
+    inset: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+
+    transform: none !important;
+    -webkit-transform: none !important;
+
+    background: #eeeeec;
+}
+
+/* Force the iframe to occupy the full container space */
+.map-container iframe {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+
+
+    border: 0;
+    display: block;
+
+    transform: none !important;
+    -webkit-transform: none !important;
+
+    /* Helps Safari render the iframe correctly */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.pharmacy_page h1,
+.pharmacy_page .page_title {
+    text-align: center;
+    color: #BA0000;
+    font-family: 'heebo-bold';
+    font-size: clamp(1.3rem, 5.5vw, 1.8rem);
+
+    margin: 1vh 0;
+    /* מרווח קטן מאוד שלא יתפוס נדל"ן מסך */
+    flex-shrink: 0;
+    /* מונע מהכותרת להתכווץ */
+}
+
+.pharmacy_page h1 {
+    top: 3%;
+}
+
+
+.pharmacy_page .title {
+    position: relative;
+    top: 0;
+    flex-shrink: 0;
+
+    width: 100%;
+    margin: 8px 0;
+
+    text-align: center;
+    z-index: 5;
+}
+
+
+/* ========================================================= */
+/* 4. Interactive Map Pins & Pulse Animation                 */
+/* ========================================================= */
+
+.map-point {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 10;
+    /* Raises the pin above standard image layers */
+    top: 35%;
+    left: 55%;
+}
+
+/* The actual clickable marker */
+.pin {
+    width: 14px;
+    height: 14px;
+    background-color: #1e3a8a;
+    /* Dark Blue from your image */
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+/* The expanding radar ring */
+.pulse-ring {
+    position: absolute;
+    width: 100px;
+    /* Max size of the ring */
+    height: 100px;
+    border: 2px solid rgba(30, 58, 138, 0.6);
+    /* Semi-transparent blue */
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0;
+    display: block;
+
+    /* Loop the pulse animation */
+    animation: radar-pulse 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+}
+
+@keyframes radar-pulse {
+    0% {
+        transform: scale(0.1);
+        opacity: 0.9;
     }
 
-    if (closeBtn) {
-        closeBtn.onclick = (event) => {
-            event.stopPropagation();
-            imageModal.classList.remove("open");
-        };
+    80% {
+        opacity: 0.4;
     }
 
-    if (imageModal) {
-        imageModal.addEventListener("click", (event) => {
-            if (event.target === imageModal) {
-                imageModal.classList.remove("open");
-            }
-        });
+    100% {
+        transform: scale(1.5);
+        /* Expands outward */
+        opacity: 0;
+        /* Fades out */
     }
-});
+}
 
-const setTomerPage = () => {
-    hideAllScreens();
+/* ========================================================= */
+/* Location Card Styles                                      */
+/* ========================================================= */
+.location-card {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 7vh;
+    display: none;
 
-    document.getElementById("tomer-system").style.display = "flex";
-    document.getElementById("progress_bar").style.display = "block";
-    document.getElementById('next-page-btn').style.display = "none";
+    height: 38vh;
+    background: #d9edf2;
 
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, .2);
 
-    setRadioProgress("fifty");
+    transform: translateY(100%);
+    transition: bottom 0.5s ease, opacity 0.5s ease;
 
-    currPage = 1;
-    showTomerImage(0);
+    z-index: 100;
+}
 
-    const nextBtn = document.getElementById("next-page-btn");
+/* When this active modifier class is appended by JS, the drawer slides upward */
+.location-card.open {
+    bottom: 250px;
+    opacity: 1;
 
-    if (nextBtn) {
-        nextBtn.onclick = nextTomerPage;
-    }
-};
+}
 
-const nextTomerPage = () => {
-    if (currPage === tomerImages.length) {
-        asmachtaPage();
-        return;
-    }
+/* Card layout spacing decorations */
+.card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(134, 155, 126, 0.3);
+}
 
+.chevron-icon {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 2px;
+    --rotation: 180deg;
+    animation: bounce 2s infinite;
+    /* Subtle continuous physical bounce hint */
 
-    showTomerImage(currPage);
-};
+}
 
-
-const asmachtaQuestions = [
-    {
-        question: 'אסמכתא תקציבית ניתנת על ידי ענף שר"פ או באישור הרת"ח.',
-        answer: true,
-    },
-    {
-        question: 'תוקף אסמכתא תקציבית הוא שלושה חודשים.',
-        answer: false,
-    },
-    {
-        question: 'אי אפשר לקצר בקשה לתוקף אסמכתא במלל החופשי',
-        answer: false,
-    },
-    {
-        question: 'תרופות מקור או גנריקה ספציפית מצריכות אסמכתא.',
-        answer: true,
-    },
-    {
-        question: 'שינוי מינון דורש הגשת בקשה חדשה.',
-        answer: true,
-    }
-];
-
-let currentTestQuestion = 0;
-let correctTestAnswers = 0;
+.location-card.open .chevron-icon {
+    --rotation: 0deg;
+}
 
 
-const asmachtaPage = () => {
-    hideAllScreens();
-    document.getElementById('asmachta-page').style.display = "flex";
-    document.getElementById('progress_bar').style.display = "block";
 
-    setRadioProgress("seventyfive");
+.card-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-family: 'heebo-bold', sans-serif;
+    color: #333;
+}
 
-    const nextBtn = document.getElementById('next-button');
-    if (nextBtn) nextBtn.onclick = setUpAsmachtaTest;
-};
+.card-content {
+    padding: 15px;
+    overflow-y: auto;
+    direction: rtl;
+}
 
-const setUpAsmachtaTest = () => {
-    currExercise = 3;
+.location-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    padding: 12px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
 
-    document.getElementById('asmachta-page').style.display = "none";
-    document.getElementById('asmachta-pre-page').style.display = "block";
+.location-item p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #444;
+}
 
-    const startGameBtn = document.getElementById("start-test-game");
-    if (startGameBtn) {
-        startGameBtn.onclick = asmachtaTest;
-    }
+/* Bouncing animation indicator cue for users */
+@keyframes bounce {
 
-    const skipGameBtn = document.getElementById("skip-test-game");
-    if (skipGameBtn) {
-        if (exercisesDone[currExercise] === 1) {
-            skipGameBtn.style.display = "flex";
-            skipGameBtn.onclick = () => {
-                toDigitalPage();
-            };
-        } else {
-            skipGameBtn.style.display = "none";
-        }
-    }
-
-    const returnBtn = document.getElementById('return-test-btn');
-    if (returnBtn) {
-        returnBtn.onclick = () => {
-            document.getElementById('asmachta-page').style.display = "flex";
-            document.getElementById('asmachta-pre-page').style.display = "none";
-        };
-    }
-};
-
-const asmachtaTest = () => {
-    hideAllScreens();
-
-    document.getElementById("asmachta-pre-page").style.display = "none";
-    document.getElementById("asmachta-test").style.display = "flex";
-    document.getElementById("progress_bar").style.display = "block";
-    document.getElementById('close-popup-btn').style.display = "none";
-
-    currentTestQuestion = 0;
-    correctTestAnswers = 0;
-
-    loadAsmachtaQuestion();
-
-    document.getElementById("answer-true").onclick = () => {
-        checkAsmachtaAnswer(true);
-    };
-
-    document.getElementById("answer-false").onclick = () => {
-        checkAsmachtaAnswer(false);
-    };
-};
-
-const loadAsmachtaQuestion = () => {
-    const questionData = asmachtaQuestions[currentTestQuestion];
-    if (!questionData) return;
-
-    const questionElement = document.getElementById("asmachta-question");
-    const questionNumber = document.getElementById("question-number");
-
-    if (questionElement) {
-        questionElement.innerText = questionData.question;
+    0%,
+    100% {
+        transform: rotate(var(--rotation)) translateY(0);
     }
 
-    if (questionNumber) {
-        questionNumber.innerText = `${currentTestQuestion + 1}/${asmachtaQuestions.length}`;
+    50% {
+        transform: rotate(var(--rotation)) translateY(-3px);
+        /* Adjust bounce height here */
+    }
+}
+
+.popup {
+    /* Set to flex in your JS when opening: display: flex; */
+    display: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    /* Darkens and blurs everything behind it (including the map button!) */
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    justify-content: center;
+    align-items: center;
+
+    /* Pushes the entire popup mechanism above the map button (999) */
+    z-index: 10000;
+}
+
+.pop-up-card {
+    background-color: #FAF4EB;
+    border: #ac9a6b solid 3px;
+    border-radius: 24px;
+    padding: 30px 24px;
+    width: 85vw;
+    max-width: 320px;
+    box-sizing: border-box;
+    text-align: center;
+    direction: rtl;
+
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+
+    /* Clean entry animation */
+    animation: popupScaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pop-up-card p {
+    font-family: 'heebo-bold';
+    color: #000000;
+    font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+    margin: 8px;
+    line-height: 1.4;
+}
+
+.popup .button {
+    /* override the global .button absolute positioning */
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 1.5px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+.popup .button {
+    /* override the global .button absolute positioning */
+    position: static;
+    width: auto;
+    height: autoac;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 1.5px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+
+/* Responsive popup buttons */
+@media (max-width: 600px) {
+    .pop-up-card {
+        width: 90vw;
+        padding: 16px;
+        gap: 14px;
     }
 
-    resetAsmachtaButtons();
-};
+    .popup .button {
+        min-width: 44vw;
+        font-size: 14px;
+        padding: 10px 12px;
+        border-width: 2px;
+    }
+}
 
-const checkAsmachtaAnswer = (userAnswer) => {
-    const questionData = asmachtaQuestions[currentTestQuestion];
-    if (!questionData) return;
+@media (min-width: 601px) and (max-width: 900px) {
+    .popup .button {
+        min-width: 200px;
+    }
+}
 
-    const trueBtn = document.getElementById("answer-true");
-    const falseBtn = document.getElementById("answer-false");
 
-    trueBtn.disabled = true;
-    falseBtn.disabled = true;
+/* exercise page */
+.exercise-page {
+    display: none;
+    text-align: center;
 
-    const selectedBtn = userAnswer ? trueBtn : falseBtn;
+}
 
-    if (userAnswer === questionData.answer) {
-        correctTestAnswers++;
-        selectedBtn.classList.add("right-answer");
-    } else {
-        selectedBtn.classList.add("wrong-answer");
+.exercise-page p {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    direction: rtl;
+}
+
+.exercise-page .button-row {
+    gap: 10px;
+}
+
+.exercise-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+/* pharmacy game */
+/* Container for the entire game area */
+.seterra-game-container {
+    display: none;
+    /* חובה כדי ששורת המשימות והמפה יתחלקו במסך */
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #ffffff;
+    overflow: hidden;
+    font-family: 'heebo-bold', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Seterra-Style Header Banner */
+.game-header-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 40px;
+    display: flex;
+    align-items: center;
+
+    background: #2c3e50;
+    color: white;
+    direction: rtl;
+    z-index: 100;
+}
+
+.stat-box,
+.timer-box {
+    width: 110px;
+    /* אפשר גם 120px אם צריך */
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.stat-box {
+    position: relative;
+    right: 3vw;
+
+    text-align: right;
+}
+
+.timer-box {
+    position: relative;
+    text-align: left;
+    left: 3vw;
+}
+
+.target-prompt {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+
+}
+
+.target-prompt strong {
+    width: 200px;
+    /* Increase from 170px or 200px */
+    max-width: 200px;
+
+    background: white;
+    color: #2c3e50;
+    padding: 4px 6px;
+    border-radius: 6px;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* The Map Area */
+.game-map-viewport {
+    flex-grow: 1;
+    /* לוקח את כל מה שנשאר מהמסך (100% פחות ה-60px של ההדר) */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    overflow: hidden;
+    width: 100%;
+}
+
+#quiz-map-img {
+    /* הופכים את גובה התמונה למקסימלי בתוך אזור ה-viewport הפנוי */
+    height: 90%;
+    width: auto;
+    max-width: 95%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    top: 4vh;
+    /* מונע גרירה של התמונה בטעות בלחיצה על נקודות */
+
+    /* מסירים מיקום absolute מיותר שמבלבל את הדפדפן */
+    position: relative;
+}
+
+/* White Click Pins (Seterra Style) */
+.map-target-dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: #e3eef8;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    /* Centers the point on its coordinates */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease;
+    z-index: 5;
+}
+
+.map-target-dot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* When a user clicks correctly, flash green */
+.map-target-dot.correct {
+    background-color: #2ecc71 !important;
+    pointer-events: none;
+    /* Stops it from being clicked again */
+}
+
+/* When a user clicks incorrectly, flash red */
+.map-target-dot.wrong {
+    background-color: #e74c3c;
+}
+
+/* pop up game */
+/* ========================================================= */
+/* 1. רקע כהה חצי שקוף מאחורי הפופ-אפ (Overlay)               */
+/* ========================================================= */
+.game-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* מטשטש/מכהה את המפה ברקע */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ========================================================= */
+/* 2. כרטיס הפופ-אפ (Pop-up Card)                            */
+/* ========================================================= */
+.pop-up-card {
+    position: relative;
+    background-color: #fff9f2;
+    border: 2px solid #b19379;
+    /* מסגרת מעט יותר דקה */
+    border-radius: 16px;
+    /* פינות מעוגלות עדינות יותר */
+    padding: 15px 15px 20px 15px;
+    /* מרווח פנימי קטן משמעותית */
+    width: 240px;
+    /* הוקטן מ-310px ל-240px */
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    direction: rtl;
+    font-family: 'heebo-bold', sans-serif;
+}
+
+/* כפתור ה-X לסגירה */
+#close-popup-btn {
+    position: absolute;
+    top: 8px;
+    right: 7px;
+    background: none;
+    border: none;
+    display: none;
+    font-size: 1.1rem;
+    color: #000000;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.popup-title {
+    font-size: 1rem;
+    /* הוקטן מ-1.25rem */
+    color: #1a1a1a;
+    margin: 5px 0 10px 0;
+    font-weight: bold;
+}
+
+/* ========================================================= */
+/* נתונים (ציון וזמן)                                        */
+/* ========================================================= */
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#grade,
+#time {
+    font-size: 1.6rem;
+    /* הוקטן מ-2.2rem */
+    font-weight: 900;
+    color: #000000;
+}
+
+/* קו מפריד קטן יותר */
+.separator-line {
+    border: none;
+    border-top: 1px solid #a0a0a0;
+    width: 20%;
+    margin: 8px auto;
+}
+
+/* ========================================================= */
+/* כפתורים מוקטנים (Seterra Style)                           */
+/* ========================================================= */
+.button-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.or-text {
+    margin: 2px 0;
+    font-size: 0.85rem;
+    /* הוקטן */
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+/* כפתורי קפסולה קומפקטיים */
+.button-column .button {
+    width: 110px;
+    /* הוקטן מ-140px */
+    padding: 6px 0;
+    /* דק ועדין יותר */
+    font-size: 1rem;
+    /* גופן קטן יותר */
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+}
+
+.retry-btn {
+    color: #b31010 !important;
+}
+
+.next-btn-popup {
+    width: 140px;
+    display: block;
+
+}
+
+.retry-btn-popup {
+    width: 140px;
+    display: block;
+
+}
+
+#skip-game {
+    display: none;
+}
+
+/* אפקט לחיצה מותאם */
+.button-column .button:active {
+    transform: translateY(1.5px);
+    box-shadow: 0 1.5px 0px #822a2a, 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.button-column .button:hover {
+    filter: brightness(0.98);
+}
+
+.medicine-table-page {
+    display: none;
+    font-size: 0.8rem;
+}
+
+.medicine-table-page table {
+    border-collapse: collapse;
+    position: relative;
+    top: 3vh;
+    width: 100%;
+    direction: rtl;
+    text-align: center;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+
+    text-align: center;
+
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#warning-btn {
+    position: relative;
+    width: 10%;
+}
+
+.important {
+    display: flex !important;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    /* Ensures content centers horizontally */
+    color: #b31010 !important;
+    font-family: 'heebo-bold';
+    margin-top: 4vh;
+    /* Use margin instead of top: 5vh to push elements naturally */
+    margin-bottom: 2vh;
+    visibility: visible !important;
+}
+
+/* medicine page */
+.medicine-page {
+    display: none;
+    text-align: center;
+
+}
+
+.medicine-page p {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    direction: rtl;
+}
+
+.medicine-page .button-row {
+    gap: 10px;
+}
+
+.medicine-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+/*medicine game page*/
+
+.pill-img {
+    width: 35%;
+}
+
+#practice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border-radius: 100px;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+#practice-btn:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/* =========================
+   GAME CONTAINER
+========================= */
+
+/* ===========================
+   GAME
+=========================== */
+
+.medicine-game {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: none;
+}
+
+/* ===========================
+   TITLE
+=========================== */
+
+.medicine-game .title {
+    position: absolute;
+    top: 17%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+
+    text-align: center;
+
+    font-family: 'heebo-bold';
+    font-size: clamp(1.4rem, 5vw, 2rem);
+
+    color: #b7473a;
+
+    z-index: 20;
+}
+
+/* ===========================
+   QUESTION
+=========================== */
+
+.question-prompt {
+
+    position: absolute;
+
+    left: 50%;
+    top: 35%;
+
+    transform: translate(-50%, -50%);
+
+    width: 80%;
+    max-width: 430px;
+
+    padding: 5px;
+
+    border-radius: 16px;
+
+    background: #d7ecef;
+
+    border: 1px solid #617274;
+
+    text-align: center;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
+
+    direction: rtl;
+}
+
+#question-progress {
+
+    font-size: .9rem;
+    margin-bottom: 10px;
+
+}
+
+#question {
+
+    font-size: clamp(1rem, 4vw, 1.25rem);
+
+    line-height: 1.45;
+
+    margin: 0;
+
+}
+
+/* ===========================
+   CHOICES
+=========================== */
+
+.medicine-choice {
+
+    position: absolute;
+
+    width: 120px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pill-wrapper {
+
+    position: relative;
+
+}
+
+.pill-img {
+
+    width: 64px;
+
+    transition: .2s;
+
+    filter:
+        drop-shadow(0 6px 8px rgba(0, 0, 0, .15));
+
+}
+
+.badge-icon {
+
+    position: absolute;
+
+    top: -6px;
+    right: -6px;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: #a855b7;
+
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: .8rem;
+
+    border: 2px solid white;
+
+}
+
+.medicine-choice p {
+
+    margin-top: 8px;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: .95rem;
+
+    line-height: 1.2;
+
+}
+
+/* ===========================
+   POSITIONS
+=========================== */
+
+#asmachta {
+
+    left: 7%;
+    top: 49%;
+
+}
+
+#teken15 {
+
+    right: 7%;
+    top: 49%;
+
+}
+
+#teken15d {
+
+    left: 7%;
+    top: 73%;
+
+}
+
+#mumhim {
+
+    right: 7%;
+    top: 73%;
+
+}
+
+/* ===========================
+   ANSWER
+=========================== */
+
+.answer-banner {
+
+    position: absolute;
+
+    bottom: 0.5vh;
+
+    left: 5%;
+
+    width: 90%;
+
+    display: flex;
+
+    flex-direction: row-reverse;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.answer-text {
+
+    flex: 1;
+
+    direction: rtl;
+
+    font-size: .9rem;
+
+}
+
+.answer-icon {
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+
+}
+
+/* ===========================
+   STATES
+=========================== */
+
+.selected-right {
+    filter:
+        drop-shadow(0 0 5px rgba(0, 202, 78, 0.8));
+
+}
+
+.selected-wrong {
+    filter:
+        drop-shadow(0 0 5px rgba(255, 0, 0, 0.87));
+
+}
+
+/* ===========================
+   SMALL PHONES
+=========================== */
+
+@media (max-height:700px) {
+
+    .title {
+        top: 7%;
     }
 
-    setTimeout(() => {
-        currentTestQuestion++;
+    .question-prompt {
 
-        if (currentTestQuestion >= asmachtaQuestions.length) {
-            endAsmachtaTest();
-        } else {
-            loadAsmachtaQuestion();
-        }
-    }, 1000);
-};
+        top: 36%;
 
-const resetAsmachtaButtons = () => {
-    const buttons = document.querySelectorAll("#asmachta-test .answer-btn");
-    buttons.forEach((button) => {
-        button.disabled = false;
-        button.classList.remove("right-answer", "wrong-answer");
-    });
-};
-
-const calculateFinalGrade = () => {
-    if (asmachtaQuestions.length === 0) return 0;
-    const grade = (correctTestAnswers * 100) / asmachtaQuestions.length;
-    return Math.round(grade);
-};
-
-const endAsmachtaTest = () => {
-    const score = calculateFinalGrade();
-    const totalRight = correctTestAnswers;
-    const totalWrong = asmachtaQuestions.length - correctTestAnswers;
-
-    gameScores.asmachta = score;
-    exercisesDone[currExercise] = 1;
-
-    const popup = document.getElementById("game-popup");
-    popup.style.display = "flex";
-    popup.dataset.gameType = "asmachta";
-
-    const popupTitle = document.getElementById("popup-title");
-    if (score >= 85) {
-        popupTitle.innerText = "כל הכבוד! ציונך הוא:";
-    } else if (score >= 65) {
-        popupTitle.innerText = "אחלה, בוא נמשיך";
-    } else {
-        popupTitle.innerText = "אולי נתרגל שוב?";
     }
 
-    document.getElementById("grade").innerText = `${score}%`;
+    #asmachta,
+    #teken15 {
 
-    const time = document.getElementById("time");
-    if (time) {
-        time.style.display = "block";
-        time.innerText = `${totalRight}/${asmachtaQuestions.length}`;
+        top: 53%;
+
     }
 
-    const mistakeLine = document.getElementById("mistake-line");
-    if (mistakeLine) {
-        if (totalWrong === 0) {
-            mistakeLine.innerText = "לא טעית בכלל!";
-        } else if (totalWrong === 1) {
-            mistakeLine.innerText = "טעית פעם אחת";
-        } else {
-            mistakeLine.innerText = `טעית ${totalWrong} פעמים`;
-        }
+    #teken15d,
+    #mumhim {
+
+        top: 72%;
+
     }
 
-    const retryBtn = document.getElementById("retry-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const orText = document.getElementById("or-text");
+    .pill-img {
 
-    if (retryBtn) {
-        retryBtn.style.display = "block";
-        retryBtn.onclick = asmachtaTest; // Restart test on retry
+        width: 58px;
+
     }
 
-    if (nextBtn) {
-        nextBtn.style.display = "block";
-        nextBtn.onclick = toDigitalPage;
+}
+
+/* ===========================
+   VERY SMALL PHONES
+=========================== */
+
+@media (max-width:360px) {
+
+    .question-prompt {
+
+        width: 85%;
+
     }
 
-    if (orText) {
-        orText.style.display = "block";
+    .medicine-choice {
+
+        width: 100px;
+
     }
 
-};
-const toDigitalPage = () => {
-    hideAllScreens();
-    document.getElementById('digital-page').style.display = "flex";
-    document.getElementById('progress_bar').style.display = "block";
+    .pill-img {
 
-    const nextBtn = document.getElementById('digital-next-btn');
-    if (nextBtn) nextBtn.onclick = availablePage;
-};
+        width: 54px;
 
-const availablePage = () => {
-    hideAllScreens();
-    document.getElementById('progress_bar').style.display = "block";
-    document.getElementById('available-page').style.display = "flex";
-    setRadioProgress("onehundred");
-
-    const nextBtn = document.getElementById('available-next-btn');
-    if (nextBtn) nextBtn.onclick = availableStep2;
-};
-
-const availableStep2 = () => {
-    hideAllScreens();
-
-    document.getElementById('progress_bar').style.display = "block";
-    document.getElementById('tomer-system-page').style.display = "flex";
-
-    setRadioProgress("onehundred");
-
-    const nextBtn = document.getElementById('finish-btn');
-
-    if (nextBtn) {
-        nextBtn.innerText = "הבא";
-        nextBtn.onclick = showSuperpharmPage;
-    }
-};
-
-// ==========================================
-// 8. SUPERPHARM PAGE
-// ==========================================
-const showSuperpharmPage = () => {
-    hideAllScreens();
-
-    const superpharmPage =
-        document.getElementById("superpharm-page");
-
-    if (superpharmPage) {
-        superpharmPage.style.display = "flex";
     }
 
-    const progressBar =
-        document.getElementById("progress_bar");
+    .medicine-choice p {
 
-    if (progressBar) {
-        progressBar.style.display = "block";
+        font-size: .8rem;
+
     }
 
-    setRadioProgress("onehundred");
+}
 
-    const finishBtn =
-        document.getElementById("superpharm-finish-btn");
+/* ===========================
+   BIG PHONES
+=========================== */
 
-    if (finishBtn) {
-        finishBtn.onclick = showReserveDispensingPage;
-    }
-};
+@media (min-width:430px) {
 
-const showReserveDispensingPage = () => {
-    hideAllScreens();
+    .question-prompt {
 
-    const reservePage =
-        document.getElementById("reserve-dispensing-page");
+        max-width: 470px;
 
-    if (reservePage) {
-        reservePage.style.display = "flex";
-        reservePage.scrollTop = 0;
-
-        requestAnimationFrame(() => {
-            reservePage.scrollTo({
-                top: 0,
-                behavior: "auto"
-            });
-        });
     }
 
-    const progressBar =
-        document.getElementById("progress_bar");
+    .pill-img {
 
-    if (progressBar) {
-        progressBar.style.display = "block";
+        width: 70px;
+
     }
 
-    setRadioProgress("onehundred");
+    .medicine-choice {
 
-    const finishBtn =
-        document.getElementById("reserve-finish-btn");
+        width: 135px;
 
-    if (finishBtn) {
-        finishBtn.onclick = showSummaryPage;
-    }
-};
-// ==========================================
-// 9. SUMMARY & FINAL PAGE
-// ==========================================
-const showSummaryPage = () => {
-    hideAllScreens();
-
-    const summaryPage = document.getElementById('summary-page');
-    summaryPage.style.display = "flex";
-
-    document.getElementById('progress_bar').style.display = "block";
-    setRadioProgress("onehundred");
-
-    const validScores = Object.values(gameScores).filter(
-        score => score !== null && typeof score === "number"
-    );
-
-    const sum = validScores.reduce((acc, score) => acc + score, 0);
-
-    const avgScore = validScores.length > 0
-        ? Math.round(sum / validScores.length)
-        : 0;
-
-    document.getElementById('final-score-display').innerText = avgScore;
-
-    const titleEl = document.getElementById('final-title');
-
-    if (avgScore >= 75) {
-        titleEl.innerText = "כל הכבוד! סיימתם את הלומדה בהצלחה.";
-    } else {
-        titleEl.innerText = "לומדה הושלמה! כדאי לתרגל שוב.";
     }
 
-    const starsContainer = document.getElementById('stars-container');
+    .medicine-choice p {
 
-    if (avgScore >= 90) {
-        starsContainer.innerHTML = '⭐ ⭐ ⭐';
-    } else if (avgScore >= 70) {
-        starsContainer.innerHTML =
-            '⭐ ⭐ <span class="star gray">⭐</span>';
-    } else {
-        starsContainer.innerHTML =
-            '⭐ <span class="star gray">⭐</span> <span class="star gray">⭐</span>';
+        font-size: 1rem;
+
     }
 
-    const finishBtn = document.getElementById('end-lomda-btn');
+}
 
-    if (finishBtn) {
-        finishBtn.onclick = () => {
-            finishBtn.disabled = true;
+/* medicine box page */
+.medicine-box-page {
+    display: none;
+}
 
-            // Attempts to close only when the browser allows it
-            window.close();
+.medicine-box-page .title {}
 
-            // LMS tabs/iframes frequently cannot be closed with window.close()
-            setTimeout(() => {
-                if (!window.closed) {
-                    finishBtn.disabled = false;
-                    finishBtn.innerText = "הלומדה הסתיימה – ניתן לסגור את החלון";
-                }
-            }, 500);
-        };
+
+#practice-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border-radius: 100px;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+#practice-button:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+
+
+
+
+/* כותרת ההסבר הכחולה */
+.info-title {
+    font-family: 'heebo-bold', sans-serif;
+    color: #4a6572;
+    /* כחול-אפרפר תואם */
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    max-width: 90%;
+    line-height: 1.3;
+}
+
+/* ריכוז השלבים */
+.info-steps {
+    width: 100%;
+    max-width: 355px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* שורת שלב בודד */
+.info-step {
+    display: flex;
+    flex-direction: row-reverse;
+    /* גורם לאייקון להיות מימין לטקסט */
+    align-items: center;
+    justify-content: flex-start;
+    width: 90%;
+    margin: 15px 0;
+    gap: 20px;
+}
+
+.step-icon {
+    width: 45px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.step-text {
+    font-family: 'heebo-regular', sans-serif;
+    font-size: 1rem;
+    color: #333;
+    text-align: right;
+    margin: 0;
+    line-height: 1.4;
+    direction: rtl;
+}
+
+/* קווי הפרדה אפורים בין השלבים */
+.step-divider {
+    width: 40%;
+    border: none;
+    border-top: 1px solid #54636b;
+    margin: 10px 0;
+}
+
+.step-icon {
+    width: 6vw;
+    position: relative;
+    right: 2%;
+}
+
+
+
+/*medicine bag page*/
+
+#skip-bag-game {
+    display: none;
+}
+
+.bag-page {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    /* פתרון: הוספת מרווח עליון כדי שהכותרת תרד אל מתחת לסרגל הניווט */
+    margin-top: 100px;
+}
+
+/* קונטיינר האפשרויות */
+.options-container {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    top: 69%;
+}
+
+.bag-page .title {
+    margin-bottom: 10px;
+    position: absolute;
+    top: 17%;
+}
+
+.options-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+#answer-explain {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555555;
+    text-align: center;
+    max-width: 80vw;
+}
+
+/* עיצוב כפתור בחירה שגרתי */
+.option-btn {
+    background-color: #ced2b7;
+    /* צבע זית/חאקי בהיר כמו בצילום */
+    border: 1px solid #b5b99e;
+    color: #000;
+    border-radius: 20px;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 0.7rem;
+    width: 50vw;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.39);
+    transition: all 0.2s ease;
+}
+
+/* מצב שבו הכפתור נבחר על ידי המשתמש (Toggle) */
+.option-btn.selected {
+    background-color: #8c926b;
+    /* כהה יותר המראה בחירה */
+    color: white;
+    transform: scale(0.96);
+}
+
+/* כפתור נפק תרופה התחתון */
+/* מיכל עוטף שדואג להציב את הלחצן והטקסט אחד מתחת לשני */
+.submit-container {
+    display: flex;
+    flex-direction: column;
+    /* מסדר את האלמנטים בטור (זה תחת זה) */
+    align-items: center;
+    /* ממורכז אופקית */
+    gap: 8px;
+    /* רווח נקי וגמיש בין הלחצן לטקסט */
+    margin-top: 20px;
+}
+
+/* סגנון הלחצן - עודכן השם ל-ID/Class הנכון */
+#dispense-btn {
+    background-color: #f2dede;
+    border: 3px solid #b7473a;
+    color: #b7473a;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 1.4rem;
+    padding: 8px 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* סגנון לטקסט ההסבר שמתחת לחצן */
+#answer-explain {
+    margin: 0;
+    position: absolute;
+    /* איפוס מרג'ין ברירת מחדל של פסקה */
+    font-size: 0.95rem;
+    color: #555555;
+    text-align: center;
+    bottom: 0%;
+    font-family: 'heebo-bold';
+}
+
+#bag-result-buttons {
+    display: none;
+    width: min(94%, 420px);
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    bottom: 3%;
+    position: absolute;
+}
+
+#bag-result-buttons .next-button {
+    flex: 1;
+    width: auto;
+    max-width: 190px;
+    margin: 0;
+}
+
+.next-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 140px !important;
+    max-width: 160px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.next-button:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+#answer-explain {
+    display: block;
+}
+
+.bag-img {
+    width: 70vw;
+    top: -3vh;
+    position: relative;
+    padding-bottom: 100px;
+}
+
+#dispense-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+#dispense-btn:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+
+/* קונטיינר השקית - מקבל מיקום יחסי */
+.bag-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 67vw;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* התמונה של השקית */
+.bag-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* האזור הלבן שעל השקית - ממוקם בדיוק במרכז התווית */
+.label-lines {
+    position: absolute;
+    top: 32%;
+    /* גובה הריבוע הלבן בשקית */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 58%;
+    /* רוחב התווית הלבנה */
+    display: flex;
+    flex-direction: column;
+    /* מסדר את השורות אחת מתחת לשנייה */
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    /* רווח קטן בין שורה לשורה */
+    z-index: 10;
+}
+
+/* עיצוב כל שורת טקסט בתוך התווית */
+.answer-choice {
+    display: none;
+    /* מוסתר כברירת מחדל עד לחיצה */
+    width: 100%;
+    text-align: center;
+    font-family: 'playpen';
+    font-size: clamp(0.65rem, 3.2vw, 0.85rem);
+    /* גודל גופן גמיש שלא יברח */
+    font-weight: bold;
+    color: #000;
+    border-radius: 3px;
+    padding: 2px 0;
+    cursor: pointer;
+    height: 2vh;
+}
+
+#bag-retry-btn {}
+
+#bag-next-btn {}
+
+/*tomer system page */
+
+.tomer-photo {
+    display: none;
+}
+
+/* המכולת הראשית */
+.tomer-system {
+    display: none;
+    /* או flex כשהיא פעילה */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    box-sizing: border-box;
+    padding: 30px 15px 20px 15px;
+    position: relative;
+    overflow: hidden;
+    direction: rtl;
+}
+
+/* כותרת */
+.tomer-system .title {
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 0;
+    top: 13%;
+    margin-top: 5px;
+    line-height: 1.3;
+}
+
+.tomer-photo {
+    position: absolute;
+    width: 100%;
+    /* משמר צורה ריבועית מותאמת לכל גודל מסך */
+    aspect-ratio: 1.5 / 1;
+
+    /* מיקום במרכז המסך */
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+
+    /* עיצוב המסגרת והרקע */
+    background-color: #d9d9d9;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    /* אפקט האיקס האפור במרכז */
+    background-image:
+        linear-gradient(to top right, transparent calc(50% - 1px), #555 50%, transparent calc(50% + 1px)),
+        linear-gradient(to bottom right, transparent calc(50% - 1px), #555 50%, transparent calc(50% + 1px));
+}
+
+#next-page-btn {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    z-index: 999;
+    /* Higher than iframe, controls, and map interface elements */
+
+    /* Modern, robust centering: defines the bounding box and forces centering */
+    inset: 0;
+    margin: 0 auto;
+    /* Handles horizontal centering automatically */
+    margin-bottom: 4dvh;
+    /* Safely offsets the button from the absolute bottom edge */
+    align-self: end;
+    /* Keeps it locked to the bottom row */
+
+    /* Strict override: completely cancels out previous wide widths */
+    width: 65vw !important;
+    max-width: 250px !important;
+    height: 6.5vh !important;
+    min-height: 48px;
+
+    border: #840000 solid 3px;
+    border-radius: 100px;
+    color: #BA0000;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-family: 'heebo-bold';
+    background: radial-gradient(#FFFFFF, #EACDCD);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.35);
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי נמוך יותר בהתאמה לגודל */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+
+    /* Clean transition (removed transform rules to prevent off-center bugs) */
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+}
+
+#next-page-btn:active {
+    /* Use the individual CSS scale property instead of transform: scale() */
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-modal.open {
+    display: flex;
+}
+
+
+.close-image-modal {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.modal-nav {
+    position: absolute;
+
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #000;
+    border: none;
+    z-index: 1000;
+
+    background-color: #e2e2e2a6;
+    border-radius: 50%;
+
+    font-size: 2.4rem;
+    line-height: 1;
+
+    padding: 0;
+    margin: 0;
+}
+
+#modal-prev {
+    top: 95%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+#modal-next {
+    top: 5%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.modal-image-wrapper {
+    position: relative;
+    display: inline-block;
+
+    transform: rotate(90deg);
+
+    max-width: 90vh;
+    max-height: 90vw;
+}
+
+#modal-image {
+    display: block;
+
+    max-width: 90vh;
+    max-height: 90vw;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+}
+
+#image-guides {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.image-guide {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-guide {
+    position: absolute;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.guide-text {
+    position: absolute;
+
+    width: max-content;
+    max-width: 200px;
+
+    padding: 6px 10px;
+
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #aa3a3a;
+    border-radius: 8px;
+
+    color: #222;
+    font-size: 0.8rem;
+    font-family: 'heebo-bold', sans-serif;
+    text-align: center;
+    direction: rtl;
+
+    writing-mode: horizontal-tb;
+
+    box-sizing: border-box;
+}
+
+.guide-arrow {
+    color: #ba0000;
+    font-size: 3rem;
+    line-height: 1;
+
+    transform: rotate(45deg);
+    position: absolute;
+    top: 10px;
+
+    animation: guide-move 1s ease-in-out infinite alternate;
+}
+
+#picture-click {
+    font-family: "heebo-bold";
+    font-size: 1rem;
+    position: absolute;
+    top: 68%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tap-icon {
+    width: 8vw;
+    height: 4vh;
+}
+
+
+
+@keyframes guide-move {
+    from {
+        translate: 0 0;
     }
-};
+
+    to {
+        translate: 7px 7px;
+    }
+}
+
+/*asmachta page*/
+
+/* עמוד אסמכתא - מכולת ראשית */
+.asmachta-page {
+    display: none;
+    /* בעת הפעלה לשנות ל-flex ב-JS */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    box-sizing: border-box;
+    padding: 15px 20px 20px 20px;
+    direction: rtl;
+    background-color: #f3f3f3;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+
+
+
+/* כותרת הדף - הסרת ה-top שגרם לחפיפה */
+.asmachta-page .title {
+    position: relative !important;
+    top: 14% !important;
+    left: 0 !important;
+    transform: none !important;
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    z-index: 10 !important;
+
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    font-size: 1.8rem;
+    text-align: center;
+    width: 100%;
+}
+
+/*asmachta pre page */
+.asmachta-pre-page {}
+
+/* medicine page */
+#asmachta-pre-page {
+    display: none;
+    text-align: center;
+
+}
+
+#asmachta-pre-page p {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    direction: rtl;
+}
+
+#asmachta-pre-page .button-row {
+    gap: 10px;
+}
+
+#asmachta-pre-page .button {
+    position: static;
+    width: auto;
+    height: auto;
+
+    min-width: 180px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border: #840000 solid 3px;
+
+
+    /* optional: ensure flex sizing behaves predictably */
+    flex: 0 0 auto;
+}
+
+
+/*asmachta-test*/
+
+.asmachta-test {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.asmachta-card {
+    width: min(90%, 430px);
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .15);
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    direction: rtl;
+}
+
+.asmachta-test .title {
+    top: -1%;
+}
+
+.question-counter {
+    text-align: center;
+    font-family: "heebo-bold";
+    color: #888;
+}
+
+.asmachta-question {
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    font-family: "heebo-medium";
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.answer-btn {
+    height: 55px;
+
+    border: solid rgb(38, 71, 38) 2px;
+    border-radius: 100px;
+
+    box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.26);
+
+
+    background: #adb999;
+    color: white;
+
+    font-size: 1.2rem;
+    font-family: "heebo-bold";
+
+    cursor: pointer;
+}
+
+/* ריכוז השלבים */
+.bullets-container {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 8px;
+    top: 7%;
+    /* הפחתה קלה ב-gap כדי לאפשר מרווח נשימה לכותרת */
+    margin: auto 0;
+    /* ממקם במרכז האנכי הפנוי בלבד */
+}
+
+/* שורת שלב בודד */
+.bullet-item {
+    display: flex;
+    flex-direction: row;
+    /* שומר על זרימה מימין לשמאל ב-RTL */
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 12px;
+}
+
+/* האייקון בצד */
+.asmachta-page .step-icon {
+    width: 25px;
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.15));
+}
+
+/* הטקסט */
+.bullet-text {
+    font-family: 'heebo-regular', sans-serif;
+    font-size: 0.95rem;
+    color: #222;
+    text-align: right;
+    margin: 0;
+    line-height: 1.35;
+    direction: rtl;
+    flex-grow: 1;
+}
+
+/* קווי הפרדה אפורים בין השלבים */
+.bullet-divider {
+    width: 40%;
+    height: 1px;
+    background-color: #54636b;
+    border: none;
+    margin: 8px 0;
+    opacity: 0.6;
+}
+
+/* כפתור "הבא" - עיצוב יציב ללא Absolute */
+#next-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 70%;
+    max-width: 240px;
+    padding: 10px 0;
+    margin-top: 10px;
+
+    border-radius: 100px;
+    font-size: 1.4rem;
+    font-family: 'heebo-bold', sans-serif;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    flex-shrink: 0;
+}
+
+#next-button:active {
+    scale: 0.96;
+    box-shadow: 0 1px 0px #822a2a, 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* digital page */
+#digital-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 15px 20px 20px 20px;
+    direction: rtl;
+    background-color: #f3f3f3;
+    position: relative;
+    overflow-y: auto;
+}
+
+/* 2. הכותרת - מבוטלים כל מיקומים מוחלטים */
+/* דריסת מיקום כפויה לכותרת המסך הדיגיטלי */
+#digital-page h1.digital-title,
+.digital-title {
+    position: relative !important;
+    top: 13% !important;
+    left: 0 !important;
+    transform: none !important;
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+    z-index: 10 !important;
+
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    font-size: 1.8rem;
+    text-align: center;
+    width: 100%;
+    padding-top: 10px;
+}
+
+
+/* 3. רשימת הסעיפים */
+#digital-page .digital-bullets {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    top: 5%;
+    position: relative;
+    margin: auto 0;
+    flex-shrink: 1;
+}
+
+#digital-page .digital-item {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 12px;
+}
+
+#digital-page .digital-icon {
+    width: 26px;
+    height: auto;
+    flex-shrink: 0;
+    order: 2;
+    /* מיקום בצד ימין */
+}
+
+#digital-page .digital-text {
+    font-family: 'heebo-regular', sans-serif;
+    font-size: 0.95rem;
+    color: #222;
+    text-align: center;
+    margin: 0;
+    line-height: 1.35;
+    flex-grow: 1;
+    order: 1;
+}
+
+/* הדגשות טקסט */
+#digital-page .digital-text.highlight {
+    font-family: 'heebo-bold', sans-serif;
+    text-decoration: underline;
+}
+
+#digital-page .digital-text.alert {
+    font-family: 'heebo-bold', sans-serif;
+    color: #1a3c5e;
+    /* גוון כחול כהה כמו בטיוטה */
+    text-decoration: underline;
+}
+
+#digital-page .digital-divider {
+    width: 45%;
+    height: 1px;
+    background-color: #54636b;
+    border: none;
+    margin: 6px 0;
+    opacity: 0.5;
+}
+
+/* 4. עיצוב כפתור הבא */
+#digital-page #digital-next-btn {
+    position: static !important;
+    width: 70%;
+    max-width: 220px;
+    padding: 8px 0;
+    margin: 10px auto 5px auto !important;
+
+    border-radius: 100px;
+    font-size: 1.3rem;
+    font-family: 'heebo-bold', sans-serif;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: scale 0.1s ease;
+}
+
+#digital-page #digital-next-btn:active {
+    scale: 0.96;
+}
+
+/* available page - זמינות מלאי */
+.available-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100vw;
+    height: 100dvh;
+
+    padding: 100px 20px 20px;
+    /* Top Right/Left Bottom */
+    box-sizing: border-box;
+}
+
+/* 2. כותרת העבד */
+.available-title {
+    margin: 10px 0 20px;
+    margin-top: 20px;
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    font-size: 1.8rem;
+    text-align: center;
+    padding-top: 10px
+}
+
+/* 3. הוידאו */
+#video {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    max-height: 55vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    margin: auto 0;
+    /* Pushes it to the center */
+
+}
+
+#available-next-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 70%;
+    max-width: 240px;
+    padding: 10px 0;
+    margin-top: auto;
+    /* Pushes button to bottom */
+    margin: 10px auto 5px auto !important;
+
+
+    border-radius: 100px;
+    font-size: 1.4rem;
+    font-family: 'heebo-bold', sans-serif;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    flex-shrink: 0;
+}
+
+#available-next-bt:active {
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+
+}
+
+/* מכולת העמוד הראשית */
+.tomer-system-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    box-sizing: border-box;
+    padding: 30px 20px 20px 20px;
+    direction: rtl;
+    background-color: #f3f3f3;
+    position: relative;
+    overflow-y: auto;
+}
+
+.tomer-system-page .digital-icon {
+    width: 16%;
+}
+
+/* כותרת הדף */
+.tomer-system-page .system-title {
+    position: static !important;
+    font-family: 'heebo-bold', sans-serif;
+    color: #b7473a;
+    font-size: 1.6rem;
+    text-align: center;
+    width: 100%;
+    margin: 10px 0 15px 0 !important;
+    line-height: 1.25;
+    flex-shrink: 0;
+    padding-top: 85px;
+}
+
+/* קונטיינר הכרטיסיות */
+.accordion-container {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 5px 0 auto 0;
+    flex-grow: 1;
+}
+
+/* עיצוב כרטיסיית details */
+.accordion-item {
+    border-radius: 12px;
+    border: 1px solid #c3b9a7;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+}
+
+/* סגנונות לפי צבעים מתוך הסקיצה */
+.green-item {
+    background-color: #C9CAAC;
+}
+
+.beige-item {
+    background-color: #ECE6CC;
+}
+
+.blue-item {
+    background-color: #D4E8EA;
+}
+
+.orange-item {
+    background-color: #ebb18f;
+}
+
+/* כותרת הכרטיסייה */
+.accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    font-family: 'heebo-bold', sans-serif;
+    font-size: 1.15rem;
+    color: #222;
+    cursor: pointer;
+    list-style: none;
+    /* מסיר את החץ הדיפולטיבי */
+}
+
+.accordion-header::-webkit-details-marker {
+    display: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* חץ */
+.arrow {
+    font-size: 1.4rem;
+    transition: transform 0.2s ease;
+}
+
+.accordion-item[open] .arrow {
+    transform: rotate(90deg);
+    /* מסיט את החץ בפתיחה */
+}
+
+/* תוכן הכרטיסייה שנפתח */
+.accordion-body {
+    padding: 12px 16px 16px 16px;
+    font-family: 'heebo-regular', sans-serif;
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.35;
+    border-top: 1px dashed rgba(0, 0, 0, 0.15);
+}
+
+/* קופסת תמונה בכרטיסייה הרביעית */
+.image-placeholder {
+    width: 100%;
+    height: 140px;
+    border: 1px solid #999;
+}
+
+/* כפתור סיים לומדה */
+.finish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 70%;
+    max-width: 240px;
+    padding: 10px 0;
+    margin-top: auto;
+    /* Pushes button to bottom */
+    margin: 10px auto 5px auto !important;
+
+
+    border-radius: 100px;
+    font-size: 1.4rem;
+    font-family: 'heebo-bold', sans-serif;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+
+    /* צל תלת-מימדי */
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
+    transition: scale 0.1s ease-out, box-shadow 0.1s ease-out;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    flex-shrink: 0;
+}
+
+.finish-btn:active {
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/*summary page */
+#summary-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 80vh;
+    direction: rtl;
+    font-family: 'heebo-bold', sans-serif;
+
+}
+
+.final-summary-card {
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.final-title {
+    color: #a94442;
+    /* אדום-חום כהה כמו בתמונה */
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.final-subtitle {
+    color: #a94442;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.score-box {
+    position: relative;
+    background-color: #D4E8EA;
+    /* תכלת בהיר תואם לתמונה */
+    border: 1px solid #6CA1A6;
+    border-radius: 20px;
+    padding: 30px 20px 45px 20px;
+    margin-bottom: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.final-score-number {
+    font-size: 64px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.stars-container {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    font-size: 38px;
+}
+
+.star.gray {
+    filter: grayscale(100%);
+    opacity: 0.3;
+}
+
+.redo-btn {
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px 45px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #a94442;
+    transition: all 0.2s ease;
+}
+
+.redo-btn:active {
+    scale: 0.95;
+
+    background: linear-gradient(to bottom, #ffffff 0%, #f7e6e6 50%, #edd3d3 100%);
+    border: 1.5px solid #a53d3d;
+    color: #a81c1c;
+    box-shadow: 0 3px 0px #822a2a, 0 4px 6px rgba(0, 0, 0, 0.25);
+
+    /* Faster transition into the press */
+    transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
+}
+
+/* =========================================================
+   SUPER-PHARM PAGE
+========================================================= */
+
+#superpharm-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 125px 18px 110px;
+    box-sizing: border-box;
+
+    direction: rtl;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    background: linear-gradient(180deg,
+            #f8fafa 0%,
+            #f2f6f6 55%,
+            #eef2f2 100%);
+
+    font-family: "Heebo", Arial, sans-serif;
+    color: #253333;
+
+    z-index: 10;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+#superpharm-page .header {
+    width: 100%;
+    max-width: 900px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+#superpharm-page .header h1 {
+    margin: 0;
+
+    color: #BA0000;
+    font-family: "heebo-bold", sans-serif;
+    font-size: clamp(1.45rem, 4vw, 2.1rem);
+    line-height: 1.3;
+}
+
+#superpharm-page .subtitle {
+    margin-top: 8px;
+
+    color: #666;
+    font-family: "heebo-regular", sans-serif;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+#superpharm-page .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+
+    width: 100%;
+    max-width: 1100px;
+
+    align-items: start;
+}
+
+#superpharm-page .column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+#superpharm-page .card {
+    width: 100%;
+
+    padding: 18px 20px;
+
+    background: #ffffff;
+    border: 1px solid #d9e1e1;
+    border-right: 6px solid #6f9090;
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.07);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#superpharm-page .card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 20px rgba(0, 0, 0, 0.1);
+}
+
+#superpharm-page .card-title {
+    margin-bottom: 12px;
+
+    color: #324747;
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.4;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CARD ACCENTS
+========================================================= */
+
+#superpharm-page .accent-red {
+    border-right-color: #b14444;
+}
+
+#superpharm-page .accent-red .card-title {
+    color: #983535;
+}
+
+#superpharm-page .accent-green {
+    border-right-color: #608d78;
+}
+
+#superpharm-page .accent-green .card-title {
+    color: #47715f;
+}
+
+#superpharm-page .accent-orange {
+    border-right-color: #c38242;
+}
+
+#superpharm-page .accent-orange .card-title {
+    color: #9a5d25;
+}
+
+#superpharm-page .accent-purple {
+    border-right-color: #826ca4;
+}
+
+#superpharm-page .accent-purple .card-title {
+    color: #675286;
+}
+
+
+/* =========================================================
+   TEXT AND LISTS
+========================================================= */
+
+#superpharm-page ul {
+    margin: 0;
+    padding-right: 22px;
+}
+
+#superpharm-page li {
+    margin-bottom: 9px;
+
+    color: #3e4c4c;
+    font-size: clamp(0.92rem, 1.7vw, 1.05rem);
+    line-height: 1.55;
+}
+
+#superpharm-page li:last-child {
+    margin-bottom: 0;
+}
+
+#superpharm-page li ul {
+    margin-top: 8px;
+    padding-right: 20px;
+}
+
+#superpharm-page strong {
+    color: #263737;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+#superpharm-page .badge {
+    display: inline-block;
+
+    margin: 2px 3px;
+    padding: 3px 8px;
+
+    border-radius: 20px;
+
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#superpharm-page .badge-danger {
+    color: #8a2929;
+    background: #f7e9e9;
+    border: 1px solid #8f1c1c;
+}
+
+#superpharm-page .badge-warning {
+    color: #81511e;
+    background: #fff0cf;
+    border: 1px solid #e6c583;
+}
+
+
+/* =========================================================
+   VALIDITY SECTION
+========================================================= */
+
+#superpharm-page .validity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+#superpharm-page .validity-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 90px;
+    padding: 12px;
+
+    text-align: center;
+
+    background: #f7eee3;
+    border: 1px solid #dfc29f;
+    border-radius: 13px;
+
+    box-sizing: border-box;
+}
+
+#superpharm-page .validity-box.red {
+    background: #fae5e5;
+    border-color: #dfa8a8;
+}
+
+#superpharm-page .validity-box div {
+    margin-bottom: 5px;
+
+    color: #4d5757;
+    font-size: 0.95rem;
+}
+
+#superpharm-page .days {
+    color: #9b5b25;
+    font-size: clamp(1.25rem, 3vw, 1.7rem);
+    font-weight: 700;
+}
+
+#superpharm-page .validity-box.red .days {
+    color: #a53d3d;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+#superpharm-page .footer {
+    width: 100%;
+    max-width: 1100px;
+
+    margin-top: 22px;
+    padding: 14px 18px;
+
+    text-align: center;
+
+    color: #607070;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    line-height: 1.5;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FINISH BUTTON
+========================================================= */
+
+#superpharm-finish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: min(240px, 80%);
+    min-height: 52px;
+
+    margin-top: 34px;
+    padding: 12px 24px;
+
+    color: #ffffff;
+    background:
+        linear-gradient(135deg,
+            #a63d3d,
+            #7f2c2c);
+
+    border: none;
+    border-radius: 100px;
+
+    font-family: "Heebo", Arial, sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 700;
+
+    box-shadow:
+        0 6px 15px rgba(126, 42, 42, 0.25);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#superpharm-finish-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(126, 42, 42, 0.32);
+}
+
+#superpharm-finish-btn:active {
+    transform: scale(0.97);
+}
+
+#superpharm-finish-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 850px) {
+    #superpharm-page {
+        padding: 95px 14px 100px;
+    }
+
+    #superpharm-page .grid-container {
+        grid-template-columns: 1fr;
+        max-width: 680px;
+    }
+
+    #superpharm-page .header,
+    #superpharm-page .footer {
+        max-width: 680px;
+    }
+
+    #superpharm-page .card:hover {
+        transform: none;
+    }
+}
+
+
+/* =========================================================
+   PHONES
+========================================================= */
+
+@media (max-width: 500px) {
+    #superpharm-page {
+        padding:
+            calc(125px + env(safe-area-inset-top)) 10px calc(95px + env(safe-area-inset-bottom));
+    }
+
+    #superpharm-page .header {
+        margin-bottom: 14px;
+        padding: 17px 13px;
+
+        border-radius: 14px;
+        border-top-width: 5px;
+    }
+
+    #superpharm-page .header h1 {
+        font-size: 1.3rem;
+    }
+
+    #superpharm-page .subtitle {
+        font-size: 0.87rem;
+    }
+
+    #superpharm-page .grid-container {
+        gap: 13px;
+    }
+
+    #superpharm-page .column {
+        gap: 13px;
+    }
+
+    #superpharm-page .card {
+        padding: 15px 14px;
+
+        border-radius: 13px;
+        border-right-width: 5px;
+    }
+
+    #superpharm-page .card-title {
+        margin-bottom: 9px;
+        font-size: 1.05rem;
+    }
+
+    #superpharm-page ul {
+        padding-right: 18px;
+    }
+
+    #superpharm-page li {
+        margin-bottom: 7px;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    #superpharm-page .validity-grid {
+        gap: 8px;
+    }
+
+    #superpharm-page .validity-box {
+        min-height: 78px;
+        padding: 9px 6px;
+    }
+
+    #superpharm-page .days {
+        font-size: 1.25rem;
+    }
+
+    #superpharm-page .footer {
+        margin-top: 15px;
+        padding: 11px 12px;
+
+        font-size: 0.78rem;
+    }
+
+    #superpharm-finish-btn {
+        width: 78%;
+        min-height: 50px;
+
+        margin-top: 27px;
+
+        font-size: 1.05rem;
+    }
+}
+
+/* Fix for top bar navigation tab buttons on iOS Safari */
+.upper_bar button,
+.upper_bar select,
+.upper_bar input[type="button"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #d09477;
+    /* Set to your tab button color */
+    color: #000000;
+    /* Text color */
+    border: 1px solid #a67258;
+    border-radius: 6px;
+    padding: 6px 12px;
+    display: inline-block;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Style for active selected tab button */
+.upper_bar button.active,
+.upper_bar .active_tab {
+    background-color: #bb7c5d;
+    font-family: 'heebo-bold', sans-serif;
+}
+
+/* Update your bottom action buttons CSS */
+#to-practice-btn,
+#practice-btn,
+#practice-button,
+#next-page-btn,
+#dispense-btn,
+.next-button {
+    /* Respect iPhone safe area (home bar & address bar) */
+    margin-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+    bottom: 0 !important;
+}
+
+#dispense-btn {
+    margin-bottom: calc(25px + env(safe-area-inset-bottom)) !important;
+
+}
+
+/* Allow scrolling on page containers if content overflows vertical space */
+.medicine-table-page,
+.pharmacy_page,
+.medicine-page {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
+}
+
+.title {
+    width: 100%;
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #b7473a !important;
+    font-family: "heebo-bold";
+    font-size: clamp(1.5rem, 4vw, 2.1rem) !important;
+    line-height: 1.25;
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   PAGE TITLES
+========================================================= */
+
+.page-title {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 75px;
+
+    margin-top: -1vh;
+    /* בדיוק מתחת ל-header + progress */
+    margin-bottom: 15px;
+
+    text-align: center;
+
+    font-family: "heebo-bold";
+    font-size: clamp(1.45rem, 5vw, 2rem);
+
+    color: #b7473a;
+
+    line-height: 1.3;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RESERVE SOLDIERS DISPENSING PAGE
+========================================================= */
+
+#reserve-dispensing-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding:
+        calc(17vh + 30px) 18px 110px;
+
+    box-sizing: border-box;
+
+    direction: rtl;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background:
+        linear-gradient(180deg,
+            #f4f8fc 0%,
+            #eef4f9 100%);
+
+    font-family: "heebo-regular", sans-serif;
+    color: #5B744B;
+
+    z-index: 10;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+#reserve-dispensing-page .reserve-header {
+    width: min(94%, 900px);
+
+    margin-bottom: 22px;
+
+    text-align: center;
+}
+
+#reserve-dispensing-page .reserve-header h1 {
+    margin: 0;
+
+    color: #b7473a;
+
+    font-family: "heebo-bold", sans-serif;
+    font-size: clamp(1.45rem, 4vw, 2rem);
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+#reserve-dispensing-page .reserve-card {
+    position: relative;
+
+    width: min(94%, 850px);
+
+    /* Makes the card fit between the title and button */
+    flex: 1;
+    min-height: 0;
+    max-height: 100%;
+
+    padding: 24px 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #d4e1ec;
+    border-right: 6px solid #036b1d;
+    border-radius: 18px;
+
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 6px 18px rgba(26, 75, 115, 0.12);
+
+    /* Scroll happens inside the card */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+#reserve-dispensing-page .reserve-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(90deg,
+            #036b1d 50%,
+            #d6f3d3 100%);
+}
+
+
+/* =========================================================
+   CARD TITLE
+========================================================= */
+
+#reserve-dispensing-page .reserve-card h2 {
+    margin:
+        0 0 18px;
+
+    padding-bottom: 12px;
+
+    color: #5B744B;
+    font-family: "heebo-bold", sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.55rem);
+    line-height: 1.4;
+
+    text-align: center;
+
+    border-bottom: 2px solid #e4edf4;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+#reserve-dispensing-page .reserve-intro {
+    margin:
+        0 auto 18px;
+
+    color: #34495a;
+
+    font-family: "heebo-medium", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.65;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   NUMBERED LIST
+========================================================= */
+
+#reserve-dispensing-page .reserve-list {
+    margin: 0;
+    padding-right: 25px;
+}
+
+#reserve-dispensing-page .reserve-list li {
+    margin-bottom: 15px;
+    padding-right: 5px;
+
+    color: #263747;
+
+    font-family: "heebo-regular", sans-serif;
+    font-size: clamp(0.98rem, 1.8vw, 1.1rem);
+    line-height: 1.6;
+}
+
+#reserve-dispensing-page .reserve-list li:last-child {
+    margin-bottom: 0;
+}
+
+#reserve-dispensing-page .reserve-list li::marker {
+    color: #394b2e;
+
+    font-family: "heebo-bold", sans-serif;
+    font-weight: 700;
+}
+
+#reserve-dispensing-page strong {
+    color: #3d5a2b;
+    font-family: "heebo-bold", sans-serif;
+}
+
+
+/* =========================================================
+   FINISH BUTTON
+========================================================= */
+
+#reserve-finish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: static;
+
+    width: min(240px, 82%);
+    min-height: 52px;
+
+    margin:
+        28px auto 10px;
+
+    padding: 11px 24px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(135deg,
+            #1769aa,
+            #155b91);
+
+    border: none;
+    border-radius: 100px;
+
+    font-family: "heebo-bold", sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+
+    box-shadow:
+        0 4px 0 #0e476f,
+        0 7px 14px rgba(21, 91, 145, 0.25);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+#reserve-finish-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 0 #0e476f,
+        0 9px 18px rgba(21, 91, 145, 0.3);
+}
+
+#reserve-finish-btn:active {
+    transform: translateY(2px);
+
+    box-shadow:
+        0 2px 0 #0e476f,
+        0 4px 8px rgba(21, 91, 145, 0.22);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+    #reserve-dispensing-page {
+        padding:
+            calc(17vh + 20px) 10px 95px;
+    }
+
+    #reserve-dispensing-page .reserve-header {
+        margin-bottom: 15px;
+    }
+
+    #reserve-dispensing-page .reserve-header h1 {
+        font-size: 1.35rem;
+    }
+
+    #reserve-dispensing-page .reserve-card {
+        width: 94%;
+
+        padding: 19px 16px;
+
+        border-right-width: 5px;
+        border-radius: 15px;
+    }
+
+    #reserve-dispensing-page .reserve-card h2 {
+        margin-bottom: 14px;
+
+        font-size: 1.15rem;
+    }
+
+    #reserve-dispensing-page .reserve-intro {
+        font-size: 0.94rem;
+        line-height: 1.55;
+    }
+
+    #reserve-dispensing-page .reserve-list {
+        padding-right: 20px;
+    }
+
+    #reserve-dispensing-page .reserve-list li {
+        margin-bottom: 12px;
+
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+
+    #reserve-finish-btn {
+        min-height: 49px;
+        margin-top: 22px;
+
+        font-size: 1.05rem;
+    }
+}
+
+
+/* =========================================================
+   GLOBAL BUTTON DESIGN
+========================================================= */
+
+.button,
+.next-button,
+#start_button,
+#to-practice-btn,
+#yes-btn,
+#no-btn,
+#back-btn,
+#start-exercise,
+#retry-btn,
+#next-btn,
+#practice-btn,
+#return-btn,
+#start-game,
+#practice-button,
+#return-bag-btn,
+#start-bag-game,
+#skip-game,
+#skip-bag-game,
+#start-test-game,
+#skip-test-game,
+#return-test-btn,
+#answer-true,
+#answer-false,
+#next-button,
+#digital-next-btn,
+#available-next-btn,
+#finish-btn,
+#superpharm-finish-btn,
+#redo-lomda-btn,
+#end-lomda-btn,
+#bag-retry-btn,
+#bag-next-btn,
+#dispense-btn,
+#next-page-btn,
+#reserve-finish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: min(240px, 85%);
+    min-height: 50px;
+
+    padding: 11px 24px;
+    margin: 10px auto;
+
+    box-sizing: border-box;
+
+    color: #ffffff;
+    background: linear-gradient(135deg,
+            #a63d3d 0%,
+            #8e3131 55%,
+            #722424 100%) !important;
+
+    border: none;
+    border-radius: 100px;
+
+    font-family: "Heebo", Arial, sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+
+    box-shadow:
+        0 6px 14px rgba(126, 42, 42, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease,
+        opacity 0.18s ease;
+
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+
+:is(.button,
+    .next-button,
+    #start_button,
+    #to-practice-btn,
+    #yes-btn,
+    #no-btn,
+    #back-btn,
+    #start-exercise,
+    #retry-btn,
+    #next-btn,
+    #practice-btn,
+    #return-btn,
+    #start-game,
+    #practice-button,
+    #return-bag-btn,
+    #start-bag-game,
+    #skip-game,
+    #skip-bag-game,
+    #start-test-game,
+    #skip-test-game,
+    #return-test-btn,
+    #answer-true,
+    #answer-false,
+    #next-button,
+    #digital-next-btn,
+    #available-next-btn,
+    #finish-btn,
+    #superpharm-finish-btn,
+    #redo-lomda-btn,
+    #end-lomda-btn,
+    #bag-retry-btn,
+    #bag-next-btn,
+    #dispense-btn,
+    #next-page-btn,
+    #reserve-finish-btn):active {
+    scale: 0.95;
+
+    color: #ffffff;
+
+    background: linear-gradient(135deg,
+            #a63d3d 0%,
+            #8e3131 55%,
+            #722424 100%);
+
+    box-shadow:
+        0 6px 14px rgba(126, 42, 42, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    transition:
+        scale 0.05s ease-in,
+        box-shadow 0.05s ease-in;
+}
+
+#reserve-finish-btn {
+    margin: 40px auto;
+    margin-bottom: -13% !important;
+}
+
+
+#superpharm-finish-btn {
+    margin-top: 35px;
+    margin-bottom: -30px !important;
+}
+
+#retry-btn,
+#digital-next-btn {
+    color: white !important;
+}
+
+
+#answer-true.right-answer,
+#answer-false.right-answer {
+    background: green !important;
+    color: white !important;
+    border-color: green !important;
+}
+
+#answer-true.wrong-answer,
+#answer-false.wrong-answer {
+    background: rgb(173, 27, 27) !important;
+    color: white !important;
+    border-color: rgb(173, 27, 27) !important;
+}

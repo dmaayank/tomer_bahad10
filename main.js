@@ -215,7 +215,7 @@ const hideAllScreens = () => {
         'medicine-table-page', 'medicine-page', 'medicine-game', 'medicine-box-page',
         'medicine-bag-page', // <-- זה ה-ID שהיה חסר!
         'bag-page', 'tomer-system', 'asmachta-page', 'asmachta-pre-page', 'asmachta-test', 'digital-page', 'available-page',
-        'tomer-system-page', 'popup', 'game-popup', 'summary-page', 'superpharm-page', 'reserve-dispensing-page'
+        'tomer-system-page', 'popup', 'game-popup', 'summary-page', 'superpharm-page', 'reserve-dispensing-page','course-loader'
     ];
 
     screens.forEach(id => {
