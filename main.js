@@ -129,17 +129,42 @@ const gameScores = {
 // ==========================================
 // 9. INITIALIZATION & LISTENERS
 // ==========================================
-window.addEventListener('load', () => {
-    const startBtn = document.getElementById('start_button');
-    if (startBtn) startBtn.addEventListener('click', pharmacyPage);
+window.addEventListener("load", () => {
+    const loader = document.getElementById("course-loader");
+    const topicsPage = document.getElementById("topics_page");
 
-    const lomdaTitle = document.getElementById('lomda_title');
-    if (lomdaTitle) {
-        lomdaTitle.addEventListener('click', () => location.reload());
+    const startBtn = document.getElementById("start_button");
+    if (startBtn) {
+        startBtn.addEventListener("click", pharmacyPage);
     }
 
-    const topicsPage = document.getElementById('topics_page');
-    if (topicsPage) topicsPage.style.display = "flex";
+    const lomdaTitle = document.getElementById("lomda_title");
+    if (lomdaTitle) {
+        lomdaTitle.addEventListener("click", () => {
+            location.reload();
+        });
+    }
+
+    if (topicsPage) {
+        topicsPage.style.display = "none";
+    }
+
+    // נותן למסך הטעינה להופיע לזמן קצר ולא להיעלם בהבהוב
+    setTimeout(() => {
+        if (loader) {
+            loader.classList.add("hide");
+        }
+
+        if (topicsPage) {
+            topicsPage.style.display = "flex";
+        }
+
+        setTimeout(() => {
+            if (loader) {
+                loader.style.display = "none";
+            }
+        }, 400);
+    }, 700);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
