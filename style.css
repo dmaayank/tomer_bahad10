@@ -300,15 +300,6 @@ svg {
     animation: loaderMove 1.2s ease-in-out infinite;
 }
 
-.course-loader {
-    opacity: 1;
-    transition: opacity 0.4s ease;
-}
-
-.course-loader.hide {
-    opacity: 0;
-    pointer-events: none;
-}
 
 @keyframes loaderBounce {
 
