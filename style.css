@@ -3270,14 +3270,6 @@ tr:nth-child(even) {
     transition: scale 0.05s ease-in, box-shadow 0.05s ease-in;
 }
 
-.right-answer {
-    background-color: green;
-}
-
-.wrong-answer {
-    background-color: rgb(173, 27, 27);
-}
-
 /* =========================================================
    SUPER-PHARM PAGE
 ========================================================= */
@@ -4170,7 +4162,6 @@ tr:nth-child(even) {
    GLOBAL BUTTON DESIGN
 ========================================================= */
 
-button,
 .button,
 .next-button,
 #start_button,
@@ -4205,7 +4196,7 @@ button,
 #bag-next-btn,
 #dispense-btn,
 #next-page-btn,
-#reserve-finish-bt {
+#reserve-finish-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4249,6 +4240,61 @@ button,
     user-select: none;
 }
 
+
+:is(
+    .button,
+    .next-button,
+    #start_button,
+    #to-practice-btn,
+    #yes-btn,
+    #no-btn,
+    #back-btn,
+    #start-exercise,
+    #retry-btn,
+    #next-btn,
+    #practice-btn,
+    #return-btn,
+    #start-game,
+    #practice-button,
+    #return-bag-btn,
+    #start-bag-game,
+    #skip-game,
+    #skip-bag-game,
+    #start-test-game,
+    #skip-test-game,
+    #return-test-btn,
+    #answer-true,
+    #answer-false,
+    #next-button,
+    #digital-next-btn,
+    #available-next-btn,
+    #finish-btn,
+    #superpharm-finish-btn,
+    #redo-lomda-btn,
+    #end-lomda-btn,
+    #bag-retry-btn,
+    #bag-next-btn,
+    #dispense-btn,
+    #next-page-btn,
+    #reserve-finish-btn):active {
+    scale: 0.95;
+
+    color: #ffffff;
+
+    background: linear-gradient(135deg,
+            #a63d3d 0%,
+            #8e3131 55%,
+            #732626 100%);
+
+    box-shadow:
+        0 6px 14px rgba(126, 42, 42, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    transition:
+        scale 0.05s ease-in,
+        box-shadow 0.05s ease-in;
+}
+
 #reserve-finish-btn {
     margin: 40px auto;
     margin-bottom: -13% !important;
@@ -4258,4 +4304,23 @@ button,
 #superpharm-finish-btn {
     margin-top: 35px;
     margin-bottom: -30px !important;
+}
+
+#retry-btn, #digital-next-btn {
+    color:white !important;
+}
+
+
+#answer-true.right-answer,
+#answer-false.right-answer {
+    background: green !important;
+    color: white !important;
+    border-color: green !important;
+}
+
+#answer-true.wrong-answer,
+#answer-false.wrong-answer {
+    background: rgb(173, 27, 27) !important;
+    color: white !important;
+    border-color: rgb(173, 27, 27) !important;
 }
