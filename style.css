@@ -1890,7 +1890,7 @@ tr:nth-child(even) {
 /* ריכוז השלבים */
 .info-steps {
     width: 100%;
-    max-width: 340px;
+    max-width: 355px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1904,9 +1904,9 @@ tr:nth-child(even) {
     /* גורם לאייקון להיות מימין לטקסט */
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
+    width: 90%;
     margin: 15px 0;
-    gap: 15px;
+    gap: 20px;
 }
 
 .step-icon {
@@ -4213,7 +4213,7 @@ tr:nth-child(even) {
     background: linear-gradient(135deg,
             #a63d3d 0%,
             #8e3131 55%,
-            #732626 100%) !important;
+            #722424 100%) !important;
 
     border: none;
     border-radius: 100px;
@@ -4284,7 +4284,7 @@ tr:nth-child(even) {
     background: linear-gradient(135deg,
             #a63d3d 0%,
             #8e3131 55%,
-            #732626 100%);
+            #722424 100%);
 
     box-shadow:
         0 6px 14px rgba(126, 42, 42, 0.25),
